@@ -107,7 +107,7 @@ Mod.require 'Weya.Base',
    add: (node) -> @_add node
 
    template: ->
-    @$.elem = @div ".section",
+    @$.elem = @div ".section", ->
      h = switch @$.level
       when 1 then @h1
       when 2 then @h2

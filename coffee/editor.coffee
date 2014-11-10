@@ -33,6 +33,8 @@ Mod.require 'Weya.Base',
 
     parser = new Parser text: text
     parser.parse()
+    @elems.previewMain.innerHTML = ''
+    @elems.previewSidebar.innerHTML = ''
     parser.render @elems.previewMain, @elems.previewSidebar
 
     console.log parser.root
