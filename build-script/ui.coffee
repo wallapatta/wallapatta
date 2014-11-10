@@ -3,7 +3,7 @@ fs = require 'fs'
 index = require '../ui-assets/index.coffee'
 {spawn, exec} = require 'child_process'
 
-UI_JS = []
+UI_JS = ['main']
 UI_LESS = ['style']
 
 assets = exports.assets = taskUiAssets = (callback) ->
@@ -50,7 +50,7 @@ assets = exports.assets = taskUiAssets = (callback) ->
 
 html = exports.html = ->
  files = []
- for file in JS_FILES
+ for file in UI_JS
   files.push "js/#{file}.js"
 
  try
@@ -98,7 +98,7 @@ dirList = (files) ->
 
 
 exports.js = (callback) ->
- mkdir = dirList JS_FILES
+ mkdir = dirList UI_JS
  if fs.existsSync "#{BUILD}/js"
   commands = ["rm #{BUILD}/js -r"]
  else
@@ -115,7 +115,7 @@ exports.js = (callback) ->
    e = 1
   else
    e = 0
-   for file in JS_FILES
+   for file in UI_JS
     if fs.existsSync "coffee/#{file}.coffee"
      e += util.js "coffee/#{file}.coffee", "#{BUILD}/js/#{file}.js"
     else
