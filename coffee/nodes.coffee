@@ -12,7 +12,6 @@ Mod.require 'Weya.Base',
    media: 'media'
 
 
-
   class Node extends Base
    @extend()
 
@@ -21,7 +20,7 @@ Mod.require 'Weya.Base',
     @_parent = null
     @children = []
 
-   setParent: (parent)
+   setParent: (parent) ->
     @_parent = parent
 
    _add: (node) ->
@@ -29,7 +28,7 @@ Mod.require 'Weya.Base',
     @children.push node
     return node
 
-o
+
   class Text extends Node
    @extend()
 
@@ -64,6 +63,7 @@ o
    @initialize (options) ->
 
    add: (node) -> @_add node
+
 
 
 
@@ -123,5 +123,6 @@ o
   Mod.set 'Docscript.List', List
   Mod.set 'Docscript.ListItem', ListItem
   Mod.set 'Docscript.Sidenote', Sidenote
+  Mod.set 'Docscript.Article', Article
 
   Mod.set 'Docscript.TYPES', TYPES
