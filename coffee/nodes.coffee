@@ -34,7 +34,7 @@ Mod.require 'Weya.Base',
     return node
 
    template: ->
-    @$.elem = @div ",node", null
+    @$.elem = @div ".node", null
 
    render: (options) ->
     Weya elem: options.elem, context: this, @template
@@ -78,7 +78,10 @@ Mod.require 'Weya.Base',
     @_add new Text text: text
 
    template: ->
-    @$.elem = @span ".block", null
+    if @$.paragraph
+     @$.elem = @p ".paragraph", null
+    else
+     @$.elem = @span ".block", null
 
 
   class Article extends Node
