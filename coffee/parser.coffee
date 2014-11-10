@@ -38,19 +38,23 @@ Mod.require 'Weya.Base',
       throw new Error 'Invalid indentation'
 
     switch line.type
+     when TYPES.code
+      #TODO
+      @addNode new Code indentation: 0
+
      when TYPES.list
       if @node.type isnt TYPES.list
        @addNode new List ordered: line.ordered, indentation: line.indentation
 
-      @addNode new ListItem indentation: line.indentation + 1
-      @addNode new Block indentation: line.indentation + 1
+      @addNode new ListItem ordered: line.ordered, indentation: line.indentation + 1
+      @addNode new Block indentation: line.indentation + 1, paragraph: false
       @node.addText line.text
 
      when TYPES.heading
       @addNode new Section indentation: line.indentation + 1
       @node.heading.addText line.text
 
-     when TYPES.sidebar
+     when TYPES.sidenote
       if @main
        @main = false
        n = new Sidenote indentation: line.indentation
@@ -61,7 +65,7 @@ Mod.require 'Weya.Base',
        @main = true
        @node = @mainNode
 
-     when TYPES.text
+     when TYPES.block
       if @node.type isnt TYPES.block
        @addNode new Block indentation: line.indentation, paragraph: true
        @node.addText line.text
