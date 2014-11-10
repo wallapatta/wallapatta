@@ -18,7 +18,7 @@ Mod.require 'Weya.Base',
        @$.elems.parse = @button ".btn.btn-default.btn-block",
         on: {click: @$.on.parse}
         "Render"
-     @div ".row", ->
+     @div ".row.docscript", ->
       @$.elems.previewMain = @div ".col-md-9", null
       @$.elems.previewSidebar = @div ".col-md-3", null
 
