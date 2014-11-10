@@ -21,19 +21,12 @@ Mod.require 'Weya.Base',
      @node = @root
      @main = true
      @sidenotes = []
+     @prevBlock = null
 
     parse: ->
      while @reader.has()
       @process()
       @reader.next()
-
-    checkEmpty: (line) ->
-     if line.empty
-      if @node.type is TYPES.block
-       @node = @node.parent()
-      return true
-     else
-      return false
 
     addNode: (node) ->
      @node.add node
@@ -42,7 +35,14 @@ Mod.require 'Weya.Base',
     process: ->
      line = @reader.get()
 
-     return if @checkEmpty line
+     if line.empty
+      if @node.type is TYPES.block
+       @prevBlock = @node
+       @node = @node.parent()
+
+      return
+
+
 
      while line.indentation < @node.indentation
       @node = @node.parent()
@@ -69,7 +69,9 @@ Mod.require 'Weya.Base',
       when TYPES.sidenote
        if @main
         @main = false
-        n = new Sidenote indentation: line.indentation
+        id = @node.id
+        if = @prevBlock.id if @prevBlock?
+        n = new Sidenote indentation: line.indentation, id: id
         @mainNode = @node
         @node = n
         @sidenotes.push n
@@ -88,6 +90,8 @@ Mod.require 'Weya.Base',
 
       else
        throw new Error 'Unknown syntax'
+
+      @prevBlock = null
 
 
 

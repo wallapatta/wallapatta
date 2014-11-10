@@ -35,6 +35,8 @@ Mod.require 'Weya.Base',
 
     return line if i is s.length
 
+    line.empty = false
+
     switch s[i]
      when '#'
       line.type = TYPES.heading

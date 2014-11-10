@@ -1,6 +1,8 @@
 Mod.require 'Weya.Base',
  (Base) ->
 
+  NODE_ID = 0
+
   TYPES =
    code: 'code'
    list: 'list'
@@ -19,9 +21,11 @@ Mod.require 'Weya.Base',
     @indentation = options.indentation
     @_parent = null
     @children = []
+    @id = NODE_ID
+    NODE_ID++
 
-   setParent: (parent) ->
-    @_parent = parent
+   setParent: (parent) ->  @_parent = parent
+   parent: -> @_parent
 
    _add: (node) ->
     node.setParent this
@@ -34,7 +38,7 @@ Mod.require 'Weya.Base',
 
    type: TYPES.text
 
-   @initialize: (options) ->
+   @initialize (options) ->
     @text = options.text
 
 
@@ -73,7 +77,7 @@ Mod.require 'Weya.Base',
    type: TYPES.section
 
    @initialize (options) ->
-    @heading = new Block()
+    @heading = new Block indentation: options.indentation
 
    add: (node) -> @_add node
 
