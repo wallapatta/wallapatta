@@ -72,7 +72,7 @@ Mod.require 'Weya.Base',
      else
       line.type = TYPES.block
 
-    line.text = s.substr i
+    line.text = (s.substr i).trim()
 
     return line
 

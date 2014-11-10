@@ -75,6 +75,8 @@ Mod.require 'Weya.Base',
     throw new Error 'New line expected'
 
    addText: (text) ->
+    if @children.length > 0
+     text = " #{text}"
     @_add new Text text: text
 
    template: ->

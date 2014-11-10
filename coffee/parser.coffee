@@ -67,8 +67,9 @@ Mod.require 'Weya.Base',
         @addNode new List ordered: line.ordered, indentation: line.indentation
 
        @addNode new ListItem ordered: line.ordered, indentation: line.indentation + 1
-       @addNode new Block indentation: line.indentation + 1, paragraph: false
-       @node.addText line.text
+       if line.text isnt ''
+        @addNode new Block indentation: line.indentation + 1, paragraph: false
+        @node.addText line.text
 
       when TYPES.heading
        @addNode new Section indentation: line.indentation + 1, level: line.level
@@ -90,7 +91,7 @@ Mod.require 'Weya.Base',
       when TYPES.block
        if @node.type isnt TYPES.block
         @addNode new Block indentation: line.indentation, paragraph: true
-        @node.addText line.text
+       @node.addText line.text
 
       when TYPES.media
        @addNode new Media indentation: line.indentation + 1
