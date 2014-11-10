@@ -7,9 +7,10 @@ Mod.require 'Weya.Base',
  'Docscript.ListItem'
  'Docscript.Sidenote'
  'Docscript.Article'
+ 'Docscript.Media'
  'Docscript.Reader'
- (Base, TYPES, Text, Block, Section, List,
-  ListItem, Sidenote, Article, Reader) ->
+ (Base, TYPES, Text, Block, Section, List, ListItem, Sidenote, Article,
+  Media, Reader) ->
 
    class Parser extends Base
     @extend()
@@ -145,13 +146,29 @@ Mod.require 'Weya.Base',
        @node.addText line.text
 
       when TYPES.media
-       @addNode new Media indentation: line.indentation + 1
-       @node.addSrc line.text
+       @addNode new Media indentation: line.indentation + 1, media: @parseMedia line.text
 
       else
        throw new Error 'Unknown syntax'
 
      @prevBlock = null
+
+    parseMedia: (text) ->
+     text = text.replace /\)/g, ''
+     parts = text.split '('
+
+     media = {}
+     if parts.length <= 0
+      throw new Error 'Invalid media syntax'
+
+     media.src = parts[0]
+
+     return media if parts.length <= 1
+
+     media.alt = parts[1]
+
+     return media
+
 
 
 

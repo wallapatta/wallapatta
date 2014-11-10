@@ -192,6 +192,40 @@ Mod.require 'Weya.Base',
     @$.elem = @div ".sidenote", null
 
 
+  class Media extends Node
+   @extend()
+
+   @initialize (options) ->
+    @src = options.media.src
+    @alt = options.media.alt
+    @alt ?= options.media.src
+    @loaded = false
+
+   type: TYPES.media
+
+   add: (node) ->
+    throw new Error 'Invalid indentation'
+
+   template: ->
+    @$.elem = @img ".image", src: @$.src, alt: @$.alt
+
+   onLoaded: (callback) ->
+    @onLoadCallback = callback
+    if @loaded
+     @onLoadCallback()
+
+   @listen 'load', ->
+    @loaded = true
+    if @onLoadCallback?
+     @onLoadCallback()
+
+   render: (options) ->
+    Weya elem: options.elem, context: this, @template
+    @elem.addEventListener 'load', @on.load
+
+    options.nodes[@id] = this
+
+
   Mod.set 'Docscript.Text', Text
   Mod.set 'Docscript.Block', Block
   Mod.set 'Docscript.Section', Section
@@ -199,5 +233,6 @@ Mod.require 'Weya.Base',
   Mod.set 'Docscript.ListItem', ListItem
   Mod.set 'Docscript.Sidenote', Sidenote
   Mod.set 'Docscript.Article', Article
+  Mod.set 'Docscript.Media', Media
 
   Mod.set 'Docscript.TYPES', TYPES
