@@ -1,5 +1,6 @@
 Mod.require 'Weya.Base',
- (Base) ->
+ 'Weya'
+ (Base, Weya) ->
 
   NODE_ID = 0
 
@@ -27,6 +28,9 @@ Mod.require 'Weya.Base',
 
    setParent: (parent) ->  @_parent = parent
    parent: -> @_parent
+
+   onLoaded: (callback) ->
+    callback()
 
    _add: (node) ->
     node.setParent this
@@ -177,9 +181,15 @@ Mod.require 'Weya.Base',
   class Sidenote extends Node
    @extend()
 
+   @initialize (options) ->
+    @link = options.link
+
    type: TYPES.sidenote
 
    add: (node) -> @_add node
+
+   template: ->
+    @$.elem = @div ".sidenote", null
 
 
   Mod.set 'Docscript.Text', Text

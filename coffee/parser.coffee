@@ -32,12 +32,63 @@ Mod.require 'Weya.Base',
      @node.add node
      @node = node
 
+    getOffsetTop: (elem, parent) ->
+     top = 0
+     while elem?
+      break if elem is parent
+      top += elem.offsetTop
+      elem = elem.offsetParent
+
+     return top
+
+    setFills: ->
+     for sidenote in @sidenotes
+      elemSidenote = sidenote.elem
+      elemContent = @nodes[sidenote.link].elem
+
+      topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
+      topContent = @getOffsetTop elemContent, @elems.main
+
+      if topContent > topSidenote
+       fill = Weya {}, ->
+        @div ".fill", style: {height: "#{topContent - topSidenote}px"}
+
+       elemSidenote.parentNode.insertBefore fill, elemSidenote
+      else if topContent < topSidenote
+       fill = Weya {}, ->
+        @div ".fill", style: {height: "#{topSidenote - topContent}px"}
+
+       elemContent.parentNode.insertBefore fill, elemContent
+
+
     render: (main, sidebar) ->
-     nodes = {}
-     @root.render elem: main, nodes: nodes
+     @elems =
+      main: main
+      sidebar: sidebar
+
+     @nodes = {}
+     @root.render elem: main, nodes: @nodes
 
      for sidenote in @sidenotes
-      sidenote.render elem: sidebar, nodes: nodes
+      sidenote.render elem: sidebar, nodes: @nodes
+
+     window.requestAnimationFrame @on.rendered
+
+    @listen 'rendered', ->
+     n = 0
+
+     loaded = =>
+      n--
+
+      if n is 0
+       @setFills()
+
+     for id of @nodes
+      n++
+
+     for id, node of @nodes
+      node.onLoaded loaded
+
 
 
     process: ->
@@ -80,7 +131,7 @@ Mod.require 'Weya.Base',
         @main = false
         id = @node.id
         id = @prevBlock.id if @prevBlock?
-        n = new Sidenote indentation: line.indentation, id: id
+        n = new Sidenote indentation: line.indentation, link: id
         @mainNode = @node
         @node = n
         @sidenotes.push n
