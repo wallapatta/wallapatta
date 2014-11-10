@@ -14,7 +14,7 @@ Mod.require 'Weya.Base',
 
    checkEmpty: (line) ->
     if line.empty
-     if @node.type is BLOCK
+     if @node.type is TYPES.block
       @node = @node.parent()
      @reader.next()
 
@@ -38,19 +38,19 @@ Mod.require 'Weya.Base',
       throw new Error 'Invalid indentation'
 
     switch line.type
-     when LIST
-      if @node.type isnt LIST
+     when TYPES.list
+      if @node.type isnt TYPES.list
        @addNode new List ordered: line.ordered, indentation: line.indentation
 
       @addNode new ListItem indentation: line.indentation + 1
       @addNode new Block indentation: line.indentation + 1
       @node.addText line.text
 
-     when HEADING
+     when TYPES.heading
       @addNode new Section indentation: line.indentation + 1
       @node.heading.addText line.text
 
-     when SIDEBAR
+     when TYPES.sidebar
       if @main
        @main = false
        n = new Sidenote indentation: line.indentation
@@ -61,12 +61,12 @@ Mod.require 'Weya.Base',
        @main = true
        @node = @mainNode
 
-     when TEXT
-      if @node.type isnt BLOCK
+     when TYPES.text
+      if @node.type isnt TYPES.block
        @addNode new Block indentation: line.indentation, paragraph: true
        @node.addText line.text
 
-     when IMAGE
+     when TYPES.media
       @addNode new Media indentation: line.indentation + 1
       @node.addSrc line.text
 
