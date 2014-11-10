@@ -19,7 +19,8 @@ Mod.require 'Weya.Base',
         on: {click: @$.on.parse}
         "Render"
      @div ".row", ->
-      @$.elems.preview = @div ".col-md-12", null
+      @$.elems.previewMain = @div ".col-md-9", null
+      @$.elems.previewSidebar = @div ".col-md-3", null
 
    @initialize ->
     @elems = {}
@@ -32,6 +33,7 @@ Mod.require 'Weya.Base',
 
     parser = new Parser text: text
     parser.parse()
+    parser.render @elems.previewMain, @elems.previewSidebar
 
     console.log parser.root
 

@@ -32,6 +32,14 @@ Mod.require 'Weya.Base',
      @node.add node
      @node = node
 
+    render: (main, sidebar) ->
+     nodes = {}
+     @root.render elem: main, nodes: nodes
+
+     for sidenote in @sidenotes
+      sidenote.render elem: sidebar, nodes: nodes
+
+
     process: ->
      line = @reader.get()
 
@@ -70,7 +78,7 @@ Mod.require 'Weya.Base',
        if @main
         @main = false
         id = @node.id
-        if = @prevBlock.id if @prevBlock?
+        id = @prevBlock.id if @prevBlock?
         n = new Sidenote indentation: line.indentation, id: id
         @mainNode = @node
         @node = n
@@ -91,7 +99,7 @@ Mod.require 'Weya.Base',
       else
        throw new Error 'Unknown syntax'
 
-      @prevBlock = null
+     @prevBlock = null
 
 
 
