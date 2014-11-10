@@ -12,15 +12,16 @@ template = ->
 
    @link href: "lib/bootstrap/css/bootstrap.min.css", rel: "stylesheet"
    @link href: "lib/fontawesome/css/font-awesome.min.css", rel: "stylesheet"
+   @link href: "lib/codemirror/codemirror.css", rel: "stylesheet"
    @link href: "css/style.css", rel: "stylesheet"
    @link rel: "shortcut icon", href: "img/favicon.ico", type: "image/x-icon"
 
   @body ->
+   @script src:"lib/codemirror/codemirror.js"
    @script src:"lib/d3.v3.min.js"
 
    @script src:"lib/weya/weya.js"
    @script src:"lib/weya/base.js"
-   @script src:"lib/weya/router.js"
    @script src:"lib/mod/mod.js"
 
    for file in @$.scripts

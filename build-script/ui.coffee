@@ -3,7 +3,10 @@ fs = require 'fs'
 index = require '../ui-assets/index.coffee'
 {spawn, exec} = require 'child_process'
 
-UI_JS = ['main']
+UI_JS = [
+ 'main'
+ 'editor'
+]
 UI_LESS = ['style']
 
 assets = exports.assets = taskUiAssets = (callback) ->
