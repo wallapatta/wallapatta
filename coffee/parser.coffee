@@ -1,5 +1,13 @@
 Mod.require 'Weya.Base',
- (Base) ->
+ 'Docscript.TYPES'
+ 'Docscript.Text'
+ 'Docscript.Block'
+ 'Docscript.Section'
+ 'Docscript.List'
+ 'Docscript.ListItem'
+ 'Docscript.Sidenote'
+ 'Docscript.Reader'
+ (Base, TYPES, Text, Block, Section, List, ListItem, Sidenote, Reader) ->
 
   class Parser extends Base
    @extend()
@@ -11,13 +19,12 @@ Mod.require 'Weya.Base',
    parse: ->
     while @reader.has()
      @process()
+     @reader.next()
 
    checkEmpty: (line) ->
     if line.empty
      if @node.type is TYPES.block
       @node = @node.parent()
-     @reader.next()
-
      return true
     else
      return false
@@ -51,7 +58,7 @@ Mod.require 'Weya.Base',
       @node.addText line.text
 
      when TYPES.heading
-      @addNode new Section indentation: line.indentation + 1
+      @addNode new Section indentation: line.indentation + 1, level: line.level
       @node.heading.addText line.text
 
      when TYPES.sidenote
@@ -76,10 +83,5 @@ Mod.require 'Weya.Base',
 
 
 
-
-
-
-
-
-
+  Mod.set 'Docscript.Parser', Parser
 

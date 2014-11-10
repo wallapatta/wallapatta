@@ -8,7 +8,9 @@ Mod.require 'Weya.Base',
    block: 'block'
    sidenote: 'sidenote'
    section: 'section'
+   heading: 'heading'
    media: 'media'
+
 
 
   class Node extends Base
@@ -27,8 +29,7 @@ Mod.require 'Weya.Base',
     @children.push node
     return node
 
-
-
+o
   class Text extends Node
    @extend()
 
@@ -44,7 +45,7 @@ Mod.require 'Weya.Base',
 
    type: TYPES.block
 
-   @initialize: (options) ->
+   @initialize (options) ->
     @paragraph = options.paragraph
 
    add: ->
@@ -52,6 +53,18 @@ Mod.require 'Weya.Base',
 
    addText: (text) ->
     @_add new Text text: text
+
+
+
+  class Article extends Node
+   @extend()
+
+   type: TYPES.document
+
+   @initialize (options) ->
+
+   add: (node) -> @_add node
+
 
 
   class Section extends Node

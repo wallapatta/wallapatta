@@ -1,6 +1,7 @@
 Mod.require 'Weya.Base',
  'CodeMirror'
- (Base) ->
+ 'Docscript.Parser'
+ (Base, Parser) ->
 
   class Editor  extends Base
    @extend()
@@ -27,6 +28,9 @@ Mod.require 'Weya.Base',
     e.preventDefault()
 
     console.log "Parse", @editor.getValue()
+
+    parser = new Parser text: @editor.getValue()
+    parser.parse()
 
    @listen 'setupEditor', ->
     @editor = CodeMirror.fromTextArea @elems.textarea,
