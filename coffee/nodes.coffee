@@ -131,6 +131,7 @@ Mod.require 'Weya.Base',
 
    render: (options) ->
     Weya elem: options.elem, context: this, @template
+    options.nodes[@id] = this
 
     @heading.render
      elem: @elems.heading
@@ -207,7 +208,8 @@ Mod.require 'Weya.Base',
     throw new Error 'Invalid indentation'
 
    template: ->
-    @$.elem = @img ".image", src: @$.src, alt: @$.alt
+    @$.elem = @div ".image-container", ->
+     @$.elems.img = @img ".image", src: @$.src, alt: @$.alt
 
    onLoaded: (callback) ->
     @onLoadCallback = callback
@@ -221,7 +223,9 @@ Mod.require 'Weya.Base',
 
    render: (options) ->
     Weya elem: options.elem, context: this, @template
-    @elem.addEventListener 'load', @on.load
+    options.nodes[@id] = this
+    console.log 'image', @id
+    @elems.img.addEventListener 'load', @on.load
 
     options.nodes[@id] = this
 

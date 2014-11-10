@@ -29,7 +29,6 @@ Mod.require 'Weya.Base',
     e.preventDefault()
 
     text = @editor.getValue()
-    console.log "Parse", text
 
     parser = new Parser text: text
     parser.parse()

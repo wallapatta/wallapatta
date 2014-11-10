@@ -131,7 +131,9 @@ Mod.require 'Weya.Base',
        if @main
         @main = false
         id = @node.id
+        console.log 'sidenote', id
         id = @prevBlock.id if @prevBlock?
+        console.log 'sidenote', id
         n = new Sidenote indentation: line.indentation, link: id
         @mainNode = @node
         @node = n
@@ -147,6 +149,8 @@ Mod.require 'Weya.Base',
 
       when TYPES.media
        @addNode new Media indentation: line.indentation + 1, media: @parseMedia line.text
+       @prevBlock = @node
+       return
 
       else
        throw new Error 'Unknown syntax'
