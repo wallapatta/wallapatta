@@ -2,14 +2,54 @@ Mod.require ->
  text = '''
 #Docscript Sample
 
- Following is a sample document to illustrate how to use docscript.
+ --Following is a sample document to illustrate how to use docscript.
 
- We are using docscript to generate software user manuals at Forestpin.
 
  Docscript is inspired by markdown. We developed this because markdown didn't
- fit out requirement. Docscript is available on github.
+ fit out requirement. And we can customize it as our requirements change.
+ We developed this over a couple days and published it on
+ <<https://github.com/vpj/docscript(Github)>>.
 
- ##Visualizing numerical tables
+ ---
+ ###**<<https://github.com/vpj/docscript(Fork Me on Github)>>
+ ---
+
+
+ We are using docscript to generate software user manuals at
+ **<<http://forestpin.com(Forestpin)>>**.
+
+ ---
+ !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
+
+ --Foresptin Logo
+ ---
+
+
+ The main differences to <<http://daringfireball.net/projects/markdown/
+ (Markdown)>> are:
+
+  * Minor changes to syntax
+
+    Changes such as ``- -`` for --italics-- and a few additions like
+    ^^super^^script and __sub__script.
+
+  * Indentation for hierarchy
+
+    To support print layouts, and to build table of contents.
+
+  * Sidenotes
+
+    ---
+    --Because sidenotes are so awesome!
+    ---
+
+
+ ##Visualizing numerical tables ^^1^^
+
+  ---
+  ^^1^^ Was taken from a blog post I wrote sometime back on
+  <<http://blog.varunajayasiri.com(my blog)>>.
+  ---
 
   Here's a number of alternatives to displaying table of numbers. We
   have evaluated them in terms of,

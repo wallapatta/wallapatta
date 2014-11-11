@@ -103,11 +103,11 @@ Mod.require 'Weya.Base',
 
       else
        switch token.type
-        when linkBegin
+        when 'linkBegin'
           add()
           @addNode new Link {}
 
-        when linkEnd
+        when 'linkEnd'
          if @node.type isnt TYPES.link
           throw new Error 'Unexpected link terminator'
          else
@@ -259,10 +259,9 @@ Mod.require 'Weya.Base',
      if parts.length <= 0 or parts[0] is ''
       throw new Error 'Invalid media syntax'
 
-     link.link = parts[0]
+     link.link = parts[0].trim()
      return link if parts.length <= 1
-     link.alt = parts[1]
-
+     link.text = parts[1].trim()
      return link
 
     parseMedia: (text) ->
@@ -273,12 +272,9 @@ Mod.require 'Weya.Base',
      if parts.length <= 0 or parts[0] is ''
       throw new Error 'Invalid media syntax'
 
-     media.src = parts[0]
-
+     media.src = parts[0].trim()
      return media if parts.length <= 1
-
-     media.alt = parts[1]
-
+     media.alt = parts[1].trim()
      return media
 
 
