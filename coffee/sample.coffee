@@ -41,6 +41,8 @@ Mod.require ->
 
     ---
     --Because sidenotes are so awesome!
+
+    Ok, may be these should be on the left
     ---
 
 
