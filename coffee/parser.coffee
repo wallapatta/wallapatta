@@ -1,8 +1,14 @@
 Mod.require 'Weya.Base',
  'Docscript.TYPES'
+
  'Docscript.Text'
  'Docscript.Bold'
  'Docscript.Italics'
+ 'Docscript.SuperScript'
+ 'Docscript.SubScript'
+ 'Docscript.Code'
+ 'Docscript.Link'
+
  'Docscript.Block'
  'Docscript.Section'
  'Docscript.List'
@@ -11,16 +17,23 @@ Mod.require 'Weya.Base',
  'Docscript.Article'
  'Docscript.Media'
  'Docscript.Reader'
- (Base, TYPES, Text, Bold, Italics, Block, Section, List, ListItem,
-  Sidenote, Article, Media, Reader) ->
+ (Base, TYPES,
+  Text, Bold, Italics, SuperScript, SubScript, Code, Link,
+  Block, Section, List, ListItem, Sidenote, Article, Media, Reader) ->
 
    TOKENS =
-    bold: 'bold'
-    italics: 'italics'
+    bold: Bold
+    italics: Italics
+    superScript: SuperScript
+    subScript: SubScript
+    code: Code
 
    TOKEN_MATCHES =
     bold: '**'
     italics: '--'
+    subScript: '__'
+    superScript: '^^'
+    code: '``'
     linkBegin: '<<'
     linkEnd: '>>'
 
@@ -80,22 +93,26 @@ Mod.require 'Weya.Base',
        ++i
        continue
 
-      switch token.type
-       when TOKENS.bold
-        if @node.type is TYPES.bold
-         add()
-         @node = @node.parent()
-        else
-         add()
-         @addNode new Bold {}
+      if TOKENS[token.type]?
+       if @node.type is token.type
+        add()
+        @node = @node.parent()
+       else
+        add()
+        @addNode new TOKENS[token.type] {}
 
-       when TOKENS.italics
-        if @node.type is TYPES.italics
-         add()
-         @node = @node.parent()
-        else
-         add()
-         @addNode new Italics {}
+      else
+       switch token.type
+        when linkBegin
+          add()
+          @addNode new Link {}
+
+        when linkEnd
+         if @node.type isnt TYPES.link
+          throw new Error 'Unexpected link terminator'
+         else
+          @node.setLink @parseLink text.substr last, cur - last
+          @node = @node.parent()
 
       last = i
 
@@ -233,6 +250,20 @@ Mod.require 'Weya.Base',
        throw new Error 'Unknown syntax'
 
      @prevBlock = null
+
+    parseLink: (text) ->
+     text = text.replace /\)/g, ''
+     parts = text.split '('
+
+     link = {}
+     if parts.length <= 0 or parts[0] is ''
+      throw new Error 'Invalid media syntax'
+
+     link.link = parts[0]
+     return link if parts.length <= 1
+     link.alt = parts[1]
+
+     return link
 
     parseMedia: (text) ->
      text = text.replace /\)/g, ''

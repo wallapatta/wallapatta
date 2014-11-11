@@ -13,8 +13,13 @@ Mod.require 'Weya.Base',
    section: 'section'
    heading: 'heading'
    media: 'media'
+
    bold: 'bold'
    italics: 'italics'
+   superScript: 'superScript'
+   subScript: 'subScript'
+   code: 'code'
+   link: 'link'
 
 
   class Node extends Base
@@ -76,12 +81,37 @@ Mod.require 'Weya.Base',
    type: TYPES.bold
    template: -> @$.elem = @strong ".bold", null
 
-
-
   class Italics extends Node
    @extend()
    type: TYPES.italics
    template: -> @$.elem = @em ".italics", null
+
+  class SuperScript extends Node
+   @extend()
+   type: TYPES.superScript
+   template: -> @$.elem = @sup ".superScript", null
+
+  class SubScript extends Node
+   @extend()
+   type: TYPES.subScript
+   template: -> @$.elem = @sub ".subScript", null
+
+  class Code extends Node
+   @extend()
+   type: TYPES.code
+   template: -> @$.elem = @code ".code", null
+
+  class Link extends Node
+   @extend()
+
+   setLink: (options) ->
+    @link = options.link
+    @text = options.text
+    @text ?= @link
+
+   type: TYPES.link
+   template: -> @$.elem = @a ".link", href: @$.link, @$.text
+
 
 
 
@@ -250,6 +280,11 @@ Mod.require 'Weya.Base',
   Mod.set 'Docscript.Text', Text
   Mod.set 'Docscript.Bold', Bold
   Mod.set 'Docscript.Italics', Italics
+  Mod.set 'Docscript.SuperScript', SuperScript
+  Mod.set 'Docscript.SubScript', SubScript
+  Mod.set 'Docscript.Code', Code
+  Mod.set 'Docscript.Link', Link
+
   Mod.set 'Docscript.Block', Block
   Mod.set 'Docscript.Section', Section
   Mod.set 'Docscript.List', List
