@@ -9,6 +9,7 @@ UI_JS = [
  'parser'
  'reader'
  'nodes'
+ 'sample'
 ]
 UI_LESS = ['style']
 

@@ -55,7 +55,7 @@ Mod.require 'Weya.Base',
        line.type = TYPES.sidenote
        i += 2
       else
-       throw new Error 'Unknown syntax'
+       --i #Italics
 
      when '*'
       ++i
@@ -63,14 +63,13 @@ Mod.require 'Weya.Base',
        line.type = TYPES.list
        line.ordered = false
       else
-       throw new Error 'Unknown syntax'
+       --i #bold
 
      when '!'
       ++i
       line.type = TYPES.media
 
-     else
-      line.type = TYPES.block
+    line.type ?= TYPES.block
 
     line.text = (s.substr i).trim()
 

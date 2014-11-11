@@ -1,7 +1,8 @@
 Mod.require 'Weya.Base',
  'CodeMirror'
  'Docscript.Parser'
- (Base, CodeMirror, Parser) ->
+ 'Docscript.Sample'
+ (Base, CodeMirror, Parser, Sample) ->
 
   class Editor  extends Base
    @extend()
@@ -52,6 +53,7 @@ Mod.require 'Weya.Base',
     height = window.innerHeight
     console.log height
     @editor.setSize null, "#{height - 100}px"
+    @editor.setValue Sample
 
    render: ->
     @elems.container = document.body
