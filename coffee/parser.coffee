@@ -39,11 +39,18 @@ Mod.require 'Weya.Base',
 
     parse: ->
      while @reader.has()
-      @process()
+      try
+       @process()
+      catch e
+       throw new Error "Line #{@reader.n + 1}: #{e.message}"
+
       @reader.next()
 
      for block in @blocks
-      @parseText block.text, block
+      try
+       @parseText block.text, block
+      catch e
+       throw new Error "#{e.message}: \"#{block.text}\""
 
     getToken: (text, n) ->
      for token, match of TOKEN_MATCHES
@@ -232,7 +239,7 @@ Mod.require 'Weya.Base',
      parts = text.split '('
 
      media = {}
-     if parts.length <= 0
+     if parts.length <= 0 or parts[0] is ''
       throw new Error 'Invalid media syntax'
 
      media.src = parts[0]

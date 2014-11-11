@@ -18,6 +18,9 @@ Mod.require 'Weya.Base',
         on: {click: @$.on.parse}
         "Render"
       @div ".col-md-7", ->
+       @div ".row.error", ->
+        @$.elems.errors = @div ".col-md-12", null
+
        @div ".row.docscript", ->
         @$.elems.previewMain = @div ".col-md-9", null
         @$.elems.previewSidebar = @div ".col-md-3", null
@@ -35,13 +38,18 @@ Mod.require 'Weya.Base',
    preview: ->
     text = @editor.getValue()
 
-    parser = new Parser text: text
-    parser.parse()
     @elems.previewMain.innerHTML = ''
     @elems.previewSidebar.innerHTML = ''
-    parser.render @elems.previewMain, @elems.previewSidebar
+    parser = new Parser text: text
 
-    console.log parser.root
+    try
+     parser.parse()
+    catch e
+     @elems.errors.textContent = e.message
+     return
+
+    @elems.errors.textContent = ''
+    parser.render @elems.previewMain, @elems.previewSidebar
 
    @listen 'setupEditor', ->
     @editor = CodeMirror.fromTextArea @elems.textarea,
