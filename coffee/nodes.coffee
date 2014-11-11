@@ -111,6 +111,7 @@ Mod.require 'Weya.Base',
 
    @initialize (options) ->
     @heading = new Block indentation: options.indentation
+    @heading.setParent this
     @level = options.level
 
    add: (node) -> @_add node

@@ -23,6 +23,7 @@ Mod.require 'Weya.Base',
      @main = true
      @sidenotes = []
      @prevBlock = null
+     @blocks = []
 
     parse: ->
      while @reader.has()
@@ -31,6 +32,8 @@ Mod.require 'Weya.Base',
 
     addNode: (node) ->
      @node.add node
+     if node.type is TYPES.block
+      @blocks.push node
      @node = node
 
     getOffsetTop: (elem, parent) ->
@@ -126,6 +129,7 @@ Mod.require 'Weya.Base',
       when TYPES.heading
        @addNode new Section indentation: line.indentation + 1, level: line.level
        @node.heading.addText line.text
+       @blocks.push @node.heading
 
       when TYPES.sidenote
        if @main

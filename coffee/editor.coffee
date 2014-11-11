@@ -8,7 +8,7 @@ Mod.require 'Weya.Base',
 
    template: ->
     @div ".container-fluid", ->
-     @div ".row", ->
+     @div ".row-fluid", ->
       @div ".col-md-5", ->
        @$.elems.textarea = @textarea ".editor",
         autocomplete: "off"
@@ -46,8 +46,12 @@ Mod.require 'Weya.Base',
     @editor = CodeMirror.fromTextArea @elems.textarea,
      mode: "text"
      lineNumbers: true
+     lineWrapping: true
      tabSize: 1
     @editor.on 'change', @on.change
+    height = window.innerHeight
+    console.log height
+    @editor.setSize null, "#{height - 100}px"
 
    render: ->
     @elems.container = document.body
