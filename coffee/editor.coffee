@@ -7,27 +7,31 @@ Mod.require 'Weya.Base',
    @extend()
 
    template: ->
-    @div ".container", ->
+    @div ".container-fluid", ->
      @div ".row", ->
-      @div ".col-md-12", ->
+      @div ".col-md-5", ->
        @$.elems.textarea = @textarea ".editor",
         autocomplete: "off"
         spellcheck: "false"
-     @div ".row", ->
-      @div ".col-md-12", ->
        @$.elems.parse = @button ".btn.btn-default.btn-block",
         on: {click: @$.on.parse}
         "Render"
-     @div ".row.docscript", ->
-      @$.elems.previewMain = @div ".col-md-9", null
-      @$.elems.previewSidebar = @div ".col-md-3", null
+      @div ".col-md-7", ->
+       @div ".row.docscript", ->
+        @$.elems.previewMain = @div ".col-md-9", null
+        @$.elems.previewSidebar = @div ".col-md-3", null
 
    @initialize ->
     @elems = {}
 
+   @listen 'change', ->
+    @preview()
+
    @listen 'parse', (e) ->
     e.preventDefault()
+    @preview()
 
+   preview: ->
     text = @editor.getValue()
 
     parser = new Parser text: text
@@ -43,6 +47,7 @@ Mod.require 'Weya.Base',
      mode: "text"
      lineNumbers: true
      tabSize: 1
+    @editor.on 'change', @on.change
 
    render: ->
     @elems.container = document.body
