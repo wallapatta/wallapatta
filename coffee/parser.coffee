@@ -1,6 +1,8 @@
 Mod.require 'Weya.Base',
  'Docscript.TYPES'
  'Docscript.Text'
+ 'Docscript.Bold'
+ 'Docscript.Italics'
  'Docscript.Block'
  'Docscript.Section'
  'Docscript.List'
@@ -9,8 +11,18 @@ Mod.require 'Weya.Base',
  'Docscript.Article'
  'Docscript.Media'
  'Docscript.Reader'
- (Base, TYPES, Text, Block, Section, List, ListItem, Sidenote, Article,
-  Media, Reader) ->
+ (Base, TYPES, Text, Bold, Italics, Block, Section, List, ListItem,
+  Sidenote, Article, Media, Reader) ->
+
+   TOKENS =
+    bold: 'bold'
+    italics: 'italics'
+
+   TOKEN_MATCHES =
+    bold: '**'
+    italics: '--'
+    linkBegin: '<<'
+    linkEnd: '>>'
 
    class Parser extends Base
     @extend()
@@ -29,6 +41,60 @@ Mod.require 'Weya.Base',
      while @reader.has()
       @process()
       @reader.next()
+
+     for block in @blocks
+      @parseText block.text, block
+
+    getToken: (text, n) ->
+     for token, match of TOKEN_MATCHES
+      if (text.substr n, match.length) is match
+       return type: token, length: match.length
+
+     return null
+
+    parseText: (text, node) ->
+     @node = node
+     L = text.length
+     last = i = 0
+     cur = 0
+
+     add = =>
+      if cur > last
+       @addNode new Text text: text.substr last, cur - last
+       @node = @node.parent()
+
+     while i < L
+      token = @getToken text, i
+
+      if token?
+       cur = i
+       i += token.length
+      else
+       ++i
+       continue
+
+      switch token.type
+       when TOKENS.bold
+        if @node.type is TYPES.bold
+         add()
+         @node = @node.parent()
+        else
+         add()
+         @addNode new Bold {}
+
+       when TOKENS.italics
+        if @node.type is TYPES.italics
+         add()
+         @node = @node.parent()
+        else
+         add()
+         @addNode new Italics {}
+
+      last = i
+
+     cur = i
+     add()
+
 
     addNode: (node) ->
      @node.add node

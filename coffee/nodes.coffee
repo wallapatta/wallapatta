@@ -37,6 +37,8 @@ Mod.require 'Weya.Base',
     @children.push node
     return node
 
+   add: (node) -> @_add node
+
    template: ->
     @$.elem = @div ".node", null
 
@@ -67,6 +69,20 @@ Mod.require 'Weya.Base',
 
 
 
+  class Bold extends Node
+   @extend()
+   type: TYPES.bold
+   template: -> @$.elem = @strong ".bold", null
+
+
+
+  class Italics extends Node
+   @extend()
+   type: TYPES.italics
+   template: -> @$.elem = @em ".italics", null
+
+
+
   class Block extends Node
    @extend()
 
@@ -74,14 +90,20 @@ Mod.require 'Weya.Base',
 
    @initialize (options) ->
     @paragraph = options.paragraph
+    @text = ''
 
-   add: ->
-    throw new Error 'New line expected'
+   #add: ->
+   # throw new Error 'New line expected'
 
    addText: (text) ->
-    if @children.length > 0
-     text = " #{text}"
-    @_add new Text text: text
+    if @text isnt ''
+     @text += ' '
+
+    @text += text
+
+    #if @children.length > 0
+    # text = " #{text}"
+    #@_add new Text text: text
 
    template: ->
     if @$.paragraph
@@ -97,8 +119,6 @@ Mod.require 'Weya.Base',
 
    @initialize (options) ->
 
-   add: (node) -> @_add node
-
    template: ->
     @$.elem = @div ".article", null
 
@@ -113,8 +133,6 @@ Mod.require 'Weya.Base',
     @heading = new Block indentation: options.indentation
     @heading.setParent this
     @level = options.level
-
-   add: (node) -> @_add node
 
    template: ->
     @$.elem = @div ".section", ->
@@ -174,8 +192,6 @@ Mod.require 'Weya.Base',
    @initialize (options) ->
     @ordered = options.ordered
 
-   add: (node) -> @_add node
-
    template: ->
     @$.elem = @li ".list-item", null
 
@@ -187,8 +203,6 @@ Mod.require 'Weya.Base',
     @link = options.link
 
    type: TYPES.sidenote
-
-   add: (node) -> @_add node
 
    template: ->
     @$.elem = @div ".sidenote", null
@@ -232,6 +246,8 @@ Mod.require 'Weya.Base',
 
 
   Mod.set 'Docscript.Text', Text
+  Mod.set 'Docscript.Bold', Bold
+  Mod.set 'Docscript.Italics', Italics
   Mod.set 'Docscript.Block', Block
   Mod.set 'Docscript.Section', Section
   Mod.set 'Docscript.List', List
