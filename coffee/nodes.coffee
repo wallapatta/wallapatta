@@ -13,6 +13,8 @@ Mod.require 'Weya.Base',
    section: 'section'
    heading: 'heading'
    media: 'media'
+   bold: 'bold'
+   italics: 'italics'
 
 
   class Node extends Base
