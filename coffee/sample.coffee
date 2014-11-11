@@ -14,6 +14,13 @@ Mod.require ->
  ###**<<https://github.com/vpj/docscript(Fork Me on Github)>>
  ---
 
+ Layout is inspired by style of books and handouts of Edward R. Tufte
+ and Richard Feynman.^^1^^
+
+ ---
+ ^^1^^ <<http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB
+ (Book design: advice and examples)>>
+ ---
 
  We are using docscript to generate software user manuals at
  **<<http://forestpin.com(Forestpin)>>**.
@@ -46,11 +53,12 @@ Mod.require ->
     ---
 
 
- ##Visualizing numerical tables ^^1^^
+ ##Visualizing numerical tables ^^2^^
 
   ---
-  ^^1^^ Was taken from a blog post I wrote sometime back on
-  <<http://blog.varunajayasiri.com(my blog)>>.
+  ^^2^^ Was taken from a <<http://blog.varunajayasiri.com/variable-length-underlining-to-help-see-data-in-a-glance
+  (blog post)>> I wrote sometime back.
+  .
   ---
 
   Here's a number of alternatives to displaying table of numbers. We
