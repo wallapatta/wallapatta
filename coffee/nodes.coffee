@@ -5,13 +5,18 @@ Mod.require 'Weya.Base',
   NODE_ID = 0
 
   TYPES =
-   blockCode: 'blockCode'
-   list: 'list'
-   listItem: 'listItem'
-   block: 'block'
    sidenote: 'sidenote'
+   codeBlock: 'codeBlock'
+   special: 'special'
+   html: 'html'
+
    section: 'section'
    heading: 'heading'
+
+   list: 'list'
+   listItem: 'listItem'
+
+   block: 'block'
    media: 'media'
 
    bold: 'bold'
@@ -20,6 +25,8 @@ Mod.require 'Weya.Base',
    subScript: 'subScript'
    code: 'code'
    link: 'link'
+   mediaInline: 'mediaInline' #TODO
+
 
 
   class Node extends Base
@@ -124,24 +131,62 @@ Mod.require 'Weya.Base',
     @paragraph = options.paragraph
     @text = ''
 
-   #add: ->
-   # throw new Error 'New line expected'
-
    addText: (text) ->
     if @text isnt ''
      @text += ' '
 
     @text += text
 
-    #if @children.length > 0
-    # text = " #{text}"
-    #@_add new Text text: text
-
    template: ->
     if @$.paragraph
      @$.elem = @p ".paragraph", null
     else
      @$.elem = @span ".block", null
+
+
+  class CodeBlock extends Node
+   @extend()
+
+   type: TYPES.codeBlock
+
+   @initialize: ->
+    @texti = ''
+
+   addText: (text) ->
+    @text += '\n' if @text isnt ''
+    @text += text
+
+   template: ->
+    @$.elem = @pre ".codeBlock", @text
+
+
+  class Special extends Node
+   @extend()
+
+   type: TYPES.special
+
+   template: ->
+    @$.elem = @div ".special", null
+
+
+  class Html extends Node
+   @extend()
+
+   type: TYPES.html
+
+   @initialize: ->
+    @text = ''
+
+   addText: (text) ->
+    @text += '\n' if @text isnt ''
+    @text += text
+
+   render: (options) ->
+    Weya elem: options.elem, context: this, ->
+     @$.elem = @div ".html", null
+
+    options.nodes[@id] = this
+    @elem.innerHTML = @text
 
 
   class Article extends Node
@@ -292,5 +337,8 @@ Mod.require 'Weya.Base',
   Mod.set 'Docscript.Sidenote', Sidenote
   Mod.set 'Docscript.Article', Article
   Mod.set 'Docscript.Media', Media
+  Mod.set 'Docscript.CodeBlock', CodeBlock
+  Mod.set 'Docscript.Special', Special
+  Mod.set 'Docscript.Html', Html
 
   Mod.set 'Docscript.TYPES', TYPES

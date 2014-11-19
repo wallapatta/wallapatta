@@ -63,10 +63,13 @@ Mod.require 'Weya.Base',
       line.type = TYPES.sidenote
 
      when BLOCK_TOKENS.code
-      line.type = TYPES.blockCode
+      line.type = TYPES.codeBlock
 
      when BLOCK_TOKENS.special
       line.type = TYPES.special
+
+     when BLOCK_TOKENS.html
+      line.type = TYPES.html
 
      when BLOCK_TOKENS.heading
       line.type = TYPES.heading

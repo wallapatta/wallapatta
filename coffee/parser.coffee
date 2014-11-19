@@ -16,10 +16,17 @@ Mod.require 'Weya.Base',
  'Docscript.Sidenote'
  'Docscript.Article'
  'Docscript.Media'
+
+ 'Docscript.CodeBlock'
+ 'Docscript.Special'
+ 'Docscript.Html'
+
  'Docscript.Reader'
  (Base, TYPES,
   Text, Bold, Italics, SuperScript, SubScript, Code, Link,
-  Block, Section, List, ListItem, Sidenote, Article, Media, Reader) ->
+  Block, Section, List, ListItem, Sidenote, Article, Media,
+  CodeBlock, Special, Html,
+  Reader) ->
 
    TOKENS =
     bold: Bold
@@ -204,8 +211,14 @@ Mod.require 'Weya.Base',
 
      switch line.type
       when TYPES.code
-       #TODO
-       @addNode new Code indentation: 0
+       prev = @node
+       @addNode new CodeBlock indentation: 0
+       while @reader.has()
+        @reader.next()
+        line = @reader.get()
+        break if line.type is TYPES.code
+        @node.addText line.line
+       @node = prev
 
       when TYPES.list
        if @node.type isnt TYPES.list
