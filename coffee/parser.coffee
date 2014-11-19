@@ -222,6 +222,9 @@ Mod.require 'Weya.Base',
         @node.addText line.line
        @node = prev
 
+      when TYPES.special
+       @addNode new Special indentation: line.indentation + 1
+
       when TYPES.list
        if @node.type isnt TYPES.list
         @addNode new List ordered: line.ordered, indentation: line.indentation

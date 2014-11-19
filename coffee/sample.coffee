@@ -31,6 +31,15 @@ Mod.require ->
  --Foresptin Logo
  >>>
 
+ +++
+  This is a special note
+
+  blah bla
+
+  ##a title
+
+ end
+
 
  The main differences to <<http://daringfireball.net/projects/markdown/
  (Markdown)>> are:
@@ -77,7 +86,6 @@ Mod.require ->
 
 
   ```
-
 
  ##Visualizing numerical tables ^^2^^
 
