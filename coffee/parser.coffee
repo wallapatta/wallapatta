@@ -21,12 +21,14 @@ Mod.require 'Weya.Base',
  'Docscript.Special'
  'Docscript.Html'
 
+ 'Docscript.NODES'
+
  'Docscript.Reader'
  (Base, TYPES,
   Text, Bold, Italics, SuperScript, SubScript, Code, Link,
   Block, Section, List, ListItem, Sidenote, Article, Media,
   CodeBlock, Special, Html,
-  Reader) ->
+  NODES, Reader) ->
 
    TOKENS =
     bold: Bold
@@ -155,7 +157,7 @@ Mod.require 'Weya.Base',
     setFills: ->
      for sidenote in @sidenotes
       elemSidenote = sidenote.elem
-      elemContent = @nodes[sidenote.link].elem
+      elemContent = NODES[sidenote.link].elem
 
       topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
       topContent = @getOffsetTop elemContent, @elems.main
@@ -177,12 +179,12 @@ Mod.require 'Weya.Base',
       main: main
       sidebar: sidebar
 
-     @nodes = {}
-     @root.render elem: main, nodes: @nodes
+     @root.render elem: main
 
      for sidenote in @sidenotes
-      sidenote.render elem: sidebar, nodes: @nodes
+      sidenote.render elem: sidebar
 
+    positionSidenotes: ->
      window.requestAnimationFrame @on.rendered
 
     @listen 'rendered', ->

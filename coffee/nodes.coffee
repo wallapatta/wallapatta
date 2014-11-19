@@ -4,6 +4,8 @@ Mod.require 'Weya.Base',
 
   NODE_ID = 0
 
+  PREFIX = 'docscript_'
+
   TYPES =
    sidenote: 'sidenote'
    codeBlock: 'codeBlock'
@@ -27,6 +29,7 @@ Mod.require 'Weya.Base',
    link: 'link'
    mediaInline: 'mediaInline' #TODO
 
+  NODES = {}
 
 
   class Node extends Base
@@ -39,6 +42,7 @@ Mod.require 'Weya.Base',
     @id = NODE_ID
     @elems = {}
     NODE_ID++
+    NODES[@id] = this
 
    setParent: (parent) ->  @_parent = parent
    parent: -> @_parent
@@ -51,11 +55,10 @@ Mod.require 'Weya.Base',
    add: (node) -> @_add node
 
    template: ->
-    @$.elem = @div ".node", null
+    @$.elem = @div "##{PREFIX}#{@$.id}.node", null
 
    render: (options) ->
     Weya elem: options.elem, context: this, @template
-    options.nodes[@id] = this
 
     @renderChildren @elem, options
 
@@ -63,7 +66,6 @@ Mod.require 'Weya.Base',
     for child in @children
      child.render
       elem: elem
-      nodes: options.nodes
 
 
 
@@ -76,34 +78,34 @@ Mod.require 'Weya.Base',
     @text = options.text
 
    template: ->
-    @$.elem = @span ".text", @$.text
+    @$.elem = @span "##{PREFIX}#{@$.id}.text", @$.text
 
 
 
   class Bold extends Node
    @extend()
    type: TYPES.bold
-   template: -> @$.elem = @strong ".bold", null
+   template: -> @$.elem = @strong "##{PREFIX}#{@$.id}.bold", null
 
   class Italics extends Node
    @extend()
    type: TYPES.italics
-   template: -> @$.elem = @em ".italics", null
+   template: -> @$.elem = @em "##{PREFIX}#{@$.id}.italics", null
 
   class SuperScript extends Node
    @extend()
    type: TYPES.superScript
-   template: -> @$.elem = @sup ".superScript", null
+   template: -> @$.elem = @sup "##{PREFIX}#{@$.id}.superScript", null
 
   class SubScript extends Node
    @extend()
    type: TYPES.subScript
-   template: -> @$.elem = @sub ".subScript", null
+   template: -> @$.elem = @sub "##{PREFIX}#{@$.id}.subScript", null
 
   class Code extends Node
    @extend()
    type: TYPES.code
-   template: -> @$.elem = @code ".code", null
+   template: -> @$.elem = @code "##{PREFIX}#{@$.id}.code", null
 
   class Link extends Node
    @extend()
@@ -114,7 +116,7 @@ Mod.require 'Weya.Base',
     @text ?= @link
 
    type: TYPES.link
-   template: -> @$.elem = @a ".link", href: @$.link, @$.text
+   template: -> @$.elem = @a "##{PREFIX}#{@$.id}.link", href: @$.link, @$.text
 
 
 
@@ -136,9 +138,9 @@ Mod.require 'Weya.Base',
 
    template: ->
     if @$.paragraph
-     @$.elem = @p ".paragraph", null
+     @$.elem = @p "##{PREFIX}#{@$.id}.paragraph", null
     else
-     @$.elem = @span ".block", null
+     @$.elem = @span "##{PREFIX}#{@$.id}.block", null
 
 
   class CodeBlock extends Node
@@ -154,7 +156,7 @@ Mod.require 'Weya.Base',
     @text += text
 
    template: ->
-    @$.elem = @pre ".codeBlock", @$.text
+    @$.elem = @pre "##{PREFIX}#{@$.id}.codeBlock", @$.text
 
 
   class Special extends Node
@@ -163,7 +165,7 @@ Mod.require 'Weya.Base',
    type: TYPES.special
 
    template: ->
-    @$.elem = @div ".special", null
+    @$.elem = @div "##{PREFIX}#{@$.id}.special", null
 
 
   class Html extends Node
@@ -180,9 +182,8 @@ Mod.require 'Weya.Base',
 
    render: (options) ->
     Weya elem: options.elem, context: this, ->
-     @$.elem = @div ".html", null
+     @$.elem = @div "##{PREFIX}#{@$.id}.html", null
 
-    options.nodes[@id] = this
     @elem.innerHTML = @text
 
 
@@ -194,7 +195,7 @@ Mod.require 'Weya.Base',
    @initialize (options) ->
 
    template: ->
-    @$.elem = @div ".article", null
+    @$.elem = @div "##{PREFIX}#{@$.id}.article", null
 
 
 
@@ -209,7 +210,7 @@ Mod.require 'Weya.Base',
     @level = options.level
 
    template: ->
-    @$.elem = @div ".section", ->
+    @$.elem = @div "##{PREFIX}#{@$.id}.section", ->
      h = switch @$.level
       when 1 then @h1
       when 2 then @h2
@@ -224,11 +225,9 @@ Mod.require 'Weya.Base',
 
    render: (options) ->
     Weya elem: options.elem, context: this, @template
-    options.nodes[@id] = this
 
     @heading.render
      elem: @elems.heading
-     nodes: options.nodes
 
     @renderChildren @elems.content, options
 
@@ -252,9 +251,9 @@ Mod.require 'Weya.Base',
 
    template: ->
     if @$.ordered
-     @$.elem = @ol ".list", null
+     @$.elem = @ol "##{PREFIX}#{@$.id}.list", null
     else
-     @$.elem = @ul ".list", null
+     @$.elem = @ul "##{PREFIX}#{@$.id}.list", null
 
 
 
@@ -267,7 +266,7 @@ Mod.require 'Weya.Base',
     @ordered = options.ordered
 
    template: ->
-    @$.elem = @li ".list-item", null
+    @$.elem = @li "##{PREFIX}#{@$.id}.list-item", null
 
 
   class Sidenote extends Node
@@ -279,7 +278,7 @@ Mod.require 'Weya.Base',
    type: TYPES.sidenote
 
    template: ->
-    @$.elem = @div ".sidenote", null
+    @$.elem = @div "##{PREFIX}#{@$.id}.sidenote", null
 
 
   class Media extends Node
@@ -296,15 +295,11 @@ Mod.require 'Weya.Base',
     throw new Error 'Invalid indentation'
 
    template: ->
-    @$.elem = @div ".image-container", ->
+    @$.elem = @div "##{PREFIX}#{@$.id}.image-container", ->
      @$.elems.img = @img ".image", src: @$.src, alt: @$.alt
 
    render: (options) ->
     Weya elem: options.elem, context: this, @template
-    options.nodes[@id] = this
-    console.log 'image', @id
-
-    options.nodes[@id] = this
 
 
   Mod.set 'Docscript.Text', Text
@@ -325,5 +320,7 @@ Mod.require 'Weya.Base',
   Mod.set 'Docscript.CodeBlock', CodeBlock
   Mod.set 'Docscript.Special', Special
   Mod.set 'Docscript.Html', Html
+
+  Mod.set 'Docscript.NODES', NODES
 
   Mod.set 'Docscript.TYPES', TYPES

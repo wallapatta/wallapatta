@@ -52,6 +52,7 @@ Mod.require 'Weya.Base',
 
     @elems.errors.textContent = ''
     parser.render @elems.previewMain, @elems.previewSidebar
+    parser.positionSidenotes()
 
    @listen 'setupEditor', ->
     @editor = CodeMirror.fromTextArea @elems.textarea,
