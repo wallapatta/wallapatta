@@ -6,6 +6,7 @@ Weya = require './lib/weya/weya'
 Weya.Base = require './lib/weya/base'
 fs = require 'fs'
 jsdom = require 'jsdom'
+page = require './static'
 
 Mod.set 'Weya', Weya
 Mod.set 'Weya.Base', Weya.Base
@@ -33,6 +34,12 @@ Mod.require 'Docscript.Parser',
    main = window.document.getElementById 'main'
    sidebar = window.document.getElementById 'sidebar'
    parser.render main, sidebar
-   console.log main.innerHTML
+   output = page.html
+    main: main.innerHTML
+    sidebar: sidebar.innerHTML
+    code: input
+
+   fs.writeFileSync './build/static.html', output
+
 
 Mod.initialize()

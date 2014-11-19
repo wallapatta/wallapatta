@@ -10,6 +10,15 @@ UI_JS = [
  'reader'
  'nodes'
  'sample'
+ 'static'
+]
+UI_JS_HTML = [
+ 'main'
+ 'editor'
+ 'parser'
+ 'reader'
+ 'nodes'
+ 'sample'
 ]
 UI_LESS = ['style']
 
@@ -57,7 +66,7 @@ assets = exports.assets = taskUiAssets = (callback) ->
 
 html = exports.html = ->
  files = []
- for file in UI_JS
+ for file in UI_JS_HTML
   files.push "js/#{file}.js"
 
  try
