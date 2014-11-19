@@ -5,7 +5,7 @@ Mod.require 'Weya.Base',
   NODE_ID = 0
 
   TYPES =
-   code: 'code'
+   blockCode: 'blockCode'
    list: 'list'
    listItem: 'listItem'
    block: 'block'

@@ -2,6 +2,16 @@ Mod.require 'Weya.Base',
  'Docscript.TYPES'
  (Base, TYPES) ->
 
+  BLOCK_TOKENS =
+   sidenote: '>>>'
+   code: '```'
+   special: '+++'
+   html: '<<<'
+   heading: '#'
+   orderedList: '- '
+   unorderedList: '* '
+   media: '!'
+
   class Reader extends Base
    @extend()
 
@@ -21,10 +31,18 @@ Mod.require 'Weya.Base',
     for s, n in @lines
      @lines[n] = @parseLine s
 
+   getToken: (line, start) ->
+    for k, v of BLOCK_TOKENS
+     if v is line.substr start, v.length
+      return v
+
+    return null
+
    parseLine: (s) ->
     line =
      indentation: 0
      empty: true
+     line: s
 
     i = 0
     while i < s.length
@@ -36,40 +54,41 @@ Mod.require 'Weya.Base',
     return line if i is s.length
 
     line.empty = false
+    token = @getToken s, i
+    if token?
+     i += token.length
 
-    switch s[i]
-     when '#'
+    switch token
+     when BLOCK_TOKENS.sidenote
+      line.type = TYPES.sidenote
+
+     when BLOCK_TOKENS.code
+      line.type = TYPES.blockCode
+
+     when BLOCK_TOKENS.special
+      line.type = TYPES.special
+
+     when BLOCK_TOKENS.heading
       line.type = TYPES.heading
-      line.level = 0
-      while i < s.length
-       break if s[i] isnt '#'
+      line.level = 1
+      while i < s.length and s[i] is '#'
        ++i
        ++line.level
 
-     when '-'
-      ++i
-      if i < s.length && s[i] is ' '
-       line.type = TYPES.list
-       line.ordered = true
-      else if s.substr(i, 2) is '--'
-       line.type = TYPES.sidenote
-       i += 2
-      else
-       --i #Italics
+     when BLOCK_TOKENS.orderedList
+      line.type = TYPES.list
+      line.ordered = true
 
-     when '*'
-      ++i
-      if i < s.length && s[i] is ' '
-       line.type = TYPES.list
-       line.ordered = false
-      else
-       --i #bold
 
-     when '!'
-      ++i
+     when BLOCK_TOKENS.unorderedList
+      line.type = TYPES.list
+      line.ordered = false
+
+     when BLOCK_TOKENS.media
       line.type = TYPES.media
 
-    line.type ?= TYPES.block
+     else
+      line.type = TYPES.block
 
     line.text = (s.substr i).trim()
 
