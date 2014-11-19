@@ -70,6 +70,10 @@ Mod.require ->
 
  ###The code that generated above list
 
+  >>>
+   sidenote positioning
+  >>>
+
   ```
  The main differences to <<http://daringfireball.net/projects/markdown/
  (Markdown)>> are:
