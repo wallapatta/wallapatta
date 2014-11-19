@@ -17,7 +17,7 @@ Mod.require 'Weya.Base',
        @$.elems.parse = @button ".btn.btn-default.btn-block",
         on: {click: @$.on.parse}
         "Render"
-      @div ".col-md-7", ->
+      @$.elems.preview = @div ".preview.col-md-7", ->
        @div ".row.error", ->
         @$.elems.errors = @div ".col-md-12", null
 
@@ -64,6 +64,7 @@ Mod.require 'Weya.Base',
     height = window.innerHeight
     console.log height
     @editor.setSize null, "#{height - 100}px"
+    @elems.preview.style.maxHeight = "#{height - 100}px"
     @editor.setValue Sample
 
    render: ->
