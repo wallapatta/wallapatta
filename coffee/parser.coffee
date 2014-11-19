@@ -33,7 +33,6 @@ Mod.require 'Weya.Base',
     italics: Italics
     superScript: SuperScript
     subScript: SubScript
-    code: Code
 
    TOKEN_MATCHES =
     bold: '**'
@@ -60,7 +59,7 @@ Mod.require 'Weya.Base',
     parse: ->
      while @reader.has()
       try
-       @process()
+       @processLine()
       catch e
        throw e
        #throw new Error "Line #{@reader.n + 1}: #{e.message}"
@@ -121,6 +120,16 @@ Mod.require 'Weya.Base',
          else
           @node.setLink @parseLink text.substr last, cur - last
           @node = @node.parent()
+
+        when 'code'
+         add()
+         @addNode new Code {}
+         last = i
+         cur = i = text.indexOf TOKEN_MATCHES.code, i
+         add()
+         @node = @node.parent()
+         i += TOKEN_MATCHES.code.length
+
 
       last = i
 
@@ -184,10 +193,13 @@ Mod.require 'Weya.Base',
      a.push i for i in sidebarImg
 
      n = 0
-     loaded = =>
-      n++
+     check = =>
       if n is a.length
        @setFills()
+
+     loaded = ->
+      n++
+      check()
 
      for img in a
       if not img.complete
@@ -195,8 +207,10 @@ Mod.require 'Weya.Base',
       else
        n++
 
+     check()
 
-    process: ->
+
+    processLine: ->
      line = @reader.get()
 
      if line.empty
