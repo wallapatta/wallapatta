@@ -62,7 +62,8 @@ Mod.require 'Weya.Base',
       try
        @process()
       catch e
-       throw new Error "Line #{@reader.n + 1}: #{e.message}"
+       throw e
+       #throw new Error "Line #{@reader.n + 1}: #{e.message}"
 
       @reader.next()
 
@@ -210,13 +211,14 @@ Mod.require 'Weya.Base',
        throw new Error 'Invalid indentation'
 
      switch line.type
-      when TYPES.code
+      when TYPES.codeBlock
        prev = @node
        @addNode new CodeBlock indentation: 0
-       while @reader.has()
+       while true
         @reader.next()
+        break unless @reader.has()
         line = @reader.get()
-        break if line.type is TYPES.code
+        break if line.type is TYPES.codeBlock
         @node.addText line.line
        @node = prev
 

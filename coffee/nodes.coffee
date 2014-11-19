@@ -149,15 +149,15 @@ Mod.require 'Weya.Base',
 
    type: TYPES.codeBlock
 
-   @initialize: ->
-    @texti = ''
+   @initialize ->
+    @text = ''
 
    addText: (text) ->
     @text += '\n' if @text isnt ''
     @text += text
 
    template: ->
-    @$.elem = @pre ".codeBlock", @text
+    @$.elem = @pre ".codeBlock", @$.text
 
 
   class Special extends Node
@@ -174,7 +174,7 @@ Mod.require 'Weya.Base',
 
    type: TYPES.html
 
-   @initialize: ->
+   @initialize ->
     @text = ''
 
    addText: (text) ->

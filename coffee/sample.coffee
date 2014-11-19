@@ -52,6 +52,32 @@ Mod.require ->
     Ok, may be these should be on the left
     >>>
 
+ ###The code that generated above list
+
+  ```
+ The main differences to <<http://daringfireball.net/projects/markdown/
+ (Markdown)>> are:
+
+  * Minor changes to syntax
+
+    Changes such as ``- -`` for --italics-- and a few additions like
+    ^^super^^script and __sub__script.
+
+  * Indentation for hierarchy
+
+    To support print layouts, and to build table of contents.
+
+  * Sidenotes
+
+    >>>
+    --Because sidenotes are so awesome!
+
+    Ok, may be these should be on the left
+    >>>
+
+
+  ```
+
 
  ##Visualizing numerical tables ^^2^^
 
