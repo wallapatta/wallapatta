@@ -177,20 +177,25 @@ Mod.require 'Weya.Base',
      window.requestAnimationFrame @on.rendered
 
     @listen 'rendered', ->
+     mainImg = @elems.main.getElementsByTagName 'img'
+     sidebarImg = @elems.sidebar.getElementsByTagName 'img'
+     a = []
+     a.push i for i in mainImg
+     a.push i for i in sidebarImg
+
      n = 0
-
      loaded = =>
-      n--
+      n++
+      console.log 'loaded'
 
-      if n is 0
+      if n is a.length
        @setFills()
 
-     for id of @nodes
-      n++
-
-     for id, node of @nodes
-      node.onLoaded loaded
-
+     for img in a
+      if not img.complete
+       img.addEventListener 'load', loaded
+      else
+       n++
 
 
     process: ->
