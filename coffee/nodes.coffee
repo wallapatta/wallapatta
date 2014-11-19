@@ -43,9 +43,6 @@ Mod.require 'Weya.Base',
    setParent: (parent) ->  @_parent = parent
    parent: -> @_parent
 
-   onLoaded: (callback) ->
-    callback()
-
    _add: (node) ->
     node.setParent this
     @children.push node
@@ -292,7 +289,6 @@ Mod.require 'Weya.Base',
     @src = options.media.src
     @alt = options.media.alt
     @alt ?= options.media.src
-    @loaded = false
 
    type: TYPES.media
 
@@ -303,21 +299,10 @@ Mod.require 'Weya.Base',
     @$.elem = @div ".image-container", ->
      @$.elems.img = @img ".image", src: @$.src, alt: @$.alt
 
-   onLoaded: (callback) ->
-    @onLoadCallback = callback
-    if @loaded
-     @onLoadCallback()
-
-   @listen 'load', ->
-    @loaded = true
-    if @onLoadCallback?
-     @onLoadCallback()
-
    render: (options) ->
     Weya elem: options.elem, context: this, @template
     options.nodes[@id] = this
     console.log 'image', @id
-    @elems.img.addEventListener 'load', @on.load
 
     options.nodes[@id] = this
 

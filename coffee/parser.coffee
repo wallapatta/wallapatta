@@ -186,8 +186,6 @@ Mod.require 'Weya.Base',
      n = 0
      loaded = =>
       n++
-      console.log 'loaded'
-
       if n is a.length
        @setFills()
 
