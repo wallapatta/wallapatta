@@ -222,6 +222,18 @@ Mod.require 'Weya.Base',
         @node.addText line.line
        @node = prev
 
+      when TYPES.html
+       prev = @node
+       @addNode new Html indentation: 0
+       while true
+        @reader.next()
+        break unless @reader.has()
+        line = @reader.get()
+        break if line.type is TYPES.html
+        @node.addText line.line
+       @node = prev
+
+
       when TYPES.special
        @addNode new Special indentation: line.indentation + 1
 

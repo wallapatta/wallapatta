@@ -40,6 +40,13 @@ Mod.require ->
 
  end
 
+ <<<
+<p style="color:red">This is pure html</p>
+
+<p>Pure awesomeness</p>
+ <<<
+
+
 
  The main differences to <<http://daringfireball.net/projects/markdown/
  (Markdown)>> are:
