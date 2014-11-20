@@ -13,6 +13,13 @@ Mod.require 'Docscript.Parser', (Parser) ->
  window.requestAnimationFrame ->
   parser.mediaLoaded ->
    parser.setFills()
+   n = 0
+   int = setInterval ->
+    parser.setFills()
+    n++
+    if n is 10
+     clearInterval int
+   , 1000
 
 document.addEventListener 'DOMContentLoaded', ->
  Mod.set 'Weya', Weya

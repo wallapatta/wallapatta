@@ -244,9 +244,8 @@ Mod.require 'Weya.Base',
 
      switch line.type
       when TYPES.codeBlock
-       prev = @node
        indent = line.indentation + 1
-       @addNode new CodeBlock indentation: 0
+       @addNode new CodeBlock indentation: line.indentation + 1
        while true
         @reader.next()
         break unless @reader.has()
@@ -255,12 +254,10 @@ Mod.require 'Weya.Base',
          indent = line.indentation
         break if line.type is TYPES.codeBlock
         @node.addText line.line.substr indent
-       @node = prev
 
       when TYPES.html
-       prev = @node
        indent = line.indentation + 1
-       @addNode new Html indentation: 0
+       @addNode new Html indentation: line.indentation + 1
        while true
         @reader.next()
         break unless @reader.has()
@@ -269,7 +266,6 @@ Mod.require 'Weya.Base',
          indent = line.indentation
         break if line.type is TYPES.html
         @node.addText line.line.substr indent
-       @node = prev
 
 
       when TYPES.special
