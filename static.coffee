@@ -40,7 +40,7 @@ template = ->
    '''
 
   @body ->
-   @div ".container", ->
+   @div ".container.docscript-container", ->
     @div "#docscript-container.row.docscript", ->
      @div "#main.col-xs-9", "###MAIN###"
      @div "#sidebar.col-xs-3", "###SIDEBAR###"
