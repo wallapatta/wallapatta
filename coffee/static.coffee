@@ -1,10 +1,18 @@
 Mod.require 'Docscript.Parser', (Parser) ->
- code = (document.getElementById 'code').textContent
- main = (document.getElementById 'main').textContent
- sidebar = (document.getElementById 'sidebar').textContent
+ code = document.getElementById 'code'
+ main = document.getElementById 'main'
+ sidebar = document.getElementById 'sidebar'
+ container = document.getElementById 'docscript-container'
 
- parser = new Parser text: code
+ parser = new Parser
+  text: code.textContent
  parser.parse()
+ parser.collectElements
+  main: main
+  sidebar: sidebar
+ window.requestAnimationFrame ->
+  parser.mediaLoaded ->
+   parser.setFills()
 
 document.addEventListener 'DOMContentLoaded', ->
  Mod.set 'Weya', Weya

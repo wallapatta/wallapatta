@@ -30,6 +30,8 @@ Mod.require 'Weya.Base',
   CodeBlock, Special, Html,
   NODES, Reader) ->
 
+   PREFIX = 'docscript_'
+
    TOKENS =
     bold: Bold
     italics: Italics
@@ -184,10 +186,17 @@ Mod.require 'Weya.Base',
      for sidenote in @sidenotes
       sidenote.render elem: sidebar
 
-    positionSidenotes: ->
-     window.requestAnimationFrame @on.rendered
+    collectElements: (options) ->
+     @elems =
+      main: options.main
+      sidebar: options.sidebar
 
-    @listen 'rendered', ->
+     for id, node of NODES
+      node.elem = document.getElementById "#{PREFIX}#{id}"
+      if not node.elem?
+       throw new Error "Element #{id} not found"
+
+    mediaLoaded: (callback) ->
      mainImg = @elems.main.getElementsByTagName 'img'
      sidebarImg = @elems.sidebar.getElementsByTagName 'img'
      a = []
@@ -197,7 +206,7 @@ Mod.require 'Weya.Base',
      n = 0
      check = =>
       if n is a.length
-       @setFills()
+       callback()
 
      loaded = ->
       n++

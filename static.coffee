@@ -41,9 +41,9 @@ template = ->
 
   @body ->
    @div ".container", ->
-    @div ".row.docscript", ->
-     @div "#main.col-md-9", "###MAIN###"
-     @div "#sidebar.col-md-3", "###SIDEBAR###"
+    @div "#docscript-container.row.docscript", ->
+     @div "#main.col-xs-9", "###MAIN###"
+     @div "#sidebar.col-xs-3", "###SIDEBAR###"
 
    @div "#code", style: {display: 'none'}, "###CODE###"
 

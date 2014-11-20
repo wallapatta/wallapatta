@@ -2,10 +2,6 @@ Mod.require 'Weya.Base',
  'Weya'
  (Base, Weya) ->
 
-  NODE_ID = 0
-
-  PREFIX = 'docscript_'
-
   TYPES =
    sidenote: 'sidenote'
    codeBlock: 'codeBlock'
@@ -29,7 +25,10 @@ Mod.require 'Weya.Base',
    link: 'link'
    mediaInline: 'mediaInline' #TODO
 
+  #TODO include these in a class
   NODES = {}
+  NODE_ID = 0
+  PREFIX = 'docscript_'
 
 
   class Node extends Base
