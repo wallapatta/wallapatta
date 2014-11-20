@@ -11,16 +11,17 @@ page = require './static'
 Mod.set 'Weya', Weya
 Mod.set 'Weya.Base', Weya.Base
 
-#TODO
 require './coffee/parser'
 require './coffee/nodes'
 require './coffee/reader'
 
 argv = require 'optimist'
  .usage 'DocScript parser.\n Usage: $0'
- .demand ['i']
+ .demand ['i', 'o']
  .alias 'i', 'input'
  .describe 'i', 'Input file'
+ .alias 'o', 'output'
+ .describe 'o', 'Output file'
  .argv
 
 input = "#{fs.readFileSync argv.input}"
@@ -39,7 +40,7 @@ Mod.require 'Docscript.Parser',
     sidebar: sidebar.innerHTML
     code: input
 
-   fs.writeFileSync './build/static.html', output
+   fs.writeFileSync "./build/#{argv.output}.html", output
 
 
 Mod.initialize()
