@@ -35,6 +35,7 @@ template = ->
   @body ->
    @script src:"lib/CodeMirror/lib/codemirror.js"
    @script src:"js/codemirror-syntax.js"
+   @script src:"lib/CodeMirror/mode/xml/xml.js"
 
    @script src:"lib/weya/weya.js"
    @script src:"lib/weya/base.js"

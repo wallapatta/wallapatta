@@ -14,6 +14,11 @@ Mod.require ->
  ###**<<https://github.com/vpj/docscript(Fork Me on Github)>>
  >>>
 
+ <<<
+  <p>Html Paragraph</p>
+  <strong>Strong</strong>
+ <<<
+
  Layout is inspired by style of books and handouts of Edward R. Tufte
  and Richard Feynman.^^1^^
 

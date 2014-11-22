@@ -469,109 +469,46 @@ CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
   setextHeaderRE = /^(?:\={1,}|-{1,})$/
   textRE = /^[^#!\[\]*_\\<>` "'(~]+/
   savedInlineRE = []
+
+
+  operator = "keyword"
+  console.log cmCfg
+  htmlMode = CodeMirror.getMode cmCfg, name: "xml", htmlMode: true
+
   mode =
     startState: ->
-      f: blockNormal
-      prevLineHasContent: false
-      thisLineHasContent: false
-      block: blockNormal
-      htmlState: null
-      indentation: 0
-      inline: inlineNormal
-      text: handleText
-      formatting: false
-      linkText: false
-      linkHref: false
-      linkTitle: false
-      em: false
-      strong: false
-      header: 0
-      taskList: false
-      list: false
-      listDepth: 0
-      quote: 0
-      trailingSpace: 0
-      trailingSpaceNewLine: false
-      strikethrough: false
+     stack: []
+     isHtml: false
+     htmlState: null
 
-    copyState: (s) ->
-      f: s.f
-      prevLineHasContent: s.prevLineHasContent
-      thisLineHasContent: s.thisLineHasContent
-      block: s.block
-      htmlState: s.htmlState and CodeMirror.copyState(htmlMode, s.htmlState)
-      indentation: s.indentation
-      localMode: s.localMode
-      localState: (if s.localMode then CodeMirror.copyState(s.localMode, s.localState) else null)
-      inline: s.inline
-      text: s.text
-      formatting: false
-      linkTitle: s.linkTitle
-      em: s.em
-      strong: s.strong
-      strikethrough: s.strikethrough
-      header: s.header
-      taskList: s.taskList
-      list: s.list
-      listDepth: s.listDepth
-      quote: s.quote
-      trailingSpace: s.trailingSpace
-      trailingSpaceNewLine: s.trailingSpaceNewLine
-      md_inside: s.md_inside
 
     token: (stream, state) ->
+     if stream.sol()
+      return "" if stream.eatSpace()
 
-      # Reset state.formatting
-      state.formatting = false
-      if stream.sol()
-        forceBlankLine = !!state.header
+     if state.isHtml
+      console.log 'html'
+      match = stream.match /^<<</
+      if match
+       state.isHtml = false
+       return operator
+      else
+       l = htmlMode.token stream, state.htmlState
+       console.log l
+       return l
+     else
+      console.log 'not html'
+      match = stream.match /^<<</
+      if match
+       state.isHtml = true
+       stream.skipToEnd()
+       state.htmlState = CodeMirror.startState htmlMode
+       console.log state.htmlState
+       return operator
 
-        # Reset state.header
-        state.header = 0
-        if stream.match(/^\s*$/, true) or forceBlankLine
-          state.prevLineHasContent = false
-          blankLine state
-          return (if forceBlankLine then @token(stream, state) else null)
-        else
-          state.prevLineHasContent = state.thisLineHasContent
-          state.thisLineHasContent = true
-
-        # Reset state.taskList
-        state.taskList = false
-
-        # Reset state.code
-        state.code = false
-
-        # Reset state.trailingSpace
-        state.trailingSpace = 0
-        state.trailingSpaceNewLine = false
-        state.f = state.block
-        indentation = stream.match(/^\s*/, true)[0].replace(/\t/g, "    ").length
-        difference = Math.floor((indentation - state.indentation) / 4) * 4
-        difference = 4  if difference > 4
-        adjustedIndentation = state.indentation + difference
-        state.indentationDiff = adjustedIndentation - state.indentation
-        state.indentation = adjustedIndentation
-        return null  if indentation > 0
-      state.f stream, state
-
-    innerMode: (state) ->
-      if state.block is htmlBlock
-        return (
-          state: state.htmlState
-          mode: htmlMode
-        )
-      if state.localState
-        return (
-          state: state.localState
-          mode: state.localMode
-        )
-      state: state
-      mode: mode
-
-    blankLine: blankLine
-    getType: getType
-    fold: "docscript"
+      else
+       stream.skipToEnd()
+       return ""
 
   mode
 ), "xml"
