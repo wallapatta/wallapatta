@@ -58,7 +58,7 @@ Mod.require 'Weya.Base',
 
    @listen 'setupEditor', ->
     @editor = CodeMirror.fromTextArea @elems.textarea,
-     mode: "text"
+     mode: "docscript"
      lineNumbers: true
      lineWrapping: true
      tabSize: 1

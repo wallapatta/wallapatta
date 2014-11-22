@@ -19,7 +19,7 @@ template = ->
     type: 'text/css'
    @link href: "lib/bootstrap/css/bootstrap.min.css", rel: "stylesheet"
    @link href: "lib/fontawesome/css/font-awesome.min.css", rel: "stylesheet"
-   @link href: "lib/codemirror/codemirror.css", rel: "stylesheet"
+   @link href: "lib/CodeMirror/lib/codemirror.css", rel: "stylesheet"
    @link href: "css/style.css", rel: "stylesheet"
    @link rel: "shortcut icon", href: "img/favicon.ico", type: "image/x-icon"
    @script '''
@@ -33,8 +33,8 @@ template = ->
    '''
 
   @body ->
-   @script src:"lib/codemirror/codemirror.js"
-   @script src:"lib/d3.v3.min.js"
+   @script src:"lib/CodeMirror/lib/codemirror.js"
+   @script src:"js/codemirror-syntax.js"
 
    @script src:"lib/weya/weya.js"
    @script src:"lib/weya/base.js"

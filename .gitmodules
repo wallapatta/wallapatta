@@ -4,3 +4,6 @@
 [submodule "lib/mod"]
 	path = lib/mod
 	url = git@github.com:vpj/mod.git
+[submodule "ui-assets/lib/CodeMirror"]
+	path = ui-assets/lib/CodeMirror
+	url = git@github.com:codemirror/CodeMirror.git

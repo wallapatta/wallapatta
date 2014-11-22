@@ -11,6 +11,7 @@ UI_JS = [
  'nodes'
  'sample'
  'static'
+ 'codemirror-syntax'
 ]
 UI_JS_HTML = [
  'main'
