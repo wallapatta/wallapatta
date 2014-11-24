@@ -65,8 +65,7 @@ Mod.require 'Weya.Base',
       try
        @processLine()
       catch e
-       throw e
-       #throw new Error "Line #{@reader.n + 1}: #{e.message}"
+       throw new Error "Line #{@reader.n + 1}: #{e.message}"
 
       @reader.next()
 

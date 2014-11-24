@@ -42,10 +42,9 @@ Mod.require 'Weya.Base',
     @elems.previewSidebar.innerHTML = ''
     parser = new Parser text: text
 
-    parser.parse()
+    #parser.parse()
     try
-     if false
-      parser.parse()
+     parser.parse()
     catch e
      @elems.errors.textContent = e.message
      return
