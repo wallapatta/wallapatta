@@ -478,7 +478,6 @@ CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
   mode =
     startState: ->
      stack: []
-     isHtml: false
      htmlState: null
 
 
@@ -486,29 +485,60 @@ CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
      if stream.sol()
       return "" if stream.eatSpace()
 
-     if state.isHtml
-      console.log 'html'
-      match = stream.match /^<<</
-      if match
-       state.isHtml = false
-       return operator
-      else
-       l = htmlMode.token stream, state.htmlState
-       console.log l
-       return l
-     else
-      console.log 'not html'
-      match = stream.match /^<<</
-      if match
-       state.isHtml = true
-       stream.skipToEnd()
-       state.htmlState = CodeMirror.startState htmlMode
-       console.log state.htmlState
-       return operator
+     stack = state.stack
 
+     while stack.length > 0
+      console.log 'indent', stream.indentation()
+      if stack[stack.length - 1].indentation >= stream.indentation()
+       stack.pop()
       else
-       stream.skipToEnd()
-       return ""
+       break
+
+     match = stream.match /^<<</
+     if match
+      stack.push indentation: stream.indentation(), type: 'html'
+      stream.skipToEnd()
+      state.htmlState = CodeMirror.startState htmlMode
+      return operator
+
+     match = stream.match /^\+\+\+/
+     if match
+      stack.push indentation: stream.indentation(), type: 'special'
+      stream.skipToEnd()
+      return operator
+
+     match = stream.match /^>>>/
+     if match
+      stack.push indentation: stream.indentation(), type: 'sidenote'
+      stream.skipToEnd()
+      return "strong"
+
+     match = stream.match /^```/
+     if match
+      stack.push indentation: stream.indentation(), type: 'code'
+      stream.skipToEnd()
+      return operator
+
+     types =
+      sidenote: false
+      html: false
+      special: false
+      code: false
+
+     for t in stack
+      types[t.type] = true
+
+     if types.html
+      l = htmlMode.token stream, state.htmlState
+      l = "#{l}"
+     else if types.code
+      stream.skipToEnd()
+      l = "hr"
+     else
+      stream.skipToEnd()
+      l = ""
+
+     return l
 
   mode
 ), "xml"
