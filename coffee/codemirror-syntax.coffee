@@ -97,6 +97,13 @@ CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
      if stream.sol()
       state.start = true
       s = stream.eatSpace()
+      if stream.eol()
+       state.bold = false
+       state.italics = false
+       state.subscript = false
+       state.superscript = false
+       state.code = false
+       state.link = false
 
       return "" if s
 
