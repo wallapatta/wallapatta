@@ -145,7 +145,7 @@ Mod.require 'Weya.Base',
      @node.add node
      if node.type is TYPES.block
       @blocks.push node
-     @node = node
+     @prevNode = @node = node
 
     getOffsetTop: (elem, parent) ->
      top = 0
