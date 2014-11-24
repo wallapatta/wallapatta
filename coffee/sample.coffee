@@ -1,186 +1,361 @@
 Mod.require ->
  text = '''
-#Docscript Sample
-
- --Following is a sample document to illustrate how to use docscript.
-
-
- Docscript is inspired by markdown. We developed this because markdown didn't
- fit out requirement. And we can customize it as our requirements change.
- We developed this over a couple days and published it on
- <<https://github.com/vpj/docscript(Github)>>.
+#Markdown like syntax for Edward Tufte style documents
 
  >>>
-  ###**<<https://github.com/vpj/docscript(Fork Me on Github)>>
+  ###**<<http://vpj.github.io/docscript/(Try online editor)>>
 
- <<<
-  <p>Html Paragraph</p>
-  <strong>Strong</strong>
-
- ```
-  This is code
-
- Layout is inspired by style of books and handouts of Edward R. Tufte
- and Richard Feynman.^^1^^
-
- >>>
-  ^^1^^ <<http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB
-  (Book design: advice and examples)>>
-
- We are using docscript to generate software user manuals at
- **<<http://forestpin.com(Forestpin)>>**.
+ We started working on a documentation engine to create documents such
+ as --printed user manuals--, --getting started guides--, --online help--,
+ --training handouts-- and --internal documents-- at
+ **<<http://www.forestpin.com(Foresptin)>>**.
 
  >>>
   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
 
-  --Foresptin Logo
+  --Forestpin Logo
 
- +++
-  This is a special note
+ Initially we were working with editors such as Microsoft Word. It was alright
+ when we had a couple of documents but it wasn't easy to maintain formats and
+ manage them as larger documents came in. Then we started looking at
+ alternatives like <<http://en.wikipedia.org/wiki/LaTeX(LaTeX)>>
+ and <<http://en.wikipedia.org/wiki/Markdown(Markdown)>>.
 
-  blah bla
+ Both these options would make managing the documentations much easier. The
+ documents could be version controlled with **git**, which lets us do a number
+ things: version control, branching, collaboration, etc. Although LeTeX gives
+ a lot of flexibility,  it was a little too complicated,
+ especially for non-technical writers.
 
-  ##a title
+ Markdown on the other hand was much simpler but didn't support some of the key
+ features we wanted. Markdown doesn't work well when printing. It breaks pages
+ random places. The other problem was that Markdown didn't support
+ sidenotes.
 
- end
+ <<http://rmarkdown.rstudio.com/(R Markdown)>> suported formatting inspired by
+ Tufte. This was the best already available option for us. We honestly didn't
+ have very good reasons not to use it and develop our own.
 
- <<<
-  <p style="color:red">This is pure html</p>
+ >>>
+  <<http://rmarkdown.rstudio.com/tufte_handout_format.html(RStudio Markdown)>>
+  does seem to have tufte style for Markdown.
 
-  <p>Pure awesomeness</p>
+  --<<http://sachsmc.github.io/tufterhandout/(Sample)>> -
+  <<https://raw.githubusercontent.com/sachsmc/tufterhandout/master/vignettes/example.Rmd(Source)>>
 
 
+ However there were a few advantages of developing our own tool:
 
- The main differences to <<http://daringfireball.net/projects/markdown/
- (Markdown)>> are:
+  * Give us total control
 
-  * Minor changes to syntax
+   We would be able to modify the tool to perfectly fit our needs
 
-    Changes such as ``- -`` for --italics-- and a few additions like
-    ^^super^^script and __sub__script.
+  * Mardown doesn't have a structure
 
-  * Indentation for hierarchy
+   For instance, in the following document,
 
-    To support print layouts, and to build table of contents.
+   ```
+    #Heading1
+    Intro
+    #Heading2
+    Paragraph
+    #Heading3
+    Paragraph
+    Conclusion
 
-  * Sidenotes
+   it is not clear whether ``Conclusion`` belongs to ``Heading1`` or
+   ``Heading3``. This again gives some trouble when paginating.
 
-    >>>
-     --Because sidenotes are so awesome!
+  * R Markdown seemed to be use verbose syntaxes for some of the commonly
+   needed functions
 
-     Ok, may be these should be on the left
+ ###DocScript Project
 
- ###The code that generated above list
+  Docscript is available on <<https://github.com/vpj/docscript(Github)>>. It
+  is not fully baked yet but you can give it a try.
 
   >>>
-   sidenote positioning
+   #####**<<https://github.com/vpj/docscript(Fork me on github)>>
+
+
+  Here are some of the sample documents we've created:
+
+   * <<http://vpj.github.io/docscript/benford.html(Benford's Law Test)>>
+   * <<http://vpj.github.io/docscript/dashboard.html(Forestpin Dashboard)>>
+   * <<http://vpj.github.io/docscript/correlation.html(Correlation Test)>>
+
+ ###Usage
+
+  The online compiler is available at <<http://vpj.github.io/docscript/>>.
+
+  The command line interface requires ``nodejs`` and ``coffeescript``. You need
+  to get the git submodules with ``git submodule init`` and
+  ``git submodule update`` after cloning docscript.
+
+  >>>
+   A few npm packeges such as ``optimist`` are required.
+
 
   ```
-   The main differences to <<http://daringfireball.net/projects/markdown/
-   (Markdown)>> are:
+   ./docscript.coffee -i input_file -o output_file
 
-    * Minor changes to syntax
+  This will create the output html file inside ``build`` directory. The CLI is
+  still in early stages.
 
-      Changes such as ``- -`` for --italics-- and a few additions like
-      ^^super^^script and __sub__script.
+ ##Design
 
-    * Indentation for hierarchy
+  Docscript uses indentation to specify hierarchy of content.
 
-      To support print layouts, and to build table of contents.
+  +++
+   ####Example
 
-    * Sidenotes
+    ```
+     ###Heading1
 
-      >>>
-       --Because sidenotes are so awesome!
+      Introduction
 
-       Ok, may be these should be on the left
+      * Point one
 
- ##Visualizing numerical tables ^^2^^
+       Description about point one
+
+      ####Subtopic
+
+       Subtopic content
+
+       More subtopic content
+
+      This belongs to Heading1
+
+    >>>
+     ###Heading1
+
+      Introduction
+
+      * Point one
+
+       Description about point one
+
+      ####Subtopic
+
+       Subtopic content
+
+       More subtopic content
+
+      This belongs to Heading1
+
+  Althought indentation doesn't help much in standard rendering except in a
+  a few cases (e.g. lists) it's has a number of of other uses. It lets us
+  programmetically set page breaks when printing (not implemented yet).
+  Other advantage is we can use **code folding** when editing; which come handy
+  when working with large documents.
+
+  Another key feature of docscript is sidenotes. You can have notes as well
+  as images in sidenotes.
 
   >>>
-   ^^2^^ Was taken from a <<http://blog.varunajayasiri.com/variable-length-underlining-to-help-see-data-in-a-glance
-   (blog post)>> I wrote sometime back.
-   .
+   <<<
+    <a href="https://twitter.com/share" class="twitter-share-button" data-via="vpj" data-size="large">Tweet</a>
+    <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
 
-  Here's a number of alternatives to displaying table of numbers. We
-  have evaluated them in terms of,
+   --Tweet this button in a sidenote^^1^^
 
-   - **Reading numbers
-   - **Finding the largest and smallest
-   - **Getting an idea about the distribution
+  We've changed some syntaxes of Markdown; for instance, ``<<`` and ``>>`` are
+  used for links instead of ``[]()``, because we felt it was a little more
+  intuitive (resemblence with HTML tags).
 
-  If there is only one column of numbers, the table can be sorted by that. But
-  there is a bit of a problem when there are multiple columns and you want to
-  see the relationship between two columns. In which case you will have to sort
-  by one of the columns and understand the distribution of the other column
-  relative to that.
+  Docscript introduces HTML blocks marked by ``<<<``, where you can add
+  any HTML content.
 
-  ###Listing numbers
+  >>>
+   ^^1^^That's how we added the tweet button.
 
-   The simplest and often the best way is to simply list them. Right aligned
-   numbers help quick scanning and comparison.
+ ##Reference
 
-   !assets/list.png
+  ###Headings
 
-   >>>
-    --The table is sorted by the first column.
+   Headings have the same syntax as Markdown. ``#`` for level 1 headings ``##`` for
+   level 2 headings and so on. The content that belongs to the heading should
+   indented.
 
-    If there are very large or small numbers the reader should be able to
-    spot them quickly because the number of digits in those numbers would differ
-    from the rest.
+   ```
+    #Heading
 
-   If the reader wants to get an idea about the distribution or range of numbers
-   in a non-sorted column she will have to go through the each of the numbers.
+     Indented content
 
+  ###Paragraphs
 
-  ###Bars
-   Adding a bar, like in a horizontal bar chart, helps you clearly identify
-   the largest value and understand the distribution without having to
-   read through the numbers.
+   Again similar to Markdown. Paragraphs are separated by blank lines.
 
-   !assets/bars.png
+   ```
+    Paragraph1
+    More of paragraph1
 
-   >>>
-    --The length of the green bars is proportional to the value in the list.
+    Paragraph2
 
-    Less prominent color choice for the bars would minimize the distraction.
+  ###List
 
-   The bars take up a lot of space - at least another column. Displaying text
-   over bars reduces the space, but it makes it lot harder to read the numbers.
+   Ordered lists begin with ``- `` while unordered lists begin with ``* ``.
+   Since lists can be structured with indentations, it's easy to have lists
+   within lists.
 
-   !assets/bars-text.png
+   ```
+    - Introduction
+    - Analyses
 
-   >>>
-    It would be even more distracting if the numbers were right aligned.
+     - Daily analysis
+     - Benford's law
+     - Timeseries analysis
+    - Visualizations
 
-  ###Underline
-
-   A thin line underneath the numbers instead of the bars can give
-   a visual indication of the values, without taking much space.
-
-   !assets/underline.png
+     * Treemap
+     * Bar charts
+     * Dashboard
 
    >>>
-    --The scale of the line lengths is linear.
+    - Introduction
+    - Analyses
 
-    Larger and smaller numbers of the second column can be identified without
-    reading numbers. It takes a lot less time to understand the distribution and
-    any outliers can be spotted easily.
+     - Daily analysis
+     - Benford's law
+     - Timeseries analysis
+    - Visualizations
 
-   Right aligning the bars eliminated minimizes clutter. A subtle line color
-   and/or thinner lines will help reduce distraction even more.
+     * Treemap
+     * Bar charts
+     * Dashboard
 
-   The distribution of numbers can be identified even when viewing from a
-   distance or with a **blurry** vision.
+  ###Media
+
+   Images can be added with ``!``.
+
+   ```
+    !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
 
    >>>
-    !assets/blur.png
+    !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
 
-    --A blurred copy of the table
+  ###Special Blocks
 
-   The scale of the lines could be linear or logarithmic depending on the
-   distribution of the numbers. For better understanding, a small axis could be
-   placed at the column headings.
+   This is similar to block quotes in Markdown. Special blocks are specified
+   by ``+++``. The content is identified using indentation.
+
+   ```
+    +++
+     **This is a special segment.
+
+     Can have all the other things like images.
+
+     !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1814286/d1.png
+
+   +++
+    **This is a special segment.
+
+    Can have all the other things like images.
+
+    !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1814286/d1.png
+
+  ###Code Blocks
+
+   Code blocks are identified by three backtick quotes (`).
+
+  ###Html Blocks
+
+   Html blocks are identified by ``<<<``.
+
+   ```
+    <<<
+     <blockquote class="twitter-tweet" lang="en"><p>Docscript <a href="http://t.co/iaPELYc7RL">http://t.co/iaPELYc7RL</a> Alternative to <a href="https://twitter.com/hashtag/markdown?src=hash">#markdown</a> written in <a href="https://twitter.com/hashtag/coffeescript?src=hash">#coffeescript</a></p>&mdash; Varuna Jayasiri (@vpj) <a href="https://twitter.com/vpj/status/532035802578944003">November 11, 2014</a></blockquote>
+     <script async src="http://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+   Here's a tweet embedded with an HTML block.
+
+   <<<
+    <blockquote class="twitter-tweet" lang="en"><p>Docscript <a href="http://t.co/iaPELYc7RL">http://t.co/iaPELYc7RL</a> Alternative to <a href="https://twitter.com/hashtag/markdown?src=hash">#markdown</a> written in <a href="https://twitter.com/hashtag/coffeescript?src=hash">#coffeescript</a></p>&mdash; Varuna Jayasiri (@vpj) <a href="https://twitter.com/vpj/status/532035802578944003">November 11, 2014</a></blockquote>
+    <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+   >>>
+    This won't work in online editor since the twitter script will not load
+
+  ###Bold
+
+   Text can be made bold with ``**``.
+
+   ```
+    **This is bold** and this is not.
+
+    **This entire paragraph is bold.
+    Still the same paragraph.
+
+   >>>
+    **This is bold** and this is not.
+
+    **This entire paragraph is bold.
+    Still the same paragraph.
+
+  ###Italics
+
+   Text can be made italics with ``--``.
+
+   ```
+    --This is italics-- and this is not
+
+    --This entire paragraph is in italics.
+    Still the same paragraph
+
+   >>>
+    --This is italics-- and this is not
+
+    --This entire paragraph is in italics.
+    Still the same paragraph
+
+  ###Superscript and Subscript
+
+   Superscript are wrapped inside ``^^ ^^`` and Subscripts are wrapped inside
+   ``__ __``.
+
+
+   ```
+    * 2^^2^^ = 4
+    * CO__2__
+
+   >>>
+    * 2^^2^^ = 4
+    * CO__2__
+
+  ###Inline code
+
+   Inline code is identified by two backticks (`).
+
+   ```
+    Click ``apply`` to save changes.
+
+   >>>
+    Click ``apply`` to save changes.
+
+  ###Links
+
+   Links are wrapped inside ``<< >>``. The link text can be specified within
+   brackets.
+
+   ```
+    * <<http://www.twitter.com/vpj(My Twitter Account)>>
+    * <<http://www.forestpin.com>>
+
+   >>>
+    * <<http://www.twitter.com/vpj(My Twitter Account)>>
+    * <<http://www.forestpin.com>>
+
+
+ ###**Future Plans
+
+  We need to add **inline images** to include small illustrations within text.
+  I plan on supporting comments as well. So that we can include notes that won't
+  got to the rendered document.
+
+  A lot of work needs to be done on the CLI to render multiple files and
+  to compose large document based on a number of files. I am thinking of using
+  this for my blog.
+
  '''
 
  Mod.set 'Docscript.Sample', text
