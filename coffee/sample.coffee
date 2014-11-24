@@ -17,7 +17,9 @@ Mod.require ->
  <<<
   <p>Html Paragraph</p>
   <strong>Strong</strong>
- <<<
+
+ ```
+  This is code
 
  Layout is inspired by style of books and handouts of Edward R. Tufte
  and Richard Feynman.^^1^^
@@ -46,10 +48,9 @@ Mod.require ->
  end
 
  <<<
-<p style="color:red">This is pure html</p>
+  <p style="color:red">This is pure html</p>
 
-<p>Pure awesomeness</p>
- <<<
+  <p>Pure awesomeness</p>
 
 
 
@@ -80,28 +81,25 @@ Mod.require ->
   >>>
 
   ```
- The main differences to <<http://daringfireball.net/projects/markdown/
- (Markdown)>> are:
+   The main differences to <<http://daringfireball.net/projects/markdown/
+   (Markdown)>> are:
 
-  * Minor changes to syntax
+    * Minor changes to syntax
 
-    Changes such as ``- -`` for --italics-- and a few additions like
-    ^^super^^script and __sub__script.
+      Changes such as ``- -`` for --italics-- and a few additions like
+      ^^super^^script and __sub__script.
 
-  * Indentation for hierarchy
+    * Indentation for hierarchy
 
-    To support print layouts, and to build table of contents.
+      To support print layouts, and to build table of contents.
 
-  * Sidenotes
+    * Sidenotes
 
-    >>>
-    --Because sidenotes are so awesome!
+      >>>
+      --Because sidenotes are so awesome!
 
-    Ok, may be these should be on the left
-    >>>
-
-
-  ```
+      Ok, may be these should be on the left
+      >>>
 
  ##Visualizing numerical tables ^^2^^
 

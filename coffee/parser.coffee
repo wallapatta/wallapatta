@@ -238,15 +238,20 @@ Mod.require 'Weya.Base',
       if not @node?
        throw new Error 'Invalid indentation'
 
-     if @node.type is TYPES.list
-      if line.type isnt TYPES.list
-       @node = @node.parent()
+     switch @node.type
+      when TYPES.list
+       if line.type isnt TYPES.list
+        @node = @node.parent()
+
+      when  TYPES.codeBlock, TYPES.html
+       @node.addText line.line.substr @node.indentation
+       return
 
      switch line.type
       when TYPES.codeBlock
        indent = line.indentation + 1
        @addNode new CodeBlock indentation: line.indentation + 1
-       while true
+       while false
         @reader.next()
         break unless @reader.has()
         line = @reader.get()
@@ -258,7 +263,7 @@ Mod.require 'Weya.Base',
       when TYPES.html
        indent = line.indentation + 1
        @addNode new Html indentation: line.indentation + 1
-       while true
+       while false
         @reader.next()
         break unless @reader.has()
         line = @reader.get()
