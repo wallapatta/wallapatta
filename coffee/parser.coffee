@@ -235,8 +235,8 @@ Mod.require 'Weya.Base',
       return
 
 
-
      while line.indentation < @node.indentation
+      @prevBlock = @node
       @node = @node.parent()
       if not @node?
        if @main
@@ -244,6 +244,8 @@ Mod.require 'Weya.Base',
 
        @main = true
        @node = @mainNode
+
+     @prevBlock ?= @node
 
      switch @node.type
       when TYPES.list
@@ -322,7 +324,6 @@ Mod.require 'Weya.Base',
       else
        throw new Error 'Unknown syntax'
 
-     @prevBlock = null
 
     parseLink: (text) ->
      text = text.replace /\)/g, ''

@@ -1,7 +1,6 @@
 CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
   operator = "tag strong"
   operatorInline = "string"
-  console.log cmCfg
   htmlMode = CodeMirror.getMode cmCfg, name: "xml", htmlMode: true
 
   matchBlock = (stream, state) ->
@@ -145,7 +144,6 @@ CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
 
      if state.start
       while stack.length > 0
-       console.log 'indent', stream.indentation()
        if stack[stack.length - 1].indentation >= stream.indentation()
         stack.pop()
        else
