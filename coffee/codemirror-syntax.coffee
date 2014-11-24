@@ -1,5 +1,5 @@
 CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
-  operator = "def strong"
+  operator = "keyword strong"
   operatorInline = "keyword"
   console.log cmCfg
   htmlMode = CodeMirror.getMode cmCfg, name: "xml", htmlMode: true
@@ -33,6 +33,22 @@ CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
     return operator
 
    return null
+
+  matchStart = (stream, state) ->
+   match = stream.match /^\* /
+   if match
+    clearState state
+    return operator
+   match = stream.match /^- /
+   if match
+    clearState state
+    return operator
+   match = stream.match /^#/
+   if match
+    stream.eatWhile '#'
+    clearState state
+    state.heading = true
+    return "#{operator} header"
 
   matchInline = (stream, state) ->
    match = stream.match /^\*\*/
@@ -70,7 +86,13 @@ CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
     state.link = false
     return operatorInline
 
-
+  clearState = (state) ->
+   state.bold = false
+   state.italics = false
+   state.subscript = false
+   state.superscript = false
+   state.code = false
+   state.link = false
 
 
   mode =
@@ -84,26 +106,21 @@ CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
      superscript: false
      code: false
      link: false
+     heading: false
 
     blankLine: (state) ->
-     state.bold = false
-     state.italics = false
-     state.subscript = false
-     state.superscript = false
-     state.code = false
-     state.link = false
+     clearState state
 
     token: (stream, state) ->
      if stream.sol()
       state.start = true
+      if state.heading
+       state.heading = false
+       clearState state
+
       s = stream.eatSpace()
       if stream.eol()
-       state.bold = false
-       state.italics = false
-       state.subscript = false
-       state.superscript = false
-       state.code = false
-       state.link = false
+       clearState state
 
       return "" if s
 
@@ -117,8 +134,18 @@ CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
        else
         break
 
-      match = matchBlock stream, state
-      return match if match?
+      types =
+       sidenote: false
+       html: false
+       special: false
+       code: false
+
+      for t in stack
+       types[t.type] = true
+
+      if not types.code and not types.html
+       match = matchBlock stream, state
+       return match if match?
 
      types =
       sidenote: false
@@ -138,6 +165,10 @@ CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
       stream.skipToEnd()
       l = "hr"
      else
+      if state.start
+       match = matchStart stream, state
+       return match if match
+
       match = matchInline stream, state
       return match if match?
 
@@ -147,7 +178,7 @@ CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
       if state.bold
        l += " strong"
       if state.italics
-       l += " italics"
+       l += " em"
       if state.link
        l += " link"
       if state.code
