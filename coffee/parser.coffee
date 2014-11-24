@@ -57,7 +57,7 @@ Mod.require 'Weya.Base',
      @node = @root
      @main = true
      @sidenotes = []
-     @prevBlock = null
+     @prevNode = null
      @blocks = []
 
     parse: ->
@@ -226,7 +226,7 @@ Mod.require 'Weya.Base',
 
      if line.empty
       if @node.type is TYPES.block
-       @prevBlock = @node
+       @prevNode = @node
        @node = @node.parent()
 
       if @node.type is TYPES.codeBlock or @node.type is TYPES.html
@@ -236,7 +236,7 @@ Mod.require 'Weya.Base',
 
 
      while line.indentation < @node.indentation
-      @prevBlock = @node
+      @prevNode = @node
       @node = @node.parent()
       if not @node?
        if @main
@@ -245,7 +245,7 @@ Mod.require 'Weya.Base',
        @main = true
        @node = @mainNode
 
-     @prevBlock ?= @node
+     @prevNode ?= @node
 
      switch @node.type
       when TYPES.list
@@ -305,7 +305,7 @@ Mod.require 'Weya.Base',
 
        @main = false
        id = @node.id
-       id = @prevBlock.id if @prevBlock?
+       id = @prevNode.id if @prevNode?
        n = new Sidenote indentation: line.indentation + 1, link: id
        @mainNode = @node
        @node = n
@@ -318,7 +318,7 @@ Mod.require 'Weya.Base',
 
       when TYPES.media
        @addNode new Media indentation: line.indentation + 1, media: @parseMedia line.text
-       @prevBlock = @node
+       @prevNode = @node
        return
 
       else
