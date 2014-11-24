@@ -1,6 +1,6 @@
 CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
   operator = "tag strong"
-  operatorInline = "keyword"
+  operatorInline = "string"
   console.log cmCfg
   htmlMode = CodeMirror.getMode cmCfg, name: "xml", htmlMode: true
 
@@ -55,6 +55,14 @@ CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
     return "#{operator} header"
 
   matchInline = (stream, state) ->
+   match = stream.match /^``/
+   if match
+    state.code = not state.code
+    return operatorInline
+
+   if state.code
+    return null
+
    match = stream.match /^\*\*/
    if match
     state.bold = not state.bold
@@ -75,11 +83,6 @@ CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
     state.superscript = not state.superscript
     return operatorInline
 
-   match = stream.match /^``/
-   if match
-    state.code = not state.code
-    return operatorInline
-
    match = stream.match /^<</
    if match
     state.link = true
@@ -89,6 +92,8 @@ CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
    if match
     state.link = false
     return operatorInline
+
+   return null
 
   clearState = (state) ->
    state.bold = false
