@@ -236,7 +236,11 @@ Mod.require 'Weya.Base',
      while line.indentation < @node.indentation
       @node = @node.parent()
       if not @node?
-       throw new Error 'Invalid indentation'
+       if @main
+        throw new Error 'Invalid indentation'
+
+       @main = true
+       @node = @mainNode
 
      switch @node.type
       when TYPES.list
@@ -291,19 +295,16 @@ Mod.require 'Weya.Base',
        @blocks.push @node.heading
 
       when TYPES.sidenote
-       if @main
-        @main = false
-        id = @node.id
-        console.log 'sidenote', id
-        id = @prevBlock.id if @prevBlock?
-        console.log 'sidenote', id
-        n = new Sidenote indentation: line.indentation, link: id
-        @mainNode = @node
-        @node = n
-        @sidenotes.push n
-       else
-        @main = true
-        @node = @mainNode
+       if not @main
+        throw new Error 'Cannot have a sidenote inside a sidenote'
+
+       @main = false
+       id = @node.id
+       id = @prevBlock.id if @prevBlock?
+       n = new Sidenote indentation: line.indentation + 1, link: id
+       @mainNode = @node
+       @node = n
+       @sidenotes.push n
 
       when TYPES.block
        if @node.type isnt TYPES.block
