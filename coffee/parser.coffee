@@ -229,6 +229,9 @@ Mod.require 'Weya.Base',
        @prevBlock = @node
        @node = @node.parent()
 
+      if @node.type is TYPES.codeBlock or @node.type is TYPES.html
+       @node.addText line.line.substr @node.indentation
+
       return
 
 
