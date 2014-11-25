@@ -104,6 +104,7 @@ CodeMirror.defineMode "docscript", ((cmCfg, modeCfg) ->
 
 
   mode =
+    fold: "indent"
     startState: ->
      stack: []
      htmlState: null

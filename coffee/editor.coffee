@@ -61,6 +61,9 @@ Mod.require 'Weya.Base',
      lineNumbers: true
      lineWrapping: true
      tabSize: 1
+     foldGutter: true
+     gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+
     @editor.on 'change', @on.change
     height = window.innerHeight
     console.log height
