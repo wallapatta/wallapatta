@@ -129,6 +129,8 @@ Mod.require 'Weya.Base',
          @addNode new Code {}
          last = i
          cur = i = text.indexOf TOKEN_MATCHES.code, i
+         if i is -1
+          cur = i = L
          add()
          @node = @node.parent()
          i += TOKEN_MATCHES.code.length
