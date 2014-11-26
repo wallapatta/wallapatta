@@ -222,5 +222,23 @@ class Mode
   return mode
 
 
-new Mode CodeMirror
+if define? and brackets?
+ define (require, exports, module) ->
+  "use strict"
 
+  LanguageManager = brackets.getModule "language/LanguageManager"
+  CodeMirror = brackets.getModule "thirdparty/CodeMirror2/lib/codemirror"
+
+  new Mode CodeMirror
+
+  lang = LanguageManager.defineLanguage "docscript",
+   name: "Docscript"
+   mode: "docscript"
+   fileExtensions: [".ds"]
+   lineComment: ["\/\/"]
+
+  lang.done ->
+   console.log "[Docscript] Module loaded."
+
+else if CodeMirror?
+ new Mode CodeMirror
