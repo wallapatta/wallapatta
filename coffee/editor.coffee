@@ -42,7 +42,7 @@ Mod.require 'Weya.Base',
     @elems.previewSidebar.innerHTML = ''
     parser = new Parser text: text
 
-    #parser.parse()
+    parser.parse()
     try
      parser.parse()
     catch e

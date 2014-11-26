@@ -26,9 +26,18 @@ Mod.require 'Weya.Base',
    mediaInline: 'mediaInline' #TODO
 
   #TODO include these in a class
-  NODES = {}
-  NODE_ID = 0
   PREFIX = 'docscript_'
+
+  class Map extends Base
+   @initialize (options) ->
+    @nodes = {}
+    @id = 0
+    @id = options.id if options.id
+
+   add: (node) ->
+    node.id = @id
+    @nodes[@id] = node
+    @id++
 
 
   class Node extends Base
@@ -38,10 +47,8 @@ Mod.require 'Weya.Base',
     @indentation = options.indentation
     @_parent = null
     @children = []
-    @id = NODE_ID
+    options.map.add this
     @elems = {}
-    NODE_ID++
-    NODES[@id] = this
 
    setParent: (parent) ->  @_parent = parent
    parent: -> @_parent
@@ -204,7 +211,7 @@ Mod.require 'Weya.Base',
    type: TYPES.section
 
    @initialize (options) ->
-    @heading = new Block indentation: options.indentation
+    @heading = new Block map: options.map, indentation: options.indentation
     @heading.setParent this
     @level = options.level
 
@@ -320,6 +327,6 @@ Mod.require 'Weya.Base',
   Mod.set 'Docscript.Special', Special
   Mod.set 'Docscript.Html', Html
 
-  Mod.set 'Docscript.NODES', NODES
+  Mod.set 'Docscript.Map', Map
 
   Mod.set 'Docscript.TYPES', TYPES

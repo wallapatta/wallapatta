@@ -21,14 +21,14 @@ Mod.require 'Weya.Base',
  'Docscript.Special'
  'Docscript.Html'
 
- 'Docscript.NODES'
+ 'Docscript.Map'
 
  'Docscript.Reader'
  (Base, TYPES,
   Text, Bold, Italics, SuperScript, SubScript, Code, Link,
   Block, Section, List, ListItem, Sidenote, Article, Media,
   CodeBlock, Special, Html,
-  NODES, Reader) ->
+  Map, Reader) ->
 
    PREFIX = 'docscript_'
 
@@ -51,9 +51,10 @@ Mod.require 'Weya.Base',
     @extend()
 
     @initialize (options) ->
+     @map = new Map options
      @reader = new Reader options.text
      delete options.text
-     @root = new Article indentation: 0
+     @root = new Article map: @map, indentation: 0
      @node = @root
      @main = true
      @sidenotes = []
@@ -62,8 +63,11 @@ Mod.require 'Weya.Base',
 
     parse: ->
      while @reader.has()
+      @processLine()
+
+
       try
-       @processLine()
+       #@processLine()
       catch e
        throw new Error "Line #{@reader.n + 1}: #{e.message}"
 
@@ -90,7 +94,7 @@ Mod.require 'Weya.Base',
 
      add = =>
       if cur > last
-       @addNode new Text text: text.substr last, cur - last
+       @addNode new Text map: @map, text: (text.substr last, cur - last)
        @node = @node.parent()
 
      while i < L
@@ -109,13 +113,13 @@ Mod.require 'Weya.Base',
         @node = @node.parent()
        else
         add()
-        @addNode new TOKENS[token.type] {}
+        @addNode new TOKENS[token.type] map: @map
 
       else
        switch token.type
         when 'linkBegin'
           add()
-          @addNode new Link {}
+          @addNode new Link map: @map
 
         when 'linkEnd'
          if @node.type isnt TYPES.link
@@ -126,7 +130,7 @@ Mod.require 'Weya.Base',
 
         when 'code'
          add()
-         @addNode new Code {}
+         @addNode new Code map: @map
          last = i
          cur = i = text.indexOf TOKEN_MATCHES.code, i
          if i is -1
@@ -160,7 +164,7 @@ Mod.require 'Weya.Base',
     setFills: ->
      for sidenote in @sidenotes
       elemSidenote = sidenote.elem
-      elemContent = NODES[sidenote.link].elem
+      elemContent = @map.nodes[sidenote.link].elem
 
       topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
       topContent = @getOffsetTop elemContent, @elems.main
@@ -192,7 +196,7 @@ Mod.require 'Weya.Base',
       main: options.main
       sidebar: options.sidebar
 
-     for id, node of NODES
+     for id, node of @map.nodes
       node.elem = document.getElementById "#{PREFIX}#{id}"
       if not node.elem?
        throw new Error "Element #{id} not found"
@@ -260,7 +264,7 @@ Mod.require 'Weya.Base',
      switch line.type
       when TYPES.codeBlock
        indent = line.indentation + 1
-       @addNode new CodeBlock indentation: line.indentation + 1
+       @addNode new CodeBlock map: @map, indentation: line.indentation + 1
        while false
         @reader.next()
         break unless @reader.has()
@@ -272,7 +276,7 @@ Mod.require 'Weya.Base',
 
       when TYPES.html
        indent = line.indentation + 1
-       @addNode new Html indentation: line.indentation + 1
+       @addNode new Html map: @map, indentation: line.indentation + 1
        while false
         @reader.next()
         break unless @reader.has()
@@ -284,19 +288,19 @@ Mod.require 'Weya.Base',
 
 
       when TYPES.special
-       @addNode new Special indentation: line.indentation + 1
+       @addNode new Special map: @map, indentation: line.indentation + 1
 
       when TYPES.list
        if @node.type isnt TYPES.list
-        @addNode new List ordered: line.ordered, indentation: line.indentation
+        @addNode new List map: @map, ordered: line.ordered, indentation: line.indentation
 
-       @addNode new ListItem ordered: line.ordered, indentation: line.indentation + 1
+       @addNode new ListItem map: @map, ordered: line.ordered, indentation: line.indentation + 1
        if line.text isnt ''
-        @addNode new Block indentation: line.indentation + 1, paragraph: false
+        @addNode new Block map: @map, indentation: line.indentation + 1, paragraph: false
         @node.addText line.text
 
       when TYPES.heading
-       @addNode new Section indentation: line.indentation + 1, level: line.level
+       @addNode new Section map: @map, indentation: line.indentation + 1, level: line.level
        @node.heading.addText line.text
        @blocks.push @node.heading
 
@@ -307,18 +311,18 @@ Mod.require 'Weya.Base',
        @main = false
        id = @node.id
        id = @prevNode.id if @prevNode?
-       n = new Sidenote indentation: line.indentation + 1, link: id
+       n = new Sidenote map: @map, indentation: line.indentation + 1, link: id
        @mainNode = @node
        @node = n
        @sidenotes.push n
 
       when TYPES.block
        if @node.type isnt TYPES.block
-        @addNode new Block indentation: line.indentation, paragraph: true
+        @addNode new Block map: @map, indentation: line.indentation, paragraph: true
        @node.addText line.text
 
       when TYPES.media
-       @addNode new Media indentation: line.indentation + 1, media: @parseMedia line.text
+       @addNode new Media map: @map, indentation: line.indentation + 1, media: @parseMedia line.text
        @prevNode = @node
        return
 
