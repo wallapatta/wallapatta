@@ -2,7 +2,6 @@ Mod.require 'Docscript.Parser', (Parser) ->
  code = document.getElementById 'code'
  main = document.getElementById 'main'
  sidebar = document.getElementById 'sidebar'
- container = document.getElementById 'docscript-container'
 
  parser = new Parser
   text: code.textContent
