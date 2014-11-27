@@ -43,7 +43,7 @@ template = ->
        @h1 ".title", title
      @div ".docscript-main.col-xs-9", "###MAIN###"
      @div ".docscript-sidebar.col-xs-3", "###SIDEBAR###"
-     @div ".docscript-code", style: {display: 'none'}, "###CODE###"
+     @div style: {display: 'none'}, "###CODE###"
 
    @script src:"lib/weya/weya.js"
    @script src:"lib/weya/base.js"
@@ -60,7 +60,8 @@ exports.html = (options) ->
 
  html = html.replace '###MAIN###', options.main
  html = html.replace '###SIDEBAR###', options.sidebar
- html = html.replace '###CODE###', options.code
+ html = html.replace '###CODE###',
+  "<div class='docscript-code'>#{options.code}</div>"
 
  html = "<!DOCTYPE html>#{html}"
 

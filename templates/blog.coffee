@@ -46,7 +46,7 @@ template = ->
 
       @div ".docscript-main.col-xs-9", "###MAIN#{i}###"
       @div ".docscript-sidebar.col-xs-3", "###SIDEBAR#{i}###"
-      @div ".docscript-code", style: {display: 'none'}, "###CODE#{i}###"
+      @div style: {display: 'none'}, "###CODE#{i}###"
 
     options = @$.options
     console.log options.pages
@@ -75,7 +75,8 @@ exports.html = (options) ->
  for post, i in options.posts
   html = html.replace "###MAIN#{i}###", post.main
   html = html.replace "###SIDEBAR#{i}###", post.sidebar
-  html = html.replace "###CODE#{i}###", post.code
+  html = html.replace "###CODE#{i}###",
+   "<div class='docscript-code'>#{post.code}</div>"
 
  html = "<!DOCTYPE html>#{html}"
 
