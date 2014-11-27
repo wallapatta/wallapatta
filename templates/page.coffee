@@ -37,6 +37,10 @@ template = ->
   @body ->
    @div ".container.docscript-container", ->
     @div ".row.docscript", ->
+     title = @$.options.options.title
+     if title?
+      @div ".col-xs-12", ->
+       @h1 ".title", title
      @div ".docscript-main.col-xs-9", "###MAIN###"
      @div ".docscript-sidebar.col-xs-3", "###SIDEBAR###"
      @div ".docscript-code", style: {display: 'none'}, "###CODE###"

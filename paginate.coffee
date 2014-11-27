@@ -31,6 +31,7 @@ Mod.require 'fs',
         main: main
         sidebar: sidebar
         code: code
+        options: input
        n++
        if n is options.input.length
         finished()

@@ -38,6 +38,7 @@ Mod.require 'jsdom',
     file: options.file
     template: './templates/page'
     output: "#{argv.output}/#{options.id}.html"
+    options: options
 
    if options.content?
     for i in options.content

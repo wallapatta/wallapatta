@@ -38,6 +38,12 @@ template = ->
    @div ".container.docscript-container", ->
     for post, i in @$.posts
      @div ".row.docscript", ->
+      title = post.options.title
+      if title?
+       @div ".col-xs-12", ->
+        @h1 ".title", ->
+         @a href: "#{post.options.id}.html", title
+
       @div ".docscript-main.col-xs-9", "###MAIN#{i}###"
       @div ".docscript-sidebar.col-xs-3", "###SIDEBAR#{i}###"
       @div ".docscript-code", style: {display: 'none'}, "###CODE#{i}###"
