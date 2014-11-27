@@ -56,7 +56,6 @@ Mod.require 'Docscript.File',
   N = Math.ceil data.length / POSTS
 
   for i in data
-   console.log i
    renderPost i
    inputs.push i
    if inputs.length is POSTS

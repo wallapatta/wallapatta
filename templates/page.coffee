@@ -41,9 +41,9 @@ template = ->
   @body ->
    @div ".container.docscript-container", ->
     @div ".row.docscript", ->
-    @div ".docscript-main.col-xs-9", "###MAIN###"
-    @div ".docscript-sidebar.col-xs-3", "###SIDEBAR###"
-    @div ".docscript-code", style: {display: 'none'}, "###CODE###"
+     @div ".docscript-main.col-xs-9", "###MAIN###"
+     @div ".docscript-sidebar.col-xs-3", "###SIDEBAR###"
+     @div ".docscript-code", style: {display: 'none'}, "###CODE###"
 
    @script src:"lib/weya/weya.js"
    @script src:"lib/weya/base.js"

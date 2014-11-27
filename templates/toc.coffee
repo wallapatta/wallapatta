@@ -1,6 +1,6 @@
 VERSION = 9
 
-Weya = require './lib//weya/weya'
+Weya = require '../lib//weya/weya'
 
 template = ->
  @html ->
@@ -19,7 +19,6 @@ template = ->
     type: 'text/css'
    @link href: "lib/bootstrap/css/bootstrap.min.css", rel: "stylesheet"
    @link href: "lib/fontawesome/css/font-awesome.min.css", rel: "stylesheet"
-   @link href: "lib/codemirror/codemirror.css", rel: "stylesheet"
    @link href: "css/style.css", rel: "stylesheet"
    @link rel: "shortcut icon", href: "img/favicon.ico", type: "image/x-icon"
    @script '''
