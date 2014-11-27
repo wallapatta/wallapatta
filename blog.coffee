@@ -23,13 +23,20 @@ require './coffee/reader'
 argv = require 'optimist'
  .usage 'DocScript parser.\n Usage: $0'
  .demand ['b', 'o']
+
  .alias 'b', 'blog'
  .describe 'b', 'YAML book'
+
  .alias 'o', 'output'
  .describe 'o', 'Output directory'
+
+ .alias 'p', 'posts'
+ .describe 'p', 'Posts per page'
+
  .argv
 
 data = YAML.parse "#{fs.readFileSync argv.blog}"
+POSTS = argv.posts ? 3
 
 Mod.require 'Docscript.File',
  'Docscript.Paginate'
@@ -46,17 +53,19 @@ Mod.require 'Docscript.File',
 
   inputs = []
   pages = 0
+  N = Math.ceil data.length / POSTS
 
   for i in data
    console.log i
    renderPost i
    inputs.push i
-   if inputs.length is 3
+   if inputs.length is POSTS
     Paginate
      input: inputs
      page: pages
      template: './templates/blog'
      output: argv.output
+     pages: N
     pages++
     inputs = []
 
@@ -66,6 +75,7 @@ Mod.require 'Docscript.File',
     page: pages
     template: './templates/blog'
     output: argv.output
+    pages: N
    pages++
    inputs = []
 
