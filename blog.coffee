@@ -5,7 +5,7 @@ require './lib/mod/mod'
 Weya = require './lib/weya/weya'
 Weya.Base = require './lib/weya/base'
 YAML = require 'yamljs'
-toc = require './templates/toc'
+blog = require './templates/blog'
 fs = require 'fs'
 
 Mod.set 'fs', fs
@@ -30,10 +30,10 @@ argv = require 'optimist'
 
 data = YAML.parse "#{fs.readFileSync argv.book}"
 
-Mod.require 'jsdom',
- 'Docscript.File'
- (jsdom, FileRender) ->
-  render = (options) ->
+Mod.require 'Docscript.File'.
+ 'Docscript.Paginate'
+ (FileRender, Paginate) ->
+  renderPost = (options) ->
    FileRender
     input: options.file
     page: './templates/page'
@@ -43,20 +43,30 @@ Mod.require 'jsdom',
     for i in options.content
      render i
 
+  inputs = []
+  pages = 0
+  for i in data.content
+   renderPost i
+   inputs.push i
+   if inputs.length is 3
+    Paginate
+     input: inputs
+     page: pages
+     template: './templates/blog'
+     output: argv.output
+    pages++
+    inputs = []
 
-  jsdom.env '<div id="toc"></div>', (err, window) ->
-   Weya.setApi document: window.document
-   tocElem = window.document.getElementById 'toc'
-   toc.render data, tocElem
-   output = toc.html
-    title: data.title
-    toc: tocElem.innerHTML
-
-   fs.writeFileSync "./#{argv.output}/toc.html", output
+  if inputs.length > 0
+   Paginate
+    input: inputs
+    page: pages
+    template: './templates/blog'
+    output: argv.output
+   pages++
+   inputs = []
 
    for i in data.content
-    render i
-
 
 
 Mod.initialize()
