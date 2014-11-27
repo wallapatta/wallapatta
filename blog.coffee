@@ -46,7 +46,7 @@ Mod.require 'Docscript.File',
 
   inputs = []
   pages = 0
-  console.log data
+
   for i in data
    console.log i
    renderPost i
