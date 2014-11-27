@@ -4,8 +4,8 @@ Mod.require 'fs',
  'Docscript.Parser'
  (fs, jsdom, Weya, Parser) ->
   render = (options) ->
-   input = "#{fs.readFileSync options.input}"
-   page = require options.page
+   input = "#{fs.readFileSync options.file}"
+   template = require options.template
    parser = new Parser text: input
    parser.parse()
    jsdom.env '<div id="main"></div><div id="sidebar"></div>', (err, window) ->
@@ -13,10 +13,11 @@ Mod.require 'fs',
     main = window.document.getElementById 'main'
     sidebar = window.document.getElementById 'sidebar'
     parser.render main, sidebar
-    output = page.html
+    output = template.html
      main: main.innerHTML
      sidebar: sidebar.innerHTML
      code: input
+     options: options
 
     fs.writeFileSync options.output, output
 

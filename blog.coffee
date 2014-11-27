@@ -43,8 +43,8 @@ Mod.require 'Docscript.File',
  (FileRender, Paginate) ->
   renderPost = (options) ->
    FileRender
-    input: options.file
-    page: './templates/page'
+    file: options.file
+    template: './templates/page'
     output: "#{argv.output}/#{options.id}.html"
 
    if options.content?
