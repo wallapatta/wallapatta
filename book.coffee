@@ -5,7 +5,7 @@ require './lib/mod/mod'
 Weya = require './lib/weya/weya'
 Weya.Base = require './lib/weya/base'
 YAML = require 'yamljs'
-toc = require './toc'
+toc = require './templates/toc'
 fs = require 'fs'
 
 Mod.set 'fs', fs
@@ -36,7 +36,7 @@ Mod.require 'jsdom',
   render = (options) ->
    FileRender
     input: options.file
-    page: './page'
+    page: './templates/page'
     output: "#{argv.output}/#{options.id}.html"
 
    if options.content?
