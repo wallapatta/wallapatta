@@ -168,6 +168,20 @@ Mod.require 'Weya.Base',
 
       if topContent > topSidenote
        fill = Weya {}, ->
+        @div ".fill", style: {height: "1px"}
+
+       elemSidenote.parentNode.insertBefore fill, elemSidenote
+      else if topContent < topSidenote
+       fill = Weya {}, ->
+        @div ".fill", style: {height: "1px"}
+
+       elemContent.parentNode.insertBefore fill, elemContent
+
+      topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
+      topContent = @getOffsetTop elemContent, @elems.main
+
+      if topContent > topSidenote
+       fill = Weya {}, ->
         @div ".fill", style: {height: "#{topContent - topSidenote}px"}
 
        elemSidenote.parentNode.insertBefore fill, elemSidenote
