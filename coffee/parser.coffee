@@ -63,11 +63,8 @@ Mod.require 'Weya.Base',
 
     parse: ->
      while @reader.has()
-      @processLine()
-
-
       try
-       #@processLine()
+       @processLine()
       catch e
        throw new Error "Line #{@reader.n + 1}: #{e.message}"
 
