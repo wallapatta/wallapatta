@@ -39,6 +39,7 @@ Mod.require 'fs',
    finished = ->
     output = template.html
      posts: results
+     options: options
 
     fs.writeFileSync "./#{options.output}/page#{options.page + 1}.html", output
 

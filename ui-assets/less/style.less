@@ -1,3 +1,5 @@
+@import "elements.less";
+
 .docscript {
  font-family: "Lato", sans-serif;
  color: #4d4d4d;
@@ -101,11 +103,36 @@
   }
  }
 }
+
 @media print {
-    @page {
-     size: A4;
-     margin: 10mm;
-    }
+ @page {
+  size: A4;
+  margin: 10mm;
+ }
+}
+
+.paginate {
+  margin: 50px 0;
+ .prev-page, .next-page {
+  font-size: 16px;
+  display: block;
+  border: 1px solid #aaa;
+  color: #666;
+  .rounded(10px);
+  padding: 5px 15px;
+  &:hover {
+   text-decoration: none;
+   color: #98ff98;
+   -webkit-animation-name: link-animation;
+   -webkit-animation-duration: 0.5s;
+  }
+ }
+ .prev-page {
+  float: left;
+ }
+ .next-page {
+  float: right;
+ }
 }
 
 .CodeMirror {

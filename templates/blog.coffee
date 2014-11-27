@@ -48,6 +48,17 @@ template = ->
       @div ".docscript-sidebar.col-xs-3", "###SIDEBAR#{i}###"
       @div ".docscript-code", style: {display: 'none'}, "###CODE#{i}###"
 
+    options = @$.options
+    console.log options.pages
+    if options.pages > 1
+     @div ".row.paginate", ->
+      @div ".col-xs-12", ->
+       if options.page > 0
+        @a ".prev-page", href: "page#{options.page}.html", "prev"
+       if options.page < options.pages - 1
+        @a ".next-page", href: "page#{options.page + 2}.html", "next"
+
+
    @script src:"lib/weya/weya.js"
    @script src:"lib/weya/base.js"
    @script src:"lib/mod/mod.js"
