@@ -40,10 +40,11 @@ template = ->
 
   @body ->
    @div ".container.docscript-container", ->
-    @div ".row.docscript", ->
-    @div ".docscript-main.col-xs-9", "###MAIN###"
-    @div ".docscript-sidebar.col-xs-3", "###SIDEBAR###"
-    @div ".docscript-code", style: {display: 'none'}, "###CODE###"
+    for post, i in @$.posts
+     @div "row.docscript", ->
+      @div ".docscript-main.col-xs-9", "###MAIN#{i}###"
+      @div ".docscript-sidebar.col-xs-3", "###SIDEBAR#{i}###"
+      @div ".docscript-code", style: {display: 'none'}, "###CODE#{i}###"
 
    @script src:"lib/weya/weya.js"
    @script src:"lib/weya/base.js"
@@ -58,9 +59,10 @@ exports.html = (options) ->
 
  html = Weya.markup context: options, template
 
- html = html.replace '###MAIN###', options.main
- html = html.replace '###SIDEBAR###', options.sidebar
- html = html.replace '###CODE###', options.code
+ for post, i in options.posts
+  html = html.replace "###MAIN#{i}###", post.main
+  html = html.replace "###SIDEBAR#{i}###", post.sidebar
+  html = html.replace "###CODE#{i}###", post.code
 
  html = "<!DOCTYPE html>#{html}"
 

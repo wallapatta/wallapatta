@@ -39,7 +39,7 @@ Mod.require 'fs',
     output = template.html
      posts: results
 
-   fs.writeFileSync "./#{options.output}/toc.html", output
+   fs.writeFileSync "./#{options.output}/page#{options.page + 1}.html", output
 
-  Mod.set 'Docscript.File', render
+  Mod.set 'Docscript.Paginate', render
 

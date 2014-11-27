@@ -14,6 +14,7 @@ Mod.set 'Weya', Weya
 Mod.set 'Weya.Base', Weya.Base
 
 require './file'
+require './paginate'
 
 require './coffee/parser'
 require './coffee/nodes'
@@ -28,9 +29,9 @@ argv = require 'optimist'
  .describe 'o', 'Output directory'
  .argv
 
-data = YAML.parse "#{fs.readFileSync argv.book}"
+data = YAML.parse "#{fs.readFileSync argv.blog}"
 
-Mod.require 'Docscript.File'.
+Mod.require 'Docscript.File',
  'Docscript.Paginate'
  (FileRender, Paginate) ->
   renderPost = (options) ->
@@ -45,7 +46,9 @@ Mod.require 'Docscript.File'.
 
   inputs = []
   pages = 0
-  for i in data.content
+  console.log data
+  for i in data
+   console.log i
    renderPost i
    inputs.push i
    if inputs.length is 3
@@ -65,8 +68,6 @@ Mod.require 'Docscript.File'.
     output: argv.output
    pages++
    inputs = []
-
-   for i in data.content
 
 
 Mod.initialize()
