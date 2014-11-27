@@ -15,14 +15,25 @@
   margin: 0 0 1.5em;
  }
 
+ @-webkit-keyframes link-animation {
+  from {
+   color: #000;
+  }
+  to {
+   color: #98ff98;
+  }
+ }
+
+
  a {
   color: #000;
-  border-bottom: 1px solid #98FF98;
+  border-bottom: 2px solid #98FF98;
 
   &:hover {
    text-decoration: none;
-   border-bottom: 2px solid #98FF98;
    color: #98ff98;
+   -webkit-animation-name: link-animation;
+   -webkit-animation-duration: 0.5s;
   }
  }
 
@@ -61,6 +72,11 @@
   img {
    max-width: 100%;
   }
+ }
+
+ h1.title {
+  font-weight: 300;
+  font-size: 48px;
  }
 
  .special {
