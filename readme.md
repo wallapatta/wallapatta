@@ -45,6 +45,6 @@ Use the online editor to try Wallapatta syntax.
 ##[Documentation](http://vpj.github.io/wallapatta/introduction.html)
 
 Wallapatta documetnation written in wallapatta is available here:
-[http://vpj.github.io/wallapatta/introduction.html]
+http://vpj.github.io/wallapatta/introduction.html
 
 
