@@ -35,14 +35,14 @@ template = ->
    '''
 
   @body ->
-   @div ".container.docscript-container", ->
-    @div ".row.docscript", ->
+   @div ".container.wallapatta-container", ->
+    @div ".row.wallapatta", ->
      title = @$.options.options.title
      if title?
       @div ".col-xs-12", ->
        @h1 ".title", title
-     @div ".docscript-main.col-xs-9", "###MAIN###"
-     @div ".docscript-sidebar.col-xs-3", "###SIDEBAR###"
+     @div ".wallapatta-main.col-xs-9", "###MAIN###"
+     @div ".wallapatta-sidebar.col-xs-3", "###SIDEBAR###"
      @div style: {display: 'none'}, "###CODE###"
 
    @script src:"lib/weya/weya.js"
@@ -61,7 +61,7 @@ exports.html = (options) ->
  html = html.replace '###MAIN###', options.main
  html = html.replace '###SIDEBAR###', options.sidebar
  html = html.replace '###CODE###',
-  "<div class='docscript-code'>#{options.code}</div>"
+  "<div class='wallapatta-code'>#{options.code}</div>"
 
  html = "<!DOCTYPE html>#{html}"
 

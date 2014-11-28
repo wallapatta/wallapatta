@@ -1,14 +1,14 @@
 Mod.require 'Docscript.Parser', (Parser) ->
  process = (n, doc) ->
-  code = doc.getElementsByClassName 'docscript-code'
+  code = doc.getElementsByClassName 'wallapatta-code'
   if code.length isnt 1
    throw new Error 'No code element'
   code = code[0]
-  main = doc.getElementsByClassName 'docscript-main'
+  main = doc.getElementsByClassName 'wallapatta-main'
   if main.length isnt 1
    throw new Error 'No main element'
   main = main[0]
-  sidebar = doc.getElementsByClassName 'docscript-sidebar'
+  sidebar = doc.getElementsByClassName 'wallapatta-sidebar'
   if sidebar.length isnt 1
    throw new Error 'No sidebar element'
   sidebar = sidebar[0]
@@ -31,7 +31,7 @@ Mod.require 'Docscript.Parser', (Parser) ->
       clearInterval int
     , 1000
 
- docs = document.getElementsByClassName 'docscript'
+ docs = document.getElementsByClassName 'wallapatta'
  for doc, i in docs
   process i, doc
 

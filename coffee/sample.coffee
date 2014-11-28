@@ -3,7 +3,7 @@ Mod.require ->
 #Markdown like syntax for Edward Tufte style documents
 
  >>>
-  ###**<<http://vpj.github.io/docscript/(Try online editor)>>
+  ###**<<http://vpj.github.io/wallapatta/(Try online editor)>>
 
  We started working on a documentation engine to create documents such
  as --printed user manuals--, --getting started guides--, --online help--,
@@ -71,33 +71,33 @@ Mod.require ->
 
  ###DocScript Project
 
-  Docscript is available on <<https://github.com/vpj/docscript(Github)>>. It
+  Docscript is available on <<https://github.com/vpj/wallapatta(Github)>>. It
   is not fully baked yet but you can give it a try.
 
   >>>
-   #####**<<https://github.com/vpj/docscript(Fork me on github)>>
+   #####**<<https://github.com/vpj/wallapatta(Fork me on github)>>
 
 
   Here are some of the sample documents we've created:
 
-   * <<http://vpj.github.io/docscript/benford.html(Benford's Law Test)>>
-   * <<http://vpj.github.io/docscript/dashboard.html(Forestpin Dashboard)>>
-   * <<http://vpj.github.io/docscript/correlation.html(Correlation Test)>>
+   * <<http://vpj.github.io/wallapatta/benford.html(Benford's Law Test)>>
+   * <<http://vpj.github.io/wallapatta/dashboard.html(Forestpin Dashboard)>>
+   * <<http://vpj.github.io/wallapatta/correlation.html(Correlation Test)>>
 
  ###Usage
 
-  The online compiler is available at <<http://vpj.github.io/docscript/>>.
+  The online compiler is available at <<http://vpj.github.io/wallapatta/>>.
 
   The command line interface requires ``nodejs`` and ``coffeescript``. You need
   to get the git submodules with ``git submodule init`` and
-  ``git submodule update`` after cloning docscript.
+  ``git submodule update`` after cloning wallapatta.
 
   >>>
    A few npm packeges such as ``optimist`` are required.
 
 
   ```
-   ./docscript.coffee -i input_file -o output_file
+   ./wallapatta.coffee -i input_file -o output_file
 
   This will create the output html file inside ``build`` directory. The CLI is
   still in early stages.
@@ -149,7 +149,7 @@ Mod.require ->
   Other advantage is we can use **code folding** when editing; which come handy
   when working with large documents.
 
-  Another key feature of docscript is sidenotes. You can have notes as well
+  Another key feature of wallapatta is sidenotes. You can have notes as well
   as images in sidenotes.
 
   >>>

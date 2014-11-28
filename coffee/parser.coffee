@@ -30,7 +30,7 @@ Mod.require 'Weya.Base',
   CodeBlock, Special, Html,
   Map, Reader) ->
 
-   PREFIX = 'docscript_'
+   PREFIX = 'wallapatta_'
 
    TOKENS =
     bold: Bold

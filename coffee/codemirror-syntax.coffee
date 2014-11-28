@@ -4,8 +4,8 @@ OPERATOR_INLINE = "string"
 class Mode
  constructor: (CodeMirror) ->
   @CodeMirror = CodeMirror
-  @CodeMirror.defineMode "docscript", (@defineMode.bind this), "xml"
-  @CodeMirror.defineMIME "text/x-docscript", "docscript"
+  @CodeMirror.defineMode "wallapatta", (@defineMode.bind this), "xml"
+  @CodeMirror.defineMIME "text/x-wallapatta", "wallapatta"
 
  defineMode: (cmCfg, modeCfg) ->
   @htmlMode = @CodeMirror.getMode cmCfg, name: "xml", htmlMode: true
@@ -231,9 +231,9 @@ if define? and brackets?
 
   new Mode CodeMirror
 
-  lang = LanguageManager.defineLanguage "docscript",
+  lang = LanguageManager.defineLanguage "wallapatta",
    name: "Docscript"
-   mode: "docscript"
+   mode: "wallapatta"
    fileExtensions: [".ds"]
    lineComment: ["\/\/"]
 

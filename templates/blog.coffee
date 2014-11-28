@@ -35,17 +35,17 @@ template = ->
    '''
 
   @body ->
-   @div ".container.docscript-container", ->
+   @div ".container.wallapatta-container", ->
     for post, i in @$.posts
-     @div ".row.docscript", ->
+     @div ".row.wallapatta", ->
       title = post.options.title
       if title?
        @div ".col-xs-12", ->
         @h1 ".title", ->
          @a href: "#{post.options.id}.html", title
 
-      @div ".docscript-main.col-xs-9", "###MAIN#{i}###"
-      @div ".docscript-sidebar.col-xs-3", "###SIDEBAR#{i}###"
+      @div ".wallapatta-main.col-xs-9", "###MAIN#{i}###"
+      @div ".wallapatta-sidebar.col-xs-3", "###SIDEBAR#{i}###"
       @div style: {display: 'none'}, "###CODE#{i}###"
 
     options = @$.options
@@ -76,7 +76,7 @@ exports.html = (options) ->
   html = html.replace "###MAIN#{i}###", post.main
   html = html.replace "###SIDEBAR#{i}###", post.sidebar
   html = html.replace "###CODE#{i}###",
-   "<div class='docscript-code'>#{post.code}</div>"
+   "<div class='wallapatta-code'>#{post.code}</div>"
 
  html = "<!DOCTYPE html>#{html}"
 

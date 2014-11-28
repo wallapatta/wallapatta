@@ -26,7 +26,7 @@ Mod.require 'Weya.Base',
    mediaInline: 'mediaInline' #TODO
 
   #TODO include these in a class
-  PREFIX = 'docscript_'
+  PREFIX = 'wallapatta_'
 
   class Map extends Base
    @initialize (options) ->

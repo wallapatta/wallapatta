@@ -21,7 +21,7 @@ Mod.require 'Weya.Base',
        @div ".row.error", ->
         @$.elems.errors = @div ".col-md-12", null
 
-       @div ".row.docscript", ->
+       @div ".row.wallapatta", ->
         @$.elems.previewMain = @div ".col-md-9", null
         @$.elems.previewSidebar = @div ".col-md-3", null
 
@@ -56,7 +56,7 @@ Mod.require 'Weya.Base',
 
    @listen 'setupEditor', ->
     @editor = CodeMirror.fromTextArea @elems.textarea,
-     mode: "docscript"
+     mode: "wallapatta"
      lineNumbers: true
      lineWrapping: true
      tabSize: 1
