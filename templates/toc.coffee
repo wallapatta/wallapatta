@@ -63,6 +63,6 @@ exports.render = (options, elem) ->
  Weya elem: elem, ->
   ol = @ol null
 
- for i in options.content
+ for i in options
   render i, ol
 

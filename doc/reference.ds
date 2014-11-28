@@ -1,0 +1,176 @@
+##Headings
+
+ Headings have the same syntax as Markdown. ``#`` for level 1 headings ``##`` for
+ level 2 headings and so on. The content that belongs to the heading should
+ indented.
+
+ ```
+  #Heading
+
+   Indented content
+
+##Paragraphs
+
+ Again similar to Markdown. Paragraphs are separated by blank lines.
+
+ ```
+  Paragraph1
+  More of paragraph1
+
+  Paragraph2
+
+##List
+
+ Ordered lists begin with ``- `` while unordered lists begin with ``* ``.
+ Since lists can be structured with indentations, it's easy to have lists
+ within lists.
+
+ ```
+  - Introduction
+  - Analyses
+
+   - Daily analysis
+   - Benford's law
+   - Timeseries analysis
+  - Visualizations
+
+   * Treemap
+   * Bar charts
+   * Dashboard
+
+ >>>
+  - Introduction
+  - Analyses
+
+   - Daily analysis
+   - Benford's law
+   - Timeseries analysis
+  - Visualizations
+
+   * Treemap
+   * Bar charts
+   * Dashboard
+
+##Media
+
+ Images can be added with ``!``.
+
+ ```
+  !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
+
+ >>>
+  !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
+
+##Special Blocks
+
+ This is similar to block quotes in Markdown. Special blocks are specified
+ by ``+++``. The content is identified using indentation.
+
+ ```
+  +++
+   **This is a special segment.
+
+   Can have all the other things like images.
+
+   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1814286/d1.png
+
+ +++
+  **This is a special segment.
+
+  Can have all the other things like images.
+
+  !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1814286/d1.png
+
+##Code Blocks
+
+ Code blocks are identified by three backtick quotes (`).
+
+##Html Blocks
+
+ Html blocks are identified by ``<<<``.
+
+ ```
+  <<<
+   <blockquote class="twitter-tweet" lang="en"><p>Wallapatta <a href="http://t.co/iaPELYc7RL">http://t.co/iaPELYc7RL</a> Alternative to <a href="https://twitter.com/hashtag/markdown?src=hash">#markdown</a> written in <a href="https://twitter.com/hashtag/coffeescript?src=hash">#coffeescript</a></p>&mdash; Varuna Jayasiri (@vpj) <a href="https://twitter.com/vpj/status/532035802578944003">November 11, 2014</a></blockquote>
+   <script async src="http://platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+ Here's a tweet embedded with an HTML block.
+
+ <<<
+  <blockquote class="twitter-tweet" lang="en"><p>Wallapatta <a href="http://t.co/iaPELYc7RL">http://t.co/iaPELYc7RL</a> Alternative to <a href="https://twitter.com/hashtag/markdown?src=hash">#markdown</a> written in <a href="https://twitter.com/hashtag/coffeescript?src=hash">#coffeescript</a></p>&mdash; Varuna Jayasiri (@vpj) <a href="https://twitter.com/vpj/status/532035802578944003">November 11, 2014</a></blockquote>
+  <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
+
+ >>>
+  This won't work in online editor since the twitter script will not load
+
+##Bold
+
+ Text can be made bold with ``**``.
+
+ ```
+  **This is bold** and this is not.
+
+  **This entire paragraph is bold.
+  Still the same paragraph.
+
+ >>>
+  **This is bold** and this is not.
+
+  **This entire paragraph is bold.
+  Still the same paragraph.
+
+##Italics
+
+ Text can be made italics with ``--``.
+
+ ```
+  --This is italics-- and this is not
+
+  --This entire paragraph is in italics.
+  Still the same paragraph
+
+ >>>
+  --This is italics-- and this is not
+
+  --This entire paragraph is in italics.
+  Still the same paragraph
+
+##Superscript and Subscript
+
+ Superscript are wrapped inside ``^^ ^^`` and Subscripts are wrapped inside
+ ``__ __``.
+
+
+ ```
+  * 2^^2^^ = 4
+  * CO__2__
+
+ >>>
+  * 2^^2^^ = 4
+  * CO__2__
+
+##Inline code
+
+ Inline code is identified by two backticks (`).
+
+ ```
+  Click ``apply`` to save changes.
+
+ >>>
+  Click ``apply`` to save changes.
+
+##Links
+
+ Links are wrapped inside ``<< >>``. The link text can be specified within
+ brackets.
+
+ ```
+  * <<http://www.twitter.com/vpj(My Twitter Account)>>
+  * <<http://www.forestpin.com>>
+
+ >>>
+  * <<http://www.twitter.com/vpj(My Twitter Account)>>
+  * <<http://www.forestpin.com>>
+
+
+

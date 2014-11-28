@@ -55,7 +55,7 @@ Mod.require 'jsdom',
 
    fs.writeFileSync "./#{argv.output}/toc.html", output
 
-   for i in data.content
+   for i in data
     render i
 
 

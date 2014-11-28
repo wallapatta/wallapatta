@@ -1,0 +1,131 @@
+Wallapatta has a syntax similar to
+<<http://en.wikipedia.org/wiki/Markdown(Markdown)>> and uses a layout
+inspired by handouts of Edward R. Tufte.
+
+ >>>
+  <<http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB
+  (Book design: advice and examples - edwardtufte.com)>>
+
+Wallapatta is on <<https://github.com/vpj/wallapatta(Github)>> and we are using it to generate software user manuals at
+**<<http://forestpin.com(Forestpin)>>**.
+
+ >>>
+  **<<https://github.com/vpj/wallapatta(Wallapatta on Github)>>
+
+##Overview
+
+ Wallapatta uses indentation to specify hierarchy of content.
+
+ +++
+  **Example
+
+   ```
+    ###Heading1
+
+     Introduction
+
+     * Point one
+
+      Description about point one
+
+     ####Subtopic
+
+      Subtopic content
+
+      More subtopic content
+
+     This belongs to Heading1
+
+   >>>
+    ###Heading1
+
+     Introduction
+
+     * Point one
+
+      Description about point one
+
+     ####Subtopic
+
+      Subtopic content
+
+      More subtopic content
+
+     This belongs to Heading1
+
+ Indentation lets you do things like include **content within
+ lists**. And it helps editing large documents because standard **code
+ folding** can be used with Wallapatta. Also the hierarchy of content is important for printing - to identify
+ where to break pages.
+
+ >>>
+  --Page breaking for printing is not implemented yet
+
+ Another key feature of wallapatta is sidenotes. You can have notes as well
+ as images in sidenotes.
+
+ >>>
+  <<<
+   <a href="https://twitter.com/share" class="twitter-share-button" data-via="vpj" data-size="large">Tweet</a>
+   <script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0],p=/^http:/.test(d.location)?'http':'https';if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src=p+'://platform.twitter.com/widgets.js';fjs.parentNode.insertBefore(js,fjs);}}(document, 'script', 'twitter-wjs');</script>
+
+  --Tweet this button in a sidenote^^1^^
+
+ We've changed some syntaxes of Markdown; for instance, ``<<`` and ``>>`` are
+ used for links instead of ``[]()``, because we felt it was a little more
+ intuitive (resemblence with HTML tags).
+
+
+
+##Usage
+
+###<<http://vpj.github.io/wallapatta(Online Editor)>>
+
+Use the online editor to try Wallapatta syntax.
+
+###Building CLI
+
+ The command line interface requires ``nodejs`` and ``coffeescript``.
+ Once you clone the <<https://github.com/vpj/wallapatta(Github project)>>,
+ you need to get the git submodules with ``git submodule init`` and
+ ``git submodule update`` after cloning wallapatta.
+
+ >>>
+  A few npm packeges such as ``optimist`` are required.
+
+
+ ```
+  cake clean
+  cake build
+
+ The compiled javascript files and other assets will be placed within
+ ``build`` directory. ``index.html`` file contains the onlide editor.
+
+###Compiling a wallapatta document
+
+
+ ```
+  ./wallapatta.coffee -i input_file -o output_file
+
+
+ If the default template is used. the assets in the ``build`` directory
+ should be in the same location as the html file. You can specify the
+ template using ``-h`` option. The default template is
+ ``templates/page.coffee``
+
+###<<brackets.html(Adobe Brackets Extension)>>
+
+ Detailed instructions on installing the adobe brakcets extension
+ is <<brackets.html(available here)>>.
+
+
+
+##<<reference.html(Reference)>>
+
+ <<reference.html(Click here)>> for detailed reference of the syntax.
+
+##<<https://trello.com/b/WDVpJBt2/wallapatta-roadmap(Roadmap)>>
+
+ We've published the roadmap of a <<https://trello.com/b/WDVpJBt2/wallapatta-roadmap(Trello Board)>>. You can vote for new features with a trello account.
+
+

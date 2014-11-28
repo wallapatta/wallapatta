@@ -1,0 +1,10 @@
+- id: introduction
+  title: 'Wallapatta'
+  file: 'introduction.ds'
+- id: reference
+  title: 'Wallapatta Reference'
+  file: 'reference.ds'
+- id: brackets
+  title: 'Wallapatta - Adobe Brackets Extension'
+  file: 'brackets.ds'
+
