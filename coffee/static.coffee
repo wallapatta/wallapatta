@@ -1,4 +1,4 @@
-Mod.require 'Docscript.Parser', (Parser) ->
+Mod.require 'Wallapatta.Parser', (Parser) ->
  process = (n, doc) ->
   code = doc.getElementsByClassName 'wallapatta-code'
   if code.length isnt 1

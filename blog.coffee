@@ -38,8 +38,8 @@ argv = require 'optimist'
 data = YAML.parse "#{fs.readFileSync argv.blog}"
 POSTS = argv.posts ? 3
 
-Mod.require 'Docscript.File',
- 'Docscript.Paginate'
+Mod.require 'Wallapatta.File',
+ 'Wallapatta.Paginate'
  (FileRender, Paginate) ->
   renderPost = (options) ->
    FileRender

@@ -31,7 +31,7 @@ argv = require 'optimist'
 data = YAML.parse "#{fs.readFileSync argv.book}"
 
 Mod.require 'jsdom',
- 'Docscript.File'
+ 'Wallapatta.File'
  (jsdom, FileRender) ->
   render = (options) ->
    FileRender

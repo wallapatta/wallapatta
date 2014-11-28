@@ -26,7 +26,7 @@ argv = require 'optimist'
 
 input = "#{fs.readFileSync argv.input}"
 
-Mod.require 'Docscript.Parser',
+Mod.require 'Wallapatta.Parser',
  (Parser) ->
   parser = new Parser text: input
   parser.parse()

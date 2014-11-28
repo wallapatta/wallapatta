@@ -1,7 +1,7 @@
 Mod.require 'fs',
  'jsdom'
  'Weya'
- 'Docscript.Parser'
+ 'Wallapatta.Parser'
  (fs, jsdom, Weya, Parser) ->
   render = (options) ->
    input = "#{fs.readFileSync options.file}"
@@ -21,5 +21,5 @@ Mod.require 'fs',
 
     fs.writeFileSync options.output, output
 
-  Mod.set 'Docscript.File', render
+  Mod.set 'Wallapatta.File', render
 

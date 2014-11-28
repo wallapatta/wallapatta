@@ -71,7 +71,7 @@ Mod.require ->
 
  ###DocScript Project
 
-  Docscript is available on <<https://github.com/vpj/wallapatta(Github)>>. It
+  Wallapatta is available on <<https://github.com/vpj/wallapatta(Github)>>. It
   is not fully baked yet but you can give it a try.
 
   >>>
@@ -104,7 +104,7 @@ Mod.require ->
 
  ##Design
 
-  Docscript uses indentation to specify hierarchy of content.
+  Wallapatta uses indentation to specify hierarchy of content.
 
   +++
    ####Example
@@ -163,7 +163,7 @@ Mod.require ->
   used for links instead of ``[]()``, because we felt it was a little more
   intuitive (resemblence with HTML tags).
 
-  Docscript introduces HTML blocks marked by ``<<<``, where you can add
+  Wallapatta introduces HTML blocks marked by ``<<<``, where you can add
   any HTML content.
 
   >>>
@@ -264,13 +264,13 @@ Mod.require ->
 
    ```
     <<<
-     <blockquote class="twitter-tweet" lang="en"><p>Docscript <a href="http://t.co/iaPELYc7RL">http://t.co/iaPELYc7RL</a> Alternative to <a href="https://twitter.com/hashtag/markdown?src=hash">#markdown</a> written in <a href="https://twitter.com/hashtag/coffeescript?src=hash">#coffeescript</a></p>&mdash; Varuna Jayasiri (@vpj) <a href="https://twitter.com/vpj/status/532035802578944003">November 11, 2014</a></blockquote>
+     <blockquote class="twitter-tweet" lang="en"><p>Wallapatta <a href="http://t.co/iaPELYc7RL">http://t.co/iaPELYc7RL</a> Alternative to <a href="https://twitter.com/hashtag/markdown?src=hash">#markdown</a> written in <a href="https://twitter.com/hashtag/coffeescript?src=hash">#coffeescript</a></p>&mdash; Varuna Jayasiri (@vpj) <a href="https://twitter.com/vpj/status/532035802578944003">November 11, 2014</a></blockquote>
      <script async src="http://platform.twitter.com/widgets.js" charset="utf-8"></script>
 
    Here's a tweet embedded with an HTML block.
 
    <<<
-    <blockquote class="twitter-tweet" lang="en"><p>Docscript <a href="http://t.co/iaPELYc7RL">http://t.co/iaPELYc7RL</a> Alternative to <a href="https://twitter.com/hashtag/markdown?src=hash">#markdown</a> written in <a href="https://twitter.com/hashtag/coffeescript?src=hash">#coffeescript</a></p>&mdash; Varuna Jayasiri (@vpj) <a href="https://twitter.com/vpj/status/532035802578944003">November 11, 2014</a></blockquote>
+    <blockquote class="twitter-tweet" lang="en"><p>Wallapatta <a href="http://t.co/iaPELYc7RL">http://t.co/iaPELYc7RL</a> Alternative to <a href="https://twitter.com/hashtag/markdown?src=hash">#markdown</a> written in <a href="https://twitter.com/hashtag/coffeescript?src=hash">#coffeescript</a></p>&mdash; Varuna Jayasiri (@vpj) <a href="https://twitter.com/vpj/status/532035802578944003">November 11, 2014</a></blockquote>
     <script async src="//platform.twitter.com/widgets.js" charset="utf-8"></script>
 
    >>>
@@ -358,4 +358,4 @@ Mod.require ->
 
  '''
 
- Mod.set 'Docscript.Sample', text
+ Mod.set 'Wallapatta.Sample', text

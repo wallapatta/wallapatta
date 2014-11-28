@@ -1,5 +1,5 @@
 Mod.require 'Weya.Base',
- 'Docscript.TYPES'
+ 'Wallapatta.TYPES'
  (Base, TYPES) ->
 
   BLOCK_TOKENS =
@@ -99,6 +99,6 @@ Mod.require 'Weya.Base',
 
 
 
-  Mod.set 'Docscript.Reader', Reader
+  Mod.set 'Wallapatta.Reader', Reader
 
 

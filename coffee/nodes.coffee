@@ -308,25 +308,25 @@ Mod.require 'Weya.Base',
     Weya elem: options.elem, context: this, @template
 
 
-  Mod.set 'Docscript.Text', Text
-  Mod.set 'Docscript.Bold', Bold
-  Mod.set 'Docscript.Italics', Italics
-  Mod.set 'Docscript.SuperScript', SuperScript
-  Mod.set 'Docscript.SubScript', SubScript
-  Mod.set 'Docscript.Code', Code
-  Mod.set 'Docscript.Link', Link
+  Mod.set 'Wallapatta.Text', Text
+  Mod.set 'Wallapatta.Bold', Bold
+  Mod.set 'Wallapatta.Italics', Italics
+  Mod.set 'Wallapatta.SuperScript', SuperScript
+  Mod.set 'Wallapatta.SubScript', SubScript
+  Mod.set 'Wallapatta.Code', Code
+  Mod.set 'Wallapatta.Link', Link
 
-  Mod.set 'Docscript.Block', Block
-  Mod.set 'Docscript.Section', Section
-  Mod.set 'Docscript.List', List
-  Mod.set 'Docscript.ListItem', ListItem
-  Mod.set 'Docscript.Sidenote', Sidenote
-  Mod.set 'Docscript.Article', Article
-  Mod.set 'Docscript.Media', Media
-  Mod.set 'Docscript.CodeBlock', CodeBlock
-  Mod.set 'Docscript.Special', Special
-  Mod.set 'Docscript.Html', Html
+  Mod.set 'Wallapatta.Block', Block
+  Mod.set 'Wallapatta.Section', Section
+  Mod.set 'Wallapatta.List', List
+  Mod.set 'Wallapatta.ListItem', ListItem
+  Mod.set 'Wallapatta.Sidenote', Sidenote
+  Mod.set 'Wallapatta.Article', Article
+  Mod.set 'Wallapatta.Media', Media
+  Mod.set 'Wallapatta.CodeBlock', CodeBlock
+  Mod.set 'Wallapatta.Special', Special
+  Mod.set 'Wallapatta.Html', Html
 
-  Mod.set 'Docscript.Map', Map
+  Mod.set 'Wallapatta.Map', Map
 
-  Mod.set 'Docscript.TYPES', TYPES
+  Mod.set 'Wallapatta.TYPES', TYPES

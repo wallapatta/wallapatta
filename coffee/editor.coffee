@@ -1,7 +1,7 @@
 Mod.require 'Weya.Base',
  'CodeMirror'
- 'Docscript.Parser'
- 'Docscript.Sample'
+ 'Wallapatta.Parser'
+ 'Wallapatta.Sample'
  (Base, CodeMirror, Parser, Sample) ->
 
   class Editor  extends Base

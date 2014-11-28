@@ -1,29 +1,29 @@
 Mod.require 'Weya.Base',
- 'Docscript.TYPES'
+ 'Wallapatta.TYPES'
 
- 'Docscript.Text'
- 'Docscript.Bold'
- 'Docscript.Italics'
- 'Docscript.SuperScript'
- 'Docscript.SubScript'
- 'Docscript.Code'
- 'Docscript.Link'
+ 'Wallapatta.Text'
+ 'Wallapatta.Bold'
+ 'Wallapatta.Italics'
+ 'Wallapatta.SuperScript'
+ 'Wallapatta.SubScript'
+ 'Wallapatta.Code'
+ 'Wallapatta.Link'
 
- 'Docscript.Block'
- 'Docscript.Section'
- 'Docscript.List'
- 'Docscript.ListItem'
- 'Docscript.Sidenote'
- 'Docscript.Article'
- 'Docscript.Media'
+ 'Wallapatta.Block'
+ 'Wallapatta.Section'
+ 'Wallapatta.List'
+ 'Wallapatta.ListItem'
+ 'Wallapatta.Sidenote'
+ 'Wallapatta.Article'
+ 'Wallapatta.Media'
 
- 'Docscript.CodeBlock'
- 'Docscript.Special'
- 'Docscript.Html'
+ 'Wallapatta.CodeBlock'
+ 'Wallapatta.Special'
+ 'Wallapatta.Html'
 
- 'Docscript.Map'
+ 'Wallapatta.Map'
 
- 'Docscript.Reader'
+ 'Wallapatta.Reader'
  (Base, TYPES,
   Text, Bold, Italics, SuperScript, SubScript, Code, Link,
   Block, Section, List, ListItem, Sidenote, Article, Media,
@@ -370,5 +370,5 @@ Mod.require 'Weya.Base',
 
 
 
-   Mod.set 'Docscript.Parser', Parser
+   Mod.set 'Wallapatta.Parser', Parser
 

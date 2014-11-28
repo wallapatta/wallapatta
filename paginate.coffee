@@ -1,7 +1,7 @@
 Mod.require 'fs',
  'jsdom'
  'Weya'
- 'Docscript.Parser'
+ 'Wallapatta.Parser'
  (fs, jsdom, Weya, Parser) ->
   renderPost = (options, callback) ->
    input = "#{fs.readFileSync options.file}"
@@ -43,5 +43,5 @@ Mod.require 'fs',
 
     fs.writeFileSync "./#{options.output}/page#{options.page + 1}.html", output
 
-  Mod.set 'Docscript.Paginate', render
+  Mod.set 'Wallapatta.Paginate', render
 

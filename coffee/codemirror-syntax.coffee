@@ -232,13 +232,13 @@ if define? and brackets?
   new Mode CodeMirror
 
   lang = LanguageManager.defineLanguage "wallapatta",
-   name: "Docscript"
+   name: "Wallapatta"
    mode: "wallapatta"
    fileExtensions: [".ds"]
    lineComment: ["\/\/"]
 
   lang.done ->
-   console.log "[Docscript] Module loaded."
+   console.log "[Wallapatta] Module loaded."
 
 else if CodeMirror?
  new Mode CodeMirror
