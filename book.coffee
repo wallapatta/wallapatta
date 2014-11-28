@@ -20,7 +20,7 @@ require './coffee/nodes'
 require './coffee/reader'
 
 argv = require 'optimist'
- .usage 'DocScript parser.\n Usage: $0'
+ .usage 'Wallapatta parser.\n Usage: $0'
  .demand ['b', 'o']
  .alias 'b', 'book'
  .describe 'b', 'YAML book'

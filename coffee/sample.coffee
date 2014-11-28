@@ -69,7 +69,7 @@ Mod.require ->
   * R Markdown seemed to be use verbose syntaxes for some of the commonly
    needed functions
 
- ###DocScript Project
+ ###Wallapatta Project
 
   Wallapatta is available on <<https://github.com/vpj/wallapatta(Github)>>. It
   is not fully baked yet but you can give it a try.

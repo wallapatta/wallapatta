@@ -16,7 +16,7 @@ require './coffee/nodes'
 require './coffee/reader'
 
 argv = require 'optimist'
- .usage 'DocScript parser.\n Usage: $0'
+ .usage 'Wallapatta parser.\n Usage: $0'
  .demand ['i', 'o']
  .alias 'i', 'input'
  .describe 'i', 'Input file'
