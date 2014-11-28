@@ -1,27 +1,25 @@
-#Using Wallapatta with an Editor
+While the online Wallapatta editor might be easier and more fun to use, you might need to use a separate editor for extensive writing.
 
- While the online Wallapatta editor might be easier and more fun to use, you might need to use a separate editor for extensive scripting.  
- 
- And for this you can use any editor you're comfortable with; But right now, only Brackets supports syntax highlighting (via an extension). Just follow the guide below to get started:
- 
- ##1. Install Brackets
-  <<http://brackets.io(Download Brackets)>> and follow the instructions on the website to install it.
-  
- ##2. Get the extension
-  Then after you have installed Brackets, <<http://vpj.github.io/wallapatta/js/codemirror-syntax.js(download the extension)>>. You will have a file called ``codemirror-syntax.js``.
-  
- ##3. Add the extension
-  Open Brackets, go to **Help > Show Extensions Folder**.
-  
-  !http://i.imgur.com/7VeP651.png
-   
-  A folder similar to the one shown below will open:
-  
-  !http://i.imgur.com/Fm5V1BM.png
-  
-  Go into **user** and create a new folder called **wallapatta**. Then move the previously downloaded ``codemirror-syntax.js`` into this folder.
-  
- ##4. Restart Brackets
- 
-  That's all there is to it. Just restart Brackets and start writing Wallapatta! Remember to save files with the extension ``.DS`` for Brackets to recognize the file type as Wallapatta.
-  
+And for this you can use any editor you're comfortable with; But right now, only Brackets supports syntax highlighting (via an extension). Just follow the guide below to get started:
+
+##1. Install Brackets
+ <<http://brackets.io(Download Brackets)>> and follow the instructions on the website to install it.
+
+##2. Get the extension
+ Then after you have installed Brackets, <<http://vpj.github.io/wallapatta/js/codemirror-syntax.js(download the extension)>>. You will have a file called ``codemirror-syntax.js``.
+
+##3. Add the extension
+ Open Brackets, go to **Help > Show Extensions Folder**.
+
+ !http://i.imgur.com/7VeP651.png
+
+ A folder similar to the one shown below will open:
+
+ !http://i.imgur.com/Fm5V1BM.png
+
+ Go into **user** and create a new folder called **wallapatta**. Then move the previously downloaded ``codemirror-syntax.js`` into this folder.
+
+##4. Restart Brackets
+
+ That's all there is to it. Just restart Brackets and start writing Wallapatta! Remember to save files with the extension ``.DS`` for Brackets to recognize the file type as Wallapatta.
+
