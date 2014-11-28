@@ -10,10 +10,14 @@ UI_JS = [
 ]
 
 template = ->
+ title = @$.options.options.title
  @html ->
   @head ->
    @meta charset: "utf-8"
-   @title "Wallapatta"
+   if title?
+    @title title
+   else
+    @title "Made with Wallapatta"
    @meta name: "viewport", content: "width=device-width, initial-scale=1.0"
    @meta name: "apple-mobile-web-app-capable", content:"yes"
    @link
@@ -37,7 +41,6 @@ template = ->
   @body ->
    @div ".container.wallapatta-container", ->
     @div ".row.wallapatta", ->
-     title = @$.options.options.title
      if title?
       @div ".col-xs-12", ->
        @h1 ".title", title
