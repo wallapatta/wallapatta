@@ -8,8 +8,12 @@ fs = require 'fs'
 jsdom = require 'jsdom'
 template = require './templates/page'
 
+Mod.set 'fs', fs
+Mod.set 'jsdom', require 'jsdom'
 Mod.set 'Weya', Weya
 Mod.set 'Weya.Base', Weya.Base
+
+require './file'
 
 require './coffee/parser'
 require './coffee/nodes'
@@ -22,25 +26,21 @@ argv = require 'optimist'
  .describe 'i', 'Input file'
  .alias 'o', 'output'
  .describe 'o', 'Output file'
+ .alias 't', 'title'
+ .describe 't', 'Title'
+ .default 't', 'Created with Wallapatta'
+ .alias 'h', 'template'
+ .describe 'h', 'Template'
+ .default 'h', './templates/page'
  .argv
 
-input = "#{fs.readFileSync argv.input}"
-
-Mod.require 'Wallapatta.Parser',
- (Parser) ->
-  parser = new Parser text: input
-  parser.parse()
-  jsdom.env '<div id="main"></div><div id="sidebar"></div>', (err, window) ->
-   Weya.setApi document: window.document
-   main = window.document.getElementById 'main'
-   sidebar = window.document.getElementById 'sidebar'
-   parser.render main, sidebar
-   output = template.html
-    main: main.innerHTML
-    sidebar: sidebar.innerHTML
-    code: input
-
-   fs.writeFileSync "#{argv.output}", output
-
+Mod.require 'Wallapatta.File',
+ (FileRender) ->
+   FileRender
+    file: argv.input
+    template: argv.template
+    output: argv.output
+    options:
+     title: argv.title
 
 Mod.initialize()
