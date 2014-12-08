@@ -1,16 +1,13 @@
 Wallapatta has a syntax similar to
 <<http://en.wikipedia.org/wiki/Markdown(Markdown)>> and uses a layout
-inspired by handouts of Edward R. Tufte.
+inspired by handouts of Edward R. Tufte^^1^^. We are using it to generate
+software user manuals at **<<http://forestpin.com(Forestpin)>>**.
 
  >>>
-  <<http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB
+  ^^1^^ <<http://www.edwardtufte.com/bboard/q-and-a-fetch-msg?msg_id=0000hB
   (Book design: advice and examples - edwardtufte.com)>>
 
-Wallapatta is on <<https://github.com/vpj/wallapatta(Github)>> and we are using it to generate software user manuals at
-**<<http://forestpin.com(Forestpin)>>**.
-
- >>>
-  **<<https://github.com/vpj/wallapatta(Wallapatta on Github)>>
+##<<https://github.com/vpj/wallapatta(Fork me on Github)>>
 
 ##Overview
 
