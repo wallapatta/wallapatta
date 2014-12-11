@@ -22,6 +22,7 @@ template = ->
     type: 'text/css'
    @link href: "lib/skeleton/css/skeleton.css", rel: "stylesheet"
    @link href: "css/style.css", rel: "stylesheet"
+   @link href: "css/paginate.css", rel: "stylesheet"
    @script '''
      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
@@ -35,25 +36,24 @@ template = ->
   @body ->
    @div ".container.wallapatta-container", ->
     for post, i in @$.posts
-     @div ".row.wallapatta", ->
+     @div ".wallapatta", ->
       title = post.options.title
       if title?
-       @div ".col-xs-12", ->
-        @h1 ".title", ->
-         @a href: "#{post.options.id}.html", title
+       @h1 ".title", ->
+        @a href: "#{post.options.id}.html", title
 
-      @div ".wallapatta-main.col-xs-9", "###MAIN#{i}###"
-      @div ".wallapatta-sidebar.col-xs-3", "###SIDEBAR#{i}###"
-      @div style: {display: 'none'}, "###CODE#{i}###"
+      @div ".row", ->
+       @div ".wallapatta-main.nine.columns", "###MAIN#{i}###"
+       @div ".wallapatta-sidebar.three.columns", "###SIDEBAR#{i}###"
+       @div style: {display: 'none'}, "###CODE#{i}###"
 
     options = @$.options
     if options.pages > 1
-     @div ".row.paginate", ->
-      @div ".col-xs-12", ->
-       if options.page > 0
-        @a ".prev-page", href: "page#{options.page}.html", "prev"
-       if options.page < options.pages - 1
-        @a ".next-page", href: "page#{options.page + 2}.html", "next"
+     @div ".paginate", ->
+      if options.page > 0
+       @a ".prev-page.button", href: "page#{options.page}.html", "prev"
+      if options.page < options.pages - 1
+       @a ".next-page.button", href: "page#{options.page + 2}.html", "next"
 
 
    @script src:"lib/weya/weya.js"
