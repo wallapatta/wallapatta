@@ -17,6 +17,7 @@ template = ->
    @link href: "lib/CodeMirror/lib/codemirror.css", rel: "stylesheet"
    @link href: "lib/CodeMirror/addon/fold/foldgutter.css", rel: "stylesheet"
    @link href: "css/style.css", rel: "stylesheet"
+   @link href: "css/editor.css", rel: "stylesheet"
    @script '''
      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),

@@ -21,7 +21,11 @@ UI_JS_HTML = [
  'nodes'
  'sample'
 ]
-UI_LESS = ['style']
+UI_LESS = [
+ 'style'
+ 'editor'
+ 'paginate'
+]
 
 assets = exports.assets = taskUiAssets = (callback) ->
  commands = []
@@ -91,8 +95,16 @@ css = exports.css = (callback) ->
   "ui-assets/less/style.less"
   "#{BUILD}/css/style.css"
   (e1) ->
-   util.watch filesToWatch, css, []
-   callback? e1
+   util.css "ui-assets/less/",
+    "ui-assets/less/editor.less"
+    "#{BUILD}/css/editor.css"
+    (e2) ->
+     util.css "ui-assets/less/",
+      "ui-assets/less/paginate.less"
+      "#{BUILD}/css/paginate.css"
+      (e3) ->
+       util.watch filesToWatch, css, []
+       callback? e1 + e2 + e3
 
 dirList = (files) ->
  dirs = {}

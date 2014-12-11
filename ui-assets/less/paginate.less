@@ -1,0 +1,26 @@
+@import "elements.less";
+
+.paginate {
+  margin: 50px 0;
+ .prev-page, .next-page {
+  font-size: 16px;
+  display: block;
+  border: 1px solid #aaa;
+  color: #666;
+  .rounded(10px);
+  padding: 5px 15px;
+  &:hover {
+   text-decoration: none;
+   color: #98ff98;
+   -webkit-animation-name: link-animation;
+   -webkit-animation-duration: 0.5s;
+  }
+ }
+ .prev-page {
+  float: left;
+ }
+ .next-page {
+  float: right;
+ }
+}
+

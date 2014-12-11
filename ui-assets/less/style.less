@@ -1,56 +1,14 @@
-@import "elements.less";
-
 .wallapatta {
  h1, h2, h3, h4, h5, h6 {
-//  font-weight: bold;
+ }
+
+ pre {
+  word-wrap: break-word;
  }
 
  p {
   margin: 0 0 1.5em;
  }
-
- @-webkit-keyframes link-animation {
-  from {
-   color: #000;
-  }
-  to {
-   color: #98ff98;
-  }
- }
-
-/*
- a {
-  color: #000;
-  border-bottom: 2px solid #98FF98;
-
-  &:hover {
-   text-decoration: none;
-   color: #98ff98;
-   -webkit-animation-name: link-animation;
-   -webkit-animation-duration: 0.5s;
-  }
- }
-
- h1, h2 {
-  margin-top: 40px;
- }
-
- h1 {
-  margin-bottom: 30px;
- }
-
- h3 {
-  margin-top: 30px;
- }
-
- h4, h5, h6 {
-  margin-top: 25px;
- }
-
- ol, ul {
-  padding-left: 20px;
- }
- */
 
  .sidenote {
   font-size: 0.8em;
@@ -62,7 +20,6 @@
  }
 
  .image-container {
-  //text-align: right;
   margin: 10px 0px;
   img {
    max-width: 100%;
@@ -97,6 +54,9 @@
  }
 }
 
+.wallapatta-container {
+ max-width: 750px;
+}
 @media print {
  @page {
   size: A4;
@@ -104,46 +64,3 @@
  }
 }
 
-.paginate {
-  margin: 50px 0;
- .prev-page, .next-page {
-  font-size: 16px;
-  display: block;
-  border: 1px solid #aaa;
-  color: #666;
-  .rounded(10px);
-  padding: 5px 15px;
-  &:hover {
-   text-decoration: none;
-   color: #98ff98;
-   -webkit-animation-name: link-animation;
-   -webkit-animation-duration: 0.5s;
-  }
- }
- .prev-page {
-  float: left;
- }
- .next-page {
-  float: right;
- }
-}
-
-.CodeMirror {
- background: #f8f8f8;
- margin-bottom: 20px;
- font-size: 0.9em;
-}
-
-.error {
- font-weight: bold;
- font-family: monospace;
- color: #ff4444;
-}
-
-.preview {
- overflow-y: scroll;
-}
-
-.wallapatta-container {
- max-width: 750px;
-}
