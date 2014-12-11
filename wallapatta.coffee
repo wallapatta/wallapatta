@@ -7,13 +7,15 @@ Weya.Base = require './lib/weya/base'
 fs = require 'fs'
 jsdom = require 'jsdom'
 template = require './templates/page'
+YAML = require 'yamljs'
 
 Mod.set 'fs', fs
-Mod.set 'jsdom', require 'jsdom'
+Mod.set 'jsdom', jsdom
 Mod.set 'Weya', Weya
 Mod.set 'Weya.Base', Weya.Base
 
 require './file'
+require './paginate'
 
 require './coffee/parser'
 require './coffee/nodes'
@@ -21,21 +23,30 @@ require './coffee/reader'
 
 argv = require 'optimist'
  .usage 'Wallapatta parser.\n Usage: $0'
- .demand ['i', 'o']
- .alias 'i', 'input'
- .describe 'i', 'Input file'
- .alias 'o', 'output'
- .describe 'o', 'Output file'
- .alias 't', 'title'
- .describe 't', 'Title'
- .default 't', 'Created with Wallapatta'
- .alias 'h', 'template'
- .describe 'h', 'Template'
- .default 'h', './templates/page'
+ .demand ['file', 'output']
+
+ .describe 'file', 'Single wallapatta file'
+
+ .describe 'output', 'Output directory'
+
+ .describe 'title', 'Title of a single document'
+ .default 'title', 'Created with Wallapatta'
+
+ .describe 'template', 'Template'
+ .default 'template', './templates/page'
+
+ .describe 'blog', 'Blog YAML file'
+ .describe 'book', 'Book YAML file'
+
+ .describe 'posts', 'Posts per page'
+
  .argv
 
-Mod.require 'Wallapatta.File',
- (FileRender) ->
+
+Mod.require 'jsdom',
+ 'Wallapatta.File'
+ 'Wallapatta.Paginate'
+ (jsdom, FileRender, Paginate) ->
    FileRender
     file: argv.input
     template: argv.template
