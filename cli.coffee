@@ -24,10 +24,11 @@ argv = require 'optimist'
  .describe 'book', 'Book YAML file'
 
  .describe 'posts', 'Posts per page'
+ .default 'posts', '3'
 
  .argv
 
-wallpatta = require './wallpatta'
+wallapatta = require './wallapatta'
 
 if argv.file?
  wallapatta.file argv, ->

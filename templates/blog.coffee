@@ -49,7 +49,6 @@ template = ->
       @div style: {display: 'none'}, "###CODE#{i}###"
 
     options = @$.options
-    console.log options.pages
     if options.pages > 1
      @div ".row.paginate", ->
       @div ".col-xs-12", ->

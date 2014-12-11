@@ -2,9 +2,10 @@ require './lib/mod/mod'
 
 Mod.set 'fs', require 'fs'
 Mod.set 'jsdom', require 'jsdom'
-Mod.set 'Weya', './lib/weya/weya'
+Mod.set 'Weya', require './lib/weya/weya'
 Mod.set 'Weya.Base', require './lib/weya/base'
 Mod.set 'yamljs', require 'yamljs'
+Mod.set 'path', require 'path'
 
 require './file'
 require './paginate'
@@ -16,9 +17,11 @@ require './coffee/reader'
 Mod.require 'jsdom',
  'fs'
  'yamljs'
+ 'path'
  'Wallapatta.File'
  'Wallapatta.Paginate'
- (jsdom, fs, YAML, FileRender, Paginate) ->
+ 'Weya'
+ (jsdom, fs, YAML, path, FileRender, Paginate, Weya) ->
 
   exports.copyStatic = copyStatic = (output, callback) ->
    callback()
@@ -37,7 +40,7 @@ Mod.require 'jsdom',
 
   exports.file = (options, callback) ->
    FileRender
-    file: options.input
+    file: options.file
     template: path.resolve __dirname, options.template
     output: path.resolve options.output, "index.html"
     options:
@@ -47,7 +50,7 @@ Mod.require 'jsdom',
 
   exports.book = (options, callback) ->
    data = YAML.parse "#{fs.readFileSync options.book}"
-   toc = require __dirname, options.toc
+   toc = require path.resolve __dirname, options.toc
 
    jsdom.env '<div id="toc"></div>', (err, window) ->
     Weya.setApi document: window.document
@@ -66,6 +69,8 @@ Mod.require 'jsdom',
 
 
   exports.blog = (options, callback) ->
+   data = YAML.parse "#{fs.readFileSync options.blog}"
+   POSTS = parseInt options.posts
    inputs = []
    pages = 0
    N = Math.ceil data.length / POSTS
