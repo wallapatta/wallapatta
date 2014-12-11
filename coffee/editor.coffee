@@ -8,22 +8,21 @@ Mod.require 'Weya.Base',
    @extend()
 
    template: ->
-    @div ".container-fluid", ->
-     @div ".row-fluid", ->
-      @div ".col-md-5", ->
+    @div ".container", ->
+     @div ".row", ->
+      @div ".five.columns", ->
        @$.elems.textarea = @textarea ".editor",
         autocomplete: "off"
         spellcheck: "false"
        @$.elems.parse = @button ".btn.btn-default.btn-block",
         on: {click: @$.on.parse}
         "Render"
-      @$.elems.preview = @div ".preview.col-md-7", ->
-       @div ".row.error", ->
-        @$.elems.errors = @div ".col-md-12", null
+      @$.elems.preview = @div ".preview.seven.columns", ->
+       @$.elems.errors = @div ".row.error", null
 
        @div ".row.wallapatta", ->
-        @$.elems.previewMain = @div ".col-md-9", null
-        @$.elems.previewSidebar = @div ".col-md-3", null
+        @$.elems.previewMain = @div ".nine.columns", null
+        @$.elems.previewSidebar = @div ".three.columns", null
 
    @initialize ->
     @elems = {}
