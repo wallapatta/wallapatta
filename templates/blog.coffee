@@ -17,10 +17,10 @@ template = ->
    @meta name: "viewport", content: "width=device-width, initial-scale=1.0"
    @meta name: "apple-mobile-web-app-capable", content:"yes"
    @link
-    href: 'http://fonts.googleapis.com/css?family=Lato:100,300,400,700'
+    href: 'http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900'
     rel: 'stylesheet'
     type: 'text/css'
-   @link href: "lib/bootstrap/css/bootstrap.min.css", rel: "stylesheet"
+   @link href: "lib/skeleton/css/skeleton.css", rel: "stylesheet"
    @link href: "lib/fontawesome/css/font-awesome.min.css", rel: "stylesheet"
    @link href: "css/style.css", rel: "stylesheet"
    @link rel: "shortcut icon", href: "img/favicon.ico", type: "image/x-icon"

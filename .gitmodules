@@ -7,3 +7,6 @@
 [submodule "ui-assets/lib/CodeMirror"]
 	path = ui-assets/lib/CodeMirror
 	url = git@github.com:codemirror/CodeMirror.git
+[submodule "ui-assets/lib/skeleton"]
+	path = ui-assets/lib/skeleton
+	url = git@github.com:dhg/Skeleton.git

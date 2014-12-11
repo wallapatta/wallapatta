@@ -21,11 +21,11 @@ template = ->
    @meta name: "viewport", content: "width=device-width, initial-scale=1.0"
    @meta name: "apple-mobile-web-app-capable", content:"yes"
    @link
-    href: 'http://fonts.googleapis.com/css?family=Lato:100,300,400,700'
+    href: 'http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900'
     rel: 'stylesheet'
     type: 'text/css'
-   @link href: "lib/bootstrap/css/bootstrap.min.css", rel: "stylesheet"
-   @link href: "lib/fontawesome/css/font-awesome.min.css", rel: "stylesheet"
+
+   @link href: "lib/skeleton/css/skeleton.css", rel: "stylesheet"
    @link href: "css/style.css", rel: "stylesheet"
    @link rel: "shortcut icon", href: "img/favicon.ico", type: "image/x-icon"
    @script '''
@@ -40,13 +40,13 @@ template = ->
 
   @body ->
    @div ".container.wallapatta-container", ->
-    @div ".row.wallapatta", ->
+    @div ".wallapatta", ->
      if title?
-      @div ".col-xs-12", ->
-       @h1 ".title", title
-     @div ".wallapatta-main.col-xs-9", "###MAIN###"
-     @div ".wallapatta-sidebar.col-xs-3", "###SIDEBAR###"
-     @div style: {display: 'none'}, "###CODE###"
+      @h1 ".title", title
+     @div ".row", ->
+      @div ".wallapatta-main.nine.columns", "###MAIN###"
+      @div ".wallapatta-sidebar.three.columns", "###SIDEBAR###"
+      @div style: {display: 'none'}, "###CODE###"
 
    @script src:"lib/weya/weya.js"
    @script src:"lib/weya/base.js"
