@@ -23,6 +23,8 @@ argv = require 'optimist'
  .describe 'blog', 'Blog YAML file'
  .describe 'book', 'Book YAML file'
 
+ .describe 'static', 'Copy static files'
+
  .describe 'posts', 'Posts per page'
  .default 'posts', '3'
 

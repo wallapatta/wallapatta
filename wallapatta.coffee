@@ -6,6 +6,7 @@ Mod.set 'Weya', require './lib/weya/weya'
 Mod.set 'Weya.Base', require './lib/weya/base'
 Mod.set 'yamljs', require 'yamljs'
 Mod.set 'path', require 'path'
+{exec} = require 'child_process'
 
 require './file'
 require './paginate'
@@ -23,8 +24,34 @@ Mod.require 'jsdom',
  'Weya'
  (jsdom, fs, YAML, path, FileRender, Paginate, Weya) ->
 
-  exports.copyStatic = copyStatic = (output, callback) ->
-   callback()
+  exports.copyStatic = copyStatic = (options, callback) ->
+   if not options.static?
+    callback()
+    return
+
+   commands = []
+   if fs.existsSync "#{options.output}/js"
+    commands.push "rm #{options.output}/js -r"
+   if fs.existsSync "#{options.output}/css"
+    commands.push "rm #{options.output}/css -r"
+   if fs.existsSync "#{options.output}/lib"
+    commands.push "rm #{options.output}/lib -r"
+
+   commands = commands.concat [
+    "mkdir #{options.output}/js"
+    "mkdir #{options.output}/css"
+    "mkdir #{options.output}/lib"
+    "cp -r #{path.resolve __dirname, 'js/*'} #{options.output}/js/"
+    "cp -r #{path.resolve __dirname, 'css/*'} #{options.output}/css/"
+    "cp -r #{path.resolve __dirname, 'lib/*'} #{options.output}/lib/"
+   ]
+
+   exec commands.join('&&'), (e, stderr, stdout) ->
+    console.error stderr.trim()
+    console.log stdout.trim()
+    e = (if e? then 1 else 0)
+    callback e
+
 
   renderPost = (options, opt) ->
    FileRender
@@ -46,7 +73,7 @@ Mod.require 'jsdom',
     options:
      title: options.title
 
-   copyStatic options.output, callback
+   copyStatic options, callback
 
   exports.book = (options, callback) ->
    data = YAML.parse "#{fs.readFileSync options.book}"
@@ -65,7 +92,7 @@ Mod.require 'jsdom',
     for i in data
      renderPost options, i
 
-   copyStatic options.output, callback
+   copyStatic options, callback
 
 
   exports.blog = (options, callback) ->
@@ -94,6 +121,6 @@ Mod.require 'jsdom',
    if inputs.length > 0
     paginate()
 
-   copyStatic options.output, callback
+   copyStatic options, callback
 
 Mod.initialize()
