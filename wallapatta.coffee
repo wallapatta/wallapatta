@@ -10,9 +10,9 @@ Mod.set 'path', require 'path'
 require './file'
 require './paginate'
 
-require './coffee/parser'
-require './coffee/nodes'
-require './coffee/reader'
+require './js/parser'
+require './js/nodes'
+require './js/reader'
 
 Mod.require 'jsdom',
  'fs'
