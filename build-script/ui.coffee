@@ -145,10 +145,10 @@ exports.js = (callback) ->
   else
    e = 0
    for file in UI_JS
-    if fs.existsSync "coffee/#{file}.coffee"
-     e += util.js "coffee/#{file}.coffee", "#{BUILD}/js/#{file}.js"
+    if fs.existsSync "js/#{file}.coffee"
+     e += util.js "js/#{file}.coffee", "#{BUILD}/js/#{file}.js"
     else
-     e += util.js "coffee/#{file}.litcoffee", "#{BUILD}/js/#{file}.js"
+     e += util.js "js/#{file}.litcoffee", "#{BUILD}/js/#{file}.js"
 
   callback e
 
