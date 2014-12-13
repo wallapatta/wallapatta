@@ -57,10 +57,28 @@
 .wallapatta-container {
  max-width: 750px;
 }
+
+.wallapatta-print {
+ max-width: 5000px;
+ width: 190mm; //210 - 20
+ border: 2px solid green;
+}
+
 @media print {
  @page {
   size: A4;
-  margin: 10mm;
+  //margin: 10mm;
  }
 }
 
+@page {
+  size: A4;
+  margin: 0;
+}
+@media print {
+  html, body {
+    width: 210mm;
+    height: 297mm;
+  }
+  /* ... the rest of the rules ... */
+}

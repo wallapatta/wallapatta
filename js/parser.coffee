@@ -158,6 +158,10 @@ Mod.require 'Weya.Base',
 
      return top
 
+    setPages: ->
+     W = 595
+     H = 842
+
     setFills: ->
      for sidenote in @sidenotes
       elemSidenote = sidenote.elem
