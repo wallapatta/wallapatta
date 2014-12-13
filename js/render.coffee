@@ -4,11 +4,35 @@ Mod.require 'Weya.Base',
 
    PREFIX = 'wallapatta_'
 
+   INF = 1e10
+
+   PAGE_COST = 1000
+   BREAK_COST =
+    codeBlock: 500
+    special: 500
+    html: 500
+    heading: 1000
+    list: 500
+    listItem: 500
+    block: 500
+    media: 500
+
+
    class Render extends Base
     @initialize (options) ->
      @map = options.map
      @root = options.root
      @sidenotes = options.sidenotes
+
+    getBreakCost: (node) ->
+     if BREAK_COST[node.type]?
+      return BREAK_COST[node.type]
+
+     if node.type is 'section'
+      return -200 + 100 * node.level
+
+     throw new Error 'Unknown type'
+
 
     getOffsetTop: (elem, parent) ->
      top = 0
@@ -61,12 +85,12 @@ Mod.require 'Weya.Base',
       j = @mainNodes[i]
       inode = @map.nodes[j]
       ielem = inode.elem
-      pos = padding
-            + (@getOffsetTop ielem, @elems.main)
-            - (@getOffsetTop elem, @elems.main)
+      pos = padding +
+            (@getOffsetTop ielem, @elems.main) -
+            (@getOffsetTop elem, @elems.main)
       break if pos > H
 
-      c = @broken[i] + BREAK_COST[node.type] + PAGE_COST
+      c = @broken[i] + (@getBreakCost node) + PAGE_COST
       if @broken[n] > c
        @broken[n] = c
        @best[n] = i
@@ -103,7 +127,7 @@ Mod.require 'Weya.Base',
     setPages: (H) ->
      @mainNodes = @getMainNodes()
      @sidenoteMap =  @getSidenoteMap()
-     console.log nodes
+     @calculatePageBreaks()
 
      page = 0
      for sidenote in @sidenotes
