@@ -17,6 +17,9 @@ Mod.require 'Weya.Base',
     block: 500
     media: 500
 
+   PAGE_MARGIN = '1000px'
+   START = 1
+
 
    class Render extends Base
     @initialize (options) ->
@@ -93,7 +96,7 @@ Mod.require 'Weya.Base',
       c = @broken[i] + (@getBreakCost node) + PAGE_COST
       if @broken[n] > c
        @broken[n] = c
-       @best[n] = i
+       @nextBreak[n] = i
 
       if @sidenoteMap[j]?
        p = Math.max 0, sidenote - pos
@@ -104,9 +107,9 @@ Mod.require 'Weya.Base',
       break if sidenote > H
       ++i
 
-     if i < @mainNodes.length
+     if i >= @mainNodes.length
       @broken[n] = 0
-      @best[n] = null
+      @nextBreak[n] = null
 
 
     calculatePageBreaks: ->
@@ -122,45 +125,91 @@ Mod.require 'Weya.Base',
       @calculateNextBreak n
       --n
 
+    adjust: (elemSidenote, elemContent) ->
+     topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
+     topContent = @getOffsetTop elemContent, @elems.main
+
+     if topContent > topSidenote
+      fill = Weya {}, ->
+       @div ".fill", style: {height: "1px"}
+
+      elemSidenote.parentNode.insertBefore fill, elemSidenote
+     else if topContent < topSidenote
+      fill = Weya {}, ->
+       @div ".fill", style: {height: "1px"}
+
+      elemContent.parentNode.insertBefore fill, elemContent
+
+     topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
+     topContent = @getOffsetTop elemContent, @elems.main
+
+     if topContent > topSidenote
+      fill = Weya {}, ->
+       @div ".fill", style: {height: "#{topContent - topSidenote}px"}
+
+      elemSidenote.parentNode.insertBefore fill, elemSidenote
+     else if topContent < topSidenote
+      fill = Weya {}, ->
+       @div ".fill", style: {height: "#{topSidenote - topContent}px"}
+
+      elemContent.parentNode.insertBefore fill, elemContent
+
 
 
     setPages: (H) ->
+     #@setFills()
+     #return
+     @pageHeight = H
      @mainNodes = @getMainNodes()
      @sidenoteMap =  @getSidenoteMap()
      @calculatePageBreaks()
 
-     page = 0
-     for sidenote in @sidenotes
-      elemSidenote = sidenote.elem
-      elemContent = @map.nodes[sidenote.link].elem
+     n = START
+     pos = 0
+     while n < @mainNodes.length
+      i = @nextBreak[n]
 
-      topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
-      topContent = @getOffsetTop elemContent, @elems.main
+      if n > START
+       m = @mainNodes[n]
+       node = @map.nodes[m]
+       elem = node.elem
+       elem.style.marginTop = PAGE_MARGIN
 
-      if topContent > topSidenote
+      i = @mainNodes.length unless i?
+      @setPageFill n, i, pos
+      elem = @map.nodes[@mainNodes[i - 1]].elem
+      pos = @getOffsetTop elem, @elems.main
+      pos += elem.offsetHeight
+      n = i
+
+    setPageFill: (f, t, pos) ->
+     margin = (f > START)
+     first = true
+     n = f
+     while n < t
+      m = @mainNodes[n]
+      s = @sidenoteMap[m]
+      ++n
+      continue unless s?
+
+      elemSidenote = @map.nodes[s].elem
+      elemContent = @map.nodes[m].elem
+
+      if first and margin
+       topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
+       if topSidenote < pos
+        fill = Weya {}, ->
+         @div ".fill", style: {height: "#{pos - topSidenote}px"}
+        elemSidenote.parentNode.insertBefore fill, elemSidenote
+
+       topContent = @getOffsetTop @map.nodes[@mainNodes[f]].elem, @elems.main
+       topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
        fill = Weya {}, ->
         @div ".fill", style: {height: "1px"}
-
+       fill.style.marginTop = "#{topContent - topSidenote}px"
        elemSidenote.parentNode.insertBefore fill, elemSidenote
-      else if topContent < topSidenote
-       fill = Weya {}, ->
-        @div ".fill", style: {height: "1px"}
 
-       elemContent.parentNode.insertBefore fill, elemContent
-
-      topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
-      topContent = @getOffsetTop elemContent, @elems.main
-
-      if topContent > topSidenote
-       fill = Weya {}, ->
-        @div ".fill", style: {height: "#{topContent - topSidenote}px"}
-
-       elemSidenote.parentNode.insertBefore fill, elemSidenote
-      else if topContent < topSidenote
-       fill = Weya {}, ->
-        @div ".fill", style: {height: "#{topSidenote - topContent}px"}
-
-       elemContent.parentNode.insertBefore fill, elemContent
+      @adjust elemSidenote, elemContent
 
 
     setFills: ->
@@ -168,33 +217,7 @@ Mod.require 'Weya.Base',
       elemSidenote = sidenote.elem
       elemContent = @map.nodes[sidenote.link].elem
 
-      topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
-      topContent = @getOffsetTop elemContent, @elems.main
-
-      if topContent > topSidenote
-       fill = Weya {}, ->
-        @div ".fill", style: {height: "1px"}
-
-       elemSidenote.parentNode.insertBefore fill, elemSidenote
-      else if topContent < topSidenote
-       fill = Weya {}, ->
-        @div ".fill", style: {height: "1px"}
-
-       elemContent.parentNode.insertBefore fill, elemContent
-
-      topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
-      topContent = @getOffsetTop elemContent, @elems.main
-
-      if topContent > topSidenote
-       fill = Weya {}, ->
-        @div ".fill", style: {height: "#{topContent - topSidenote}px"}
-
-       elemSidenote.parentNode.insertBefore fill, elemSidenote
-      else if topContent < topSidenote
-       fill = Weya {}, ->
-        @div ".fill", style: {height: "#{topSidenote - topContent}px"}
-
-       elemContent.parentNode.insertBefore fill, elemContent
+      @adjust elemSidenote, elemContent
 
 
     render: (main, sidebar) ->
