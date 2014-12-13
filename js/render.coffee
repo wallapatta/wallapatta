@@ -36,8 +36,65 @@ Mod.require 'Weya.Base',
 
      return nodes
 
+    calculateNextBreak: (n) ->
+     m = @mainNodes[n]
+     node = @map.nodes[m]
+     elem = node.elem
+     H = @pageHeight
+     if n is 1
+      H -= @getOffsetTop elem, null
+
+     i = n + 1
+     sidenote = 0
+     padding = 0
+     if @sidenoteMap[m]?
+      sidenote = @map.nodes[@sidenoteMap[m]].elem.offsetHeight
+
+     while i < @mainNodes.length
+      j = @mainNodes[i]
+      inode = @map.nodes[j]
+      ielem = inode.elem
+      pos = padding
+            + (@getOffsetTop ielem, @elems.main)
+            - (@getOffsetTop elem, @elems.main)
+      break if pos > H
+
+      c = @broken[i] + BREAK_COST[node.type] + PAGE_COST
+      if @broken[n] > c
+       @broken[n] = c
+       @best[n] = i
+
+      if @sidenoteMap[j]?
+       p = Math.max 0, sidenote - pos
+       padding += p
+       pos += p
+       sidenote = pos + @map.nodes[@sidenoteMap[j]].elem.offsetHeight
+
+      break if sidenote > H
+      ++i
+
+     if i < @mainNodes.length
+      @broken[n] = 0
+      @best[n] = null
+
+
+    calculatePageBreaks: ->
+     INF = 1e10
+     @broken = []
+     @nextBreak = []
+     for i in @mainNodes
+      @broken.push INF
+      @nextBreak.push null
+
+     n = @mainNodes.length - 1
+     while n >= 1
+      @calculateNextBreak n
+      --n
+
+
+
     setPages: (H) ->
-     nodes = @getMainNodes()
+     @mainNodes = @getMainNodes()
      console.log nodes
 
      page = 0
