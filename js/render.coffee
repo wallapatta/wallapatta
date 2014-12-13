@@ -36,6 +36,13 @@ Mod.require 'Weya.Base',
 
      return nodes
 
+    getSidenoteMap: ->
+     map = {}
+     for sidenote in @sidenotes
+      map[sidenote.link] = sidenote.id
+
+     return map
+
     calculateNextBreak: (n) ->
      m = @mainNodes[n]
      node = @map.nodes[m]
@@ -95,6 +102,7 @@ Mod.require 'Weya.Base',
 
     setPages: (H) ->
      @mainNodes = @getMainNodes()
+     @sidenoteMap =  @getSidenoteMap()
      console.log nodes
 
      page = 0
