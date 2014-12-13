@@ -7,19 +7,12 @@ UI_JS = [
  'main'
  'editor'
  'parser'
+ 'render'
  'reader'
  'nodes'
  'sample'
  'static'
  'codemirror-syntax'
-]
-UI_JS_HTML = [
- 'main'
- 'editor'
- 'parser'
- 'reader'
- 'nodes'
- 'sample'
 ]
 UI_LESS = [
  'style'
@@ -70,15 +63,9 @@ assets = exports.assets = taskUiAssets = (callback) ->
    callback e
 
 html = exports.html = ->
- files = []
- for file in UI_JS_HTML
-  files.push "js/#{file}.js"
-
  try
-  htmlCode = index.html scripts: files
-
+  htmlCode = index.html()
   fs.writeFileSync "#{BUILD}/index.html", htmlCode
-
   util.log " - index.html" unless options.quiet
   return 0
  catch err

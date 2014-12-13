@@ -14,6 +14,7 @@ require './paginate'
 require './js/parser'
 require './js/nodes'
 require './js/reader'
+require './js/render'
 
 Mod.require 'jsdom',
  'fs'

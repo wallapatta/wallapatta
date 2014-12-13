@@ -1,159 +1,137 @@
 Mod.require 'Weya.Base',
  'Wallapatta.TYPES'
+ (Base, TYPES) ->
 
- 'Wallapatta.Text'
- 'Wallapatta.Bold'
- 'Wallapatta.Italics'
- 'Wallapatta.SuperScript'
- 'Wallapatta.SubScript'
- 'Wallapatta.Code'
- 'Wallapatta.Link'
+   PREFIX = 'wallapatta_'
 
- 'Wallapatta.Block'
- 'Wallapatta.Section'
- 'Wallapatta.List'
- 'Wallapatta.ListItem'
- 'Wallapatta.Sidenote'
- 'Wallapatta.Article'
- 'Wallapatta.Media'
-
- 'Wallapatta.CodeBlock'
- 'Wallapatta.Special'
- 'Wallapatta.Html'
-
- 'Wallapatta.Map'
-
- 'Wallapatta.Reader'
- 'Wallapatta.Render'
- (Base, TYPES,
-  Text, Bold, Italics, SuperScript, SubScript, Code, Link,
-  Block, Section, List, ListItem, Sidenote, Article, Media,
-  CodeBlock, Special, Html,
-  Map, Reader, Render) ->
-
-   TOKENS =
-    bold: Bold
-    italics: Italics
-    superScript: SuperScript
-    subScript: SubScript
-
-   TOKEN_MATCHES =
-    bold: '**'
-    italics: '--'
-    subScript: '__'
-    superScript: '^^'
-    code: '``'
-    linkBegin: '<<'
-    linkEnd: '>>'
-
-   class Parser extends Base
-    @extend()
-
+   class Render extends Base
     @initialize (options) ->
-     @map = new Map options
-     @reader = new Reader options.text
-     delete options.text
-     @root = new Article map: @map, indentation: 0
-     @node = @root
-     @main = true
-     @sidenotes = []
-     @prevNode = null
-     @blocks = []
+     @map = options.map
+     @root = options.root
+     @sidenotes = options.sidenotes
 
-    getRender: ->
-     return new Render
-      map: @map
-      root: @root
-      sidenotes: @sidenotes
+    getOffsetTop: (elem, parent) ->
+     top = 0
+     while elem?
+      break if elem is parent
+      top += elem.offsetTop
+      elem = elem.offsetParent
 
-    parse: ->
-     while @reader.has()
-      try
-       @processLine()
-      catch e
-       throw new Error "Line #{@reader.n + 1}: #{e.message}"
+     return top
 
-      @reader.next()
+    setPages: (H) ->
+     page = 0
+     for sidenote in @sidenotes
+      elemSidenote = sidenote.elem
+      elemContent = @map.nodes[sidenote.link].elem
 
-     @map.smallElements()
+      topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
+      topContent = @getOffsetTop elemContent, @elems.main
 
-     for block in @blocks
-      try
-       @parseText block.text, block
-      catch e
-       throw new Error "#{e.message}: \"#{block.text}\""
+      if topContent > topSidenote
+       fill = Weya {}, ->
+        @div ".fill", style: {height: "1px"}
 
-    addNode: (node) ->
-     @node.add node
-     if node.type is TYPES.block
-      @blocks.push node
-     @prevNode = @node = node
+       elemSidenote.parentNode.insertBefore fill, elemSidenote
+      else if topContent < topSidenote
+       fill = Weya {}, ->
+        @div ".fill", style: {height: "1px"}
 
-    getToken: (text, n) ->
-     for token, match of TOKEN_MATCHES
-      if (text.substr n, match.length) is match
-       return type: token, length: match.length
+       elemContent.parentNode.insertBefore fill, elemContent
 
-     return null
+      topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
+      topContent = @getOffsetTop elemContent, @elems.main
 
-    parseText: (text, node) ->
-     @node = node
-     L = text.length
-     last = i = 0
-     cur = 0
+      if topContent > topSidenote
+       fill = Weya {}, ->
+        @div ".fill", style: {height: "#{topContent - topSidenote}px"}
 
-     add = =>
-      if cur > last
-       @addNode new Text map: @map, text: (text.substr last, cur - last)
-       @node = @node.parent()
+       elemSidenote.parentNode.insertBefore fill, elemSidenote
+      else if topContent < topSidenote
+       fill = Weya {}, ->
+        @div ".fill", style: {height: "#{topSidenote - topContent}px"}
 
-     while i < L
-      token = @getToken text, i
+       elemContent.parentNode.insertBefore fill, elemContent
 
-      if token?
-       cur = i
-       i += token.length
+
+    setFills: ->
+     for sidenote in @sidenotes
+      elemSidenote = sidenote.elem
+      elemContent = @map.nodes[sidenote.link].elem
+
+      topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
+      topContent = @getOffsetTop elemContent, @elems.main
+
+      if topContent > topSidenote
+       fill = Weya {}, ->
+        @div ".fill", style: {height: "1px"}
+
+       elemSidenote.parentNode.insertBefore fill, elemSidenote
+      else if topContent < topSidenote
+       fill = Weya {}, ->
+        @div ".fill", style: {height: "1px"}
+
+       elemContent.parentNode.insertBefore fill, elemContent
+
+      topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
+      topContent = @getOffsetTop elemContent, @elems.main
+
+      if topContent > topSidenote
+       fill = Weya {}, ->
+        @div ".fill", style: {height: "#{topContent - topSidenote}px"}
+
+       elemSidenote.parentNode.insertBefore fill, elemSidenote
+      else if topContent < topSidenote
+       fill = Weya {}, ->
+        @div ".fill", style: {height: "#{topSidenote - topContent}px"}
+
+       elemContent.parentNode.insertBefore fill, elemContent
+
+
+    render: (main, sidebar) ->
+     @elems =
+      main: main
+      sidebar: sidebar
+
+     @root.render elem: main
+
+     for sidenote in @sidenotes
+      sidenote.render elem: sidebar
+
+    collectElements: (options) ->
+     @elems =
+      main: options.main
+      sidebar: options.sidebar
+
+     for id, node of @map.nodes
+      node.elem = document.getElementById "#{PREFIX}#{id}"
+      if not node.elem?
+       throw new Error "Element #{id} not found"
+
+    mediaLoaded: (callback) ->
+     mainImg = @elems.main.getElementsByTagName 'img'
+     sidebarImg = @elems.sidebar.getElementsByTagName 'img'
+     a = []
+     a.push i for i in mainImg
+     a.push i for i in sidebarImg
+
+     n = 0
+     check = =>
+      if n is a.length
+       callback()
+
+     loaded = ->
+      n++
+      check()
+
+     for img in a
+      if not img.complete
+       img.addEventListener 'load', loaded
       else
-       ++i
-       continue
+       n++
 
-      if TOKENS[token.type]?
-       if @node.type is token.type
-        add()
-        @node = @node.parent()
-       else
-        add()
-        @addNode new TOKENS[token.type] map: @map
+     check()
 
-      else
-       switch token.type
-        when 'linkBegin'
-          add()
-          @addNode new Link map: @map
-
-        when 'linkEnd'
-         if @node.type isnt TYPES.link
-          throw new Error 'Unexpected link terminator'
-         else
-          @node.setLink @parseLink text.substr last, cur - last
-          @node = @node.parent()
-
-        when 'code'
-         add()
-         @addNode new Code map: @map
-         last = i
-         cur = i = text.indexOf TOKEN_MATCHES.code, i
-         if i is -1
-          cur = i = L
-         add()
-         @node = @node.parent()
-         i += TOKEN_MATCHES.code.length
-
-
-      last = i
-
-     cur = i
-     add()
 
     processLine: ->
      line = @reader.get()
@@ -288,5 +266,5 @@ Mod.require 'Weya.Base',
 
 
 
-   Mod.set 'Wallapatta.Parser', Parser
+   Mod.set 'Wallapatta.Render', Render
 

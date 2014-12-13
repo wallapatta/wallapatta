@@ -12,7 +12,8 @@ Mod.require 'fs',
     Weya.setApi document: window.document
     main = window.document.getElementById 'main'
     sidebar = window.document.getElementById 'sidebar'
-    parser.render main, sidebar
+    render = parser.getRender()
+    render.render main, sidebar
     output = template.html
      main: main.innerHTML
      sidebar: sidebar.innerHTML

@@ -7,6 +7,7 @@ UI_JS = [
  'parser'
  'reader'
  'nodes'
+ 'render'
 ]
 
 template = ->

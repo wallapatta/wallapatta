@@ -49,10 +49,11 @@ Mod.require 'Weya.Base',
      return
 
     @elems.errors.textContent = ''
-    parser.render @elems.previewMain, @elems.previewSidebar
+    render = parse.getRender()
+    render.render @elems.previewMain, @elems.previewSidebar
     window.requestAnimationFrame ->
-     parser.mediaLoaded ->
-      parser.setFills()
+     render.mediaLoaded ->
+      render.setFills()
 
    @listen 'setupEditor', ->
     @editor = CodeMirror.fromTextArea @elems.textarea,

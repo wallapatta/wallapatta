@@ -40,8 +40,14 @@ template = ->
    @script src:"lib/weya/base.js"
    @script src:"lib/mod/mod.js"
 
-   for file in @$.scripts
-    @script src: "#{file}?v=#{VERSION}"
+   @script src:"js/main.js"
+   @script src:"js/editor.js"
+   @script src:"js/parser.js"
+   @script src:"js/reader.js"
+   @script src:"js/nodes.js"
+   @script src:"js/sample.js"
+   @script src:"js/render.js"
+
 
 exports.html = (options) ->
  options ?= {}

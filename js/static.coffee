@@ -2,21 +2,21 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
  RATIO = 0
  PAGE_HEIGHT = PAGE_WIDTH = 0
 
- render = (parser) ->
-  parser.mediaLoaded ->
-   parser.setFills()
+ render = (render) ->
+  render.mediaLoaded ->
+   render.setFills()
    n = 0
    int = setInterval ->
-    parser.setFills()
+    render.setFills()
     n++
     if n is 10
      clearInterval int
    , 1000
 
- renderPrint = (parser) ->
-  parser.mediaLoaded ->
+ renderPrint = (render) ->
+  render.mediaLoaded ->
    setTimeout ->
-    parser.setPages PAGE_HEIGHT
+    render.setPages PAGE_HEIGHT
    , 2000
 
  process = (n, doc) ->
@@ -37,11 +37,12 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
    text: code.textContent
    id: n * 10000
   parser.parse()
-  parser.collectElements
+  render = parser.getRender()
+  render.collectElements
    main: main
    sidebar: sidebar
   window.requestAnimationFrame ->
-   renderPrint parser
+   renderPrint render
 
  processAll = ->
   docs = document.getElementsByClassName 'wallapatta'
@@ -63,6 +64,10 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
 
  else
   processAll()
+
+
+
+
 
 document.addEventListener 'DOMContentLoaded', ->
  Mod.set 'Weya', Weya
