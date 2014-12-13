@@ -70,6 +70,8 @@ Mod.require 'Weya.Base',
 
       @reader.next()
 
+     @map.smallElements()
+
      for block in @blocks
       try
        @parseText block.text, block
@@ -158,9 +160,40 @@ Mod.require 'Weya.Base',
 
      return top
 
-    setPages: ->
-     W = 595
-     H = 842
+    setPages: (H) ->
+     page = 0
+     for sidenote in @sidenotes
+      elemSidenote = sidenote.elem
+      elemContent = @map.nodes[sidenote.link].elem
+
+      topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
+      topContent = @getOffsetTop elemContent, @elems.main
+
+      if topContent > topSidenote
+       fill = Weya {}, ->
+        @div ".fill", style: {height: "1px"}
+
+       elemSidenote.parentNode.insertBefore fill, elemSidenote
+      else if topContent < topSidenote
+       fill = Weya {}, ->
+        @div ".fill", style: {height: "1px"}
+
+       elemContent.parentNode.insertBefore fill, elemContent
+
+      topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
+      topContent = @getOffsetTop elemContent, @elems.main
+
+      if topContent > topSidenote
+       fill = Weya {}, ->
+        @div ".fill", style: {height: "#{topContent - topSidenote}px"}
+
+       elemSidenote.parentNode.insertBefore fill, elemSidenote
+      else if topContent < topSidenote
+       fill = Weya {}, ->
+        @div ".fill", style: {height: "#{topSidenote - topContent}px"}
+
+       elemContent.parentNode.insertBefore fill, elemContent
+
 
     setFills: ->
      for sidenote in @sidenotes

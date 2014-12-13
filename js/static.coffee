@@ -1,4 +1,7 @@
 Mod.require 'Wallapatta.Parser', (Parser) ->
+ RATIO = 0
+ PAGE_HEIGHT = PAGE_WIDTH = 0
+
  render = (parser) ->
   parser.mediaLoaded ->
    parser.setFills()
@@ -13,7 +16,7 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
  renderPrint = (parser) ->
   parser.mediaLoaded ->
    setTimeout ->
-    parser.setPages()
+    parser.setPages PAGE_HEIGHT
    , 2000
 
  process = (n, doc) ->
@@ -53,7 +56,9 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
    doc.classList.add 'wallapatta-print'
 
   window.requestAnimationFrame ->
-   console.log docs[0].offsetWidth
+   RATIO = docs[0].offsetWidth / 190
+   PAGE_WIDTH = RATIO * 190
+   PAGE_HEIGHT = RATIO * 275
    processAll()
 
  else

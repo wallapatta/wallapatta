@@ -33,6 +33,11 @@ Mod.require 'Weya.Base',
     @nodes = {}
     @id = 0
     @id = options.id if options.id
+    @start = @id
+    @N = 0
+
+   smallElements: ->
+    @N = @id
 
    add: (node) ->
     node.id = @id
