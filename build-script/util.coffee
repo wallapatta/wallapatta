@@ -102,6 +102,8 @@ css = exports.css = (path, src, dest, callback) ->
     callback 1
     return
 
+   cssCode = cssCode.css
+
    if options.map
     url = "#{map.substr BUILD.length}"
     cssCode = "#{cssCode}\n/*# sourceMappingURL=#{url}*/\n"
