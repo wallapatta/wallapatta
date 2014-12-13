@@ -19,7 +19,27 @@ Mod.require 'Weya.Base',
 
      return top
 
+    getMainNodes: ->
+     f = @map.start
+     e = @map.N
+
+     nodes = []
+     for i in [f...e]
+      elem = @map.nodes[i].elem
+      main = false
+      while elem?
+       if elem is @elems.main
+        main = true
+        break
+       elem = elem.parentNode
+      nodes.push i if main
+
+     return nodes
+
     setPages: (H) ->
+     nodes = @getMainNodes()
+     console.log nodes
+
      page = 0
      for sidenote in @sidenotes
       elemSidenote = sidenote.elem
