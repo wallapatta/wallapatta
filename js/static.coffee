@@ -17,7 +17,7 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
   render.mediaLoaded ->
    setTimeout ->
     render.setPages PAGE_HEIGHT
-   , 1000
+   , 5000
 
  process = (n, doc) ->
   code = doc.getElementsByClassName 'wallapatta-code'

@@ -11,10 +11,10 @@ Mod.require 'Weya.Base',
     codeBlock: 500
     special: 500
     html: 500
-    heading: 1000
+    heading: 2000
     list: 500
-    listItem: 500
-    block: 500
+    listItem: 1500
+    block: 1500
     media: 500
 
    PAGE_MARGIN = '1000px'
@@ -32,7 +32,8 @@ Mod.require 'Weya.Base',
       return BREAK_COST[node.type]
 
      if node.type is 'section'
-      return -200 + 100 * node.level
+      console.log node.level
+      return -500 + 100 * node.level
 
      throw new Error 'Unknown type'
 
@@ -93,8 +94,8 @@ Mod.require 'Weya.Base',
             (@getOffsetTop elem, @elems.main)
       break if pos > H
 
-      c = @broken[i] + (@getBreakCost node) + PAGE_COST
-      if @broken[n] > c
+      c = @broken[i] + (@getBreakCost inode) + PAGE_COST
+      if @broken[n] >= c
        @broken[n] = c
        @nextBreak[n] = i
 
