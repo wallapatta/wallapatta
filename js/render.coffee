@@ -6,7 +6,7 @@ Mod.require 'Weya.Base',
 
    INF = 1e10
 
-   PAGE_COST = 1000
+   PAGE_COST = 100
    BREAK_COST =
     codeBlock: 1000
     special: 1000
@@ -28,7 +28,10 @@ Mod.require 'Weya.Base',
      @root = options.root
      @sidenotes = options.sidenotes
 
-    getBreakCost: (node, parent = false) ->
+    getBreakCost: (node) ->
+     if @breakCostMap[node.id]?
+      return @breakCostMap[node.id]
+
      if node.parent()?
       cost = @getBreakCost node.parent(), true
      else
@@ -37,23 +40,13 @@ Mod.require 'Weya.Base',
       cost = 0
 
      if BREAK_COST[node.type]?
-      return cost + BREAK_COST[node.type]
+      @breakCostMap[node.id] = cost + BREAK_COST[node.type]
+     else if node.type is 'section'
+      @breakCostMap[node.id] = cost + 100 * (node.level - 2)
+     else
+      throw new Error 'Unknown type'
 
-     if node.type is 'section'
-      if not parent
-       switch node.level
-        when 1
-         cost -= 1500
-        when 2
-         cost -= 1000
-        when 3
-         cost -= 100
-
-       return cost
-      return cost + 100 * (node.level - 2)
-
-
-     throw new Error 'Unknown type'
+     return @breakCostMap[node.id]
 
 
     getOffsetTop: (elem, parent) ->
@@ -112,7 +105,7 @@ Mod.require 'Weya.Base',
             (@getOffsetTop elem, @elems.main)
       break if pos > H
 
-      c = @broken[i] + (@getBreakCost inode) + PAGE_COST
+      c = @broken[i] + @breakCost[i] + PAGE_COST
       if @broken[n] >= c
        @broken[n] = c
        @nextBreak[n] = i
@@ -138,6 +131,12 @@ Mod.require 'Weya.Base',
      for i in @mainNodes
       @broken.push INF
       @nextBreak.push null
+
+     @breakCostMap = {}
+     @breakCost = []
+
+     for i in @mainNodes
+      @breakCost.push @getBreakCost @map.nodes[i]
 
      n = @mainNodes.length - 1
      while n >= 1
