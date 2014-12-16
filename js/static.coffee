@@ -57,9 +57,9 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
    doc.classList.add 'wallapatta-print'
 
   window.requestAnimationFrame ->
-   RATIO = docs[0].offsetWidth / 190
-   PAGE_WIDTH = RATIO * 190
-   PAGE_HEIGHT = RATIO * 275
+   RATIO = docs[0].offsetWidth / 170
+   PAGE_WIDTH = RATIO * 170
+   PAGE_HEIGHT = RATIO * 225
    processAll()
 
  else

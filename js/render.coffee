@@ -8,14 +8,14 @@ Mod.require 'Weya.Base',
 
    PAGE_COST = 1000
    BREAK_COST =
-    codeBlock: 500
-    special: 500
-    html: 500
+    codeBlock: 1000
+    special: 1000
+    html: 1000
     heading: 2000
-    list: 500
+    list: 1000
     listItem: 1500
     block: 1500
-    media: 500
+    media: 1000
     article: 0
 
    PAGE_MARGIN = '1000px'
@@ -28,17 +28,30 @@ Mod.require 'Weya.Base',
      @root = options.root
      @sidenotes = options.sidenotes
 
-    getBreakCost: (node) ->
+    getBreakCost: (node, parent = false) ->
      if node.parent()?
-      cost = @getBreakCost node.parent()
+      cost = @getBreakCost node.parent(), true
      else
+      if node.type isnt 'article'
+       throw new Error 'oops'
       cost = 0
 
      if BREAK_COST[node.type]?
       return cost + BREAK_COST[node.type]
 
      if node.type is 'section'
+      if not parent
+       switch node.level
+        when 1
+         cost -= 1500
+        when 2
+         cost -= 1000
+        when 3
+         cost -= 100
+
+       return cost
       return cost + 100 * (node.level - 2)
+
 
      throw new Error 'Unknown type'
 
@@ -172,6 +185,7 @@ Mod.require 'Weya.Base',
 
      n = START
      pos = 0
+     emptyPages = []
      while n < @mainNodes.length
       i = @nextBreak[n]
 
@@ -182,26 +196,47 @@ Mod.require 'Weya.Base',
        elem.style.marginTop = PAGE_MARGIN
 
       i = @mainNodes.length unless i?
-      @setPageFill n, i, pos
+      found = @setPageFill n, i, pos, emptyPages
+      if not found
+       emptyPages.push pos: pos, f: n
+      else
+       emptyPages = []
       elem = @map.nodes[@mainNodes[i - 1]].elem
       pos = @getOffsetTop elem, @elems.main
       pos += elem.offsetHeight
       n = i
 
-    setPageFill: (f, t, pos) ->
+    setPageFill: (f, t, pos, emptyPages) ->
      margin = (f > START)
      first = true
      n = f
+     found = false
      while n < t
       m = @mainNodes[n]
       s = @sidenoteMap[m]
       ++n
       continue unless s?
+      found = true
 
       elemSidenote = @map.nodes[s].elem
       elemContent = @map.nodes[m].elem
 
       if first and margin
+       for p in emptyPages
+        topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
+        if topSidenote < p
+         fill = Weya {}, ->
+          @div ".fill", style: {height: "#{p.pos - topSidenote}px"}
+         elemSidenote.parentNode.insertBefore fill, elemSidenote
+
+        topContent = @getOffsetTop @map.nodes[@mainNodes[p.f]].elem, @elems.main
+        topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
+        fill = Weya {}, ->
+         @div ".fill", style: {height: "16px"}
+        fill.style.marginTop = "#{topContent - topSidenote}px"
+        elemSidenote.parentNode.insertBefore fill, elemSidenote
+
+       #Current Page
        topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
        if topSidenote < pos
         fill = Weya {}, ->
@@ -216,6 +251,8 @@ Mod.require 'Weya.Base',
        elemSidenote.parentNode.insertBefore fill, elemSidenote
 
       @adjust elemSidenote, elemContent
+
+     return found
 
 
     setFills: ->
