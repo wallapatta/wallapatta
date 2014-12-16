@@ -3,6 +3,8 @@ Mod.require 'Weya.Base',
  (Base, Weya) ->
 
   TYPES =
+   article: 'article'
+
    sidenote: 'sidenote'
    codeBlock: 'codeBlock'
    special: 'special'
@@ -201,7 +203,7 @@ Mod.require 'Weya.Base',
   class Article extends Node
    @extend()
 
-   type: TYPES.document
+   type: TYPES.article
 
    @initialize (options) ->
 
@@ -216,9 +218,12 @@ Mod.require 'Weya.Base',
    type: TYPES.section
 
    @initialize (options) ->
+    @level = options.level
+
+   setHeading: (options) ->
     @heading = new Block map: options.map, indentation: options.indentation
     @heading.setParent this
-    @level = options.level
+    @heading.addText options.text
 
    template: ->
     @$.elem = @div "##{PREFIX}#{@$.id}.section", ->
@@ -229,16 +234,18 @@ Mod.require 'Weya.Base',
       when 4 then @h4
       when 5 then @h5
       when 6 then @h6
+      else null
 
-     @$.elems.heading = h.call this, ".heading", null
+     if h?
+      @$.elems.heading = h.call this, ".heading", null
      @$.elems.content = @div ".content", null
 
 
    render: (options) ->
     Weya elem: options.elem, context: this, @template
 
-    @heading.render
-     elem: @elems.heading
+    if @elems.heading?
+     @heading.render elem: @elems.heading
 
     @renderChildren @elems.content, options
 

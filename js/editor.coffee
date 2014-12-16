@@ -49,7 +49,7 @@ Mod.require 'Weya.Base',
      return
 
     @elems.errors.textContent = ''
-    render = parse.getRender()
+    render = parser.getRender()
     render.render @elems.previewMain, @elems.previewSidebar
     window.requestAnimationFrame ->
      render.mediaLoaded ->

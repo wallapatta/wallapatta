@@ -16,6 +16,7 @@ Mod.require 'Weya.Base',
     listItem: 1500
     block: 1500
     media: 500
+    article: 0
 
    PAGE_MARGIN = '1000px'
    START = 1
@@ -28,12 +29,16 @@ Mod.require 'Weya.Base',
      @sidenotes = options.sidenotes
 
     getBreakCost: (node) ->
+     if node.parent()?
+      cost = @getBreakCost node.parent()
+     else
+      cost = 0
+
      if BREAK_COST[node.type]?
-      return BREAK_COST[node.type]
+      return cost + BREAK_COST[node.type]
 
      if node.type is 'section'
-      console.log node.level
-      return -500 + 100 * node.level
+      return cost + 100 * (node.level - 2)
 
      throw new Error 'Unknown type'
 
@@ -207,7 +212,7 @@ Mod.require 'Weya.Base',
        topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
        fill = Weya {}, ->
         @div ".fill", style: {height: "1px"}
-       fill.style.marginTop = "#{topContent - topSidenote}px"
+       fill.style.marginTop = "#{topContent - topSidenote - 1}px"
        elemSidenote.parentNode.insertBefore fill, elemSidenote
 
       @adjust elemSidenote, elemContent

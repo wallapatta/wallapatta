@@ -46,6 +46,8 @@ Mod.require 'Weya.Base',
     linkBegin: '<<'
     linkEnd: '>>'
 
+   BLOCK_LEVEL = 10
+
    class Parser extends Base
     @extend()
 
@@ -230,7 +232,7 @@ Mod.require 'Weya.Base',
 
       when TYPES.heading
        @addNode new Section map: @map, indentation: line.indentation + 1, level: line.level
-       @node.heading.addText line.text
+       @node.setHeading map: @map, indentation: line.indentation + 1, text: line.text
        @blocks.push @node.heading
 
       when TYPES.sidenote
@@ -247,6 +249,7 @@ Mod.require 'Weya.Base',
 
       when TYPES.block
        if @node.type isnt TYPES.block
+        @addNode new Section map: @map, indentation: line.indentation + 1, level: BLOCK_LEVEL
         @addNode new Block map: @map, indentation: line.indentation, paragraph: true
        @node.addText line.text
 
