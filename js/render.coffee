@@ -42,7 +42,7 @@ Mod.require 'Weya.Base',
      if BREAK_COST[node.type]?
       @breakCostMap[node.id] = cost + BREAK_COST[node.type]
      else if node.type is 'section'
-      @breakCostMap[node.id] = cost + 100 * (node.level - 2)
+      @breakCostMap[node.id] = cost + 100 * (node.level - 3)
      else
       throw new Error 'Unknown type'
 
