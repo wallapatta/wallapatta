@@ -198,7 +198,7 @@ Mod.require 'Weya.Base',
        @addNode new CodeBlock
         map: @map
         indentation: line.indentation + 1
- #       type: line.text
+        lang: line.text
        while false
         @reader.next()
         break unless @reader.has()

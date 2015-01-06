@@ -163,7 +163,6 @@ Mod.require 'Weya.Base',
 
    @initialize (options) ->
     @text = ''
-    options.lang = ''
     @lang = options.lang.trim()
     @cssClass = ".nohighlight"
     @cssClass = ".#{@lang}" if @lang isnt ''
@@ -172,9 +171,22 @@ Mod.require 'Weya.Base',
     @text += '\n' if @text isnt ''
     @text += text
 
-   template: ->
-    @$.elem = @pre "##{PREFIX}#{@$.id}.codeBlock", @$.text
-    # @code @$.cssClass, @$.text
+   render: (options) ->
+    code = @text
+    html = false
+
+    if @lang isnt '' and hljs? and (hljs.getLanguage @lang)?
+     code = hljs.highlight @lang, @text, true
+     code = code.value
+     html = true
+
+    codeElem = null
+
+    Weya elem: options.elem, context: this, ->
+     @$.elem = @pre "##{PREFIX}#{@$.id}.codeBlock", ->
+      codeElem = @code @$.cssClass, ""
+
+    codeElem.innerHTML = code
 
 
   class Special extends Node

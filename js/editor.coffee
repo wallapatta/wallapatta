@@ -52,7 +52,6 @@ Mod.require 'Weya.Base',
     @elems.errors.textContent = ''
     render = parser.getRender()
     render.render @elems.previewMain, @elems.previewSidebar
-    HLJS.initHighlighting()
     window.requestAnimationFrame ->
      render.mediaLoaded ->
       render.setFills()
