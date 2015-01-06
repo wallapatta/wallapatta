@@ -172,11 +172,11 @@ Mod.require 'Weya.Base',
     @text += text
 
    render: (options) ->
-    code = @text
+    code = @text.trimRight()
     html = false
 
     if @lang isnt '' and hljs? and (hljs.getLanguage @lang)?
-     code = hljs.highlight @lang, @text, true
+     code = hljs.highlight @lang, code, true
      code = code.value
      html = true
 
