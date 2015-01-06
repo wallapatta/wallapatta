@@ -195,22 +195,47 @@ Mod.require 'Weya.Base',
    type: TYPES.table
 
    @initialize (options) ->
-    @text = ''
+    @table = []
+    @header = 0
 
    addText: (text) ->
-    @text += '\n' if @text isnt ''
-    @text += text
+    if (text.trim().substr 0, 3) is '==='
+     @header = @table.length
+     return
+
+    text = text.split '|'
+    row = []
+    for cell in text
+     if cell is ''
+      if row.length > 0
+       row[row.length - 1].span++
+      continue
+
+     row.push
+      span: 1
+      text: cell.trim()
+
+    @table.push row
 
    render: (options) ->
-    code = @text.trimRight()
-
     codeElem = null
 
     Weya elem: options.elem, context: this, ->
-     @$.elem = @pre "##{PREFIX}#{@$.id}.codeBlock", ->
-      codeElem = @code @$.cssClass, ""
+     @$.elem = @table "##{PREFIX}#{@$.id}.table", ->
+      @thead ->
+       for i in [0...@$.header]
+        row = @$.table[i]
+        @tr ->
+         for cell in row
+          @th cellspan: cell.span, cell.text
+      @tbody ->
+       for i in [@$.header...@$.table.length]
+        row = @$.table[i]
+        @tr ->
+         for cell in row
+          @td cellspan; cell.span, cell.text
 
-    codeElem.innerHTML = code
+
 
 
   class Special extends Node
