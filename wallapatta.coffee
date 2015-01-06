@@ -42,9 +42,9 @@ Mod.require 'jsdom',
     "mkdir #{options.output}/js"
     "mkdir #{options.output}/css"
     "mkdir #{options.output}/lib"
-    "cp -r #{path.resolve __dirname, 'js/*'} #{options.output}/js/"
-    "cp -r #{path.resolve __dirname, 'css/*'} #{options.output}/css/"
-    "cp -r #{path.resolve __dirname, 'lib/*'} #{options.output}/lib/"
+    "cp -r #{path.resolve __dirname, 'build/js/*'} #{options.output}/js/"
+    "cp -r #{path.resolve __dirname, 'build/css/*'} #{options.output}/css/"
+    "cp -r #{path.resolve __dirname, 'build/lib/*'} #{options.output}/lib/"
    ]
 
    exec commands.join('&&'), (e, stderr, stdout) ->
