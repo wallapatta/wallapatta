@@ -227,13 +227,13 @@ Mod.require 'Weya.Base',
         row = @$.table[i]
         @tr ->
          for cell in row
-          @th cellspan: cell.span, cell.text
+          @th colspan: cell.span, cell.text
       @tbody ->
        for i in [@$.header...@$.table.length]
         row = @$.table[i]
         @tr ->
          for cell in row
-          @td cellspan; cell.span, cell.text
+          @td colspan: cell.span, cell.text
 
 
 
