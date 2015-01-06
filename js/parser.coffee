@@ -18,6 +18,7 @@ Mod.require 'Weya.Base',
  'Wallapatta.Media'
 
  'Wallapatta.CodeBlock'
+ 'Wallapatta.Table'
  'Wallapatta.Special'
  'Wallapatta.Html'
 
@@ -28,7 +29,7 @@ Mod.require 'Weya.Base',
  (Base, TYPES,
   Text, Bold, Italics, SuperScript, SubScript, Code, Link,
   Block, Section, List, ListItem, Sidenote, Article, Media,
-  CodeBlock, Special, Html,
+  CodeBlock, Table, Special, Html,
   Map, Reader, Render) ->
 
    TOKENS =
@@ -188,38 +189,27 @@ Mod.require 'Weya.Base',
        if line.type isnt TYPES.list
         @node = @node.parent()
 
-      when  TYPES.codeBlock, TYPES.html
+      when  TYPES.codeBlock, TYPES.html, TYPES.table
        @node.addText line.line.substr @node.indentation
        return
 
      switch line.type
+      when TYPES.table
+       indent = line.indentation + 1
+       @addNode new Table
+        map: @map
+        indentation: line.indentation + 1
+
       when TYPES.codeBlock
        indent = line.indentation + 1
        @addNode new CodeBlock
         map: @map
         indentation: line.indentation + 1
         lang: line.text
-       while false
-        @reader.next()
-        break unless @reader.has()
-        line = @reader.get()
-        if not line.empty and line.indentation < indent
-         indent = line.indentation
-        break if line.type is TYPES.codeBlock
-        @node.addText line.line.substr indent
 
       when TYPES.html
        indent = line.indentation + 1
        @addNode new Html map: @map, indentation: line.indentation + 1
-       while false
-        @reader.next()
-        break unless @reader.has()
-        line = @reader.get()
-        if not line.empty and line.indentation < indent
-         indent = line.indentation
-        break if line.type is TYPES.html
-        @node.addText line.line.substr indent
-
 
       when TYPES.special
        @addNode new Special map: @map, indentation: line.indentation + 1

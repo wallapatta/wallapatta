@@ -9,6 +9,7 @@ Mod.require 'Weya.Base',
    codeBlock: 'codeBlock'
    special: 'special'
    html: 'html'
+   table: 'table'
 
    section: 'section'
    heading: 'heading'
@@ -188,6 +189,29 @@ Mod.require 'Weya.Base',
 
     codeElem.innerHTML = code
 
+  class Table extends Node
+   @extend()
+
+   type: TYPES.table
+
+   @initialize (options) ->
+    @text = ''
+
+   addText: (text) ->
+    @text += '\n' if @text isnt ''
+    @text += text
+
+   render: (options) ->
+    code = @text.trimRight()
+
+    codeElem = null
+
+    Weya elem: options.elem, context: this, ->
+     @$.elem = @pre "##{PREFIX}#{@$.id}.codeBlock", ->
+      codeElem = @code @$.cssClass, ""
+
+    codeElem.innerHTML = code
+
 
   class Special extends Node
    @extend()
@@ -353,6 +377,7 @@ Mod.require 'Weya.Base',
   Mod.set 'Wallapatta.Article', Article
   Mod.set 'Wallapatta.Media', Media
   Mod.set 'Wallapatta.CodeBlock', CodeBlock
+  Mod.set 'Wallapatta.Table', Table
   Mod.set 'Wallapatta.Special', Special
   Mod.set 'Wallapatta.Html', Html
 

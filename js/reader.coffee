@@ -7,6 +7,7 @@ Mod.require 'Weya.Base',
    code: '```'
    special: '+++'
    html: '<<<'
+   table: '|||'
    heading: '#'
    orderedList: '- '
    unorderedList: '* '
@@ -64,6 +65,9 @@ Mod.require 'Weya.Base',
 
      when BLOCK_TOKENS.code
       line.type = TYPES.codeBlock
+
+     when BLOCK_TOKENS.table
+      line.type = TYPES.table
 
      when BLOCK_TOKENS.special
       line.type = TYPES.special
