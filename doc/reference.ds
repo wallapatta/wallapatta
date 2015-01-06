@@ -1,7 +1,7 @@
 ##Headings
 
- Headings have the same syntax as Markdown. ``#`` for level 1 headings ``##`` for
- level 2 headings and so on. The content that belongs to the heading should
+ Headings have the same syntax as Markdown. ``#`` for level 1 headings, ``##`` for
+ level 2 headings and so on. The content that belongs to the heading should be
  indented.
 
  ```
@@ -11,7 +11,7 @@
 
 ##Paragraphs
 
- Again similar to Markdown. Paragraphs are separated by blank lines.
+ Again, similar to Markdown. Paragraphs are separated by blank lines.
 
  ```
   Paragraph1
@@ -19,9 +19,9 @@
 
   Paragraph2
 
-##List
+##Lists
 
- Ordered lists begin with ``- `` while unordered lists begin with ``* ``.
+ Ordered lists begin with ``-`` while unordered lists begin with ``*``.
  Since lists can be structured with indentations, it's easy to have lists
  within lists.
 
@@ -60,6 +60,29 @@
 
  >>>
   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
+  
+##Side Notes
+
+ Side notes can be added by ``>>>``. It is possible to have any other component inside side notes. The content belonging to the side note is specified via indentation.
+ 
+ ```
+  >>>
+   This is a **side note** containing text, a list and an image.
+   
+   - One
+   - Two
+   - Three
+   
+   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
+  
+ >>>
+  This is a **side note** containing text, a list and an image.
+  
+  - One
+  - Two
+  - Three
+  
+  !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
 
 ##Special Blocks
 
@@ -83,11 +106,22 @@
 
 ##Code Blocks
 
- Code blocks are identified by three backtick quotes (`).
+ Code blocks are identified by three backtick quotes (`). To enable syntax highlighting, specify the language after the three backtick quotes.
+ 
+ ```
+  ```javascript
+   function test() {
+        var i = 10
+   }
+ 
+ ```javascript
+  function test() {
+        var i = 10
+  }
+  
+##HTML Blocks
 
-##Html Blocks
-
- Html blocks are identified by ``<<<``.
+ HTML blocks are identified by ``<<<``.
 
  ```
   <<<
@@ -121,7 +155,7 @@
 
 ##Italics
 
- Text can be made italics with ``--``.
+ Text can be italicized with ``--``.
 
  ```
   --This is italics-- and this is not
@@ -130,14 +164,14 @@
   Still the same paragraph
 
  >>>
-  --This is italics-- and this is not
+  --This is in italics-- and this is not
 
   --This entire paragraph is in italics.
   Still the same paragraph
 
-##Superscript and Subscript
+##Superscripts and Subscripts
 
- Superscript are wrapped inside ``^^ ^^`` and Subscripts are wrapped inside
+ Superscripts are wrapped inside ``^^ ^^`` and subscripts are wrapped inside
  ``__ __``.
 
 
@@ -171,6 +205,4 @@
  >>>
   * <<http://www.twitter.com/vpj(My Twitter Account)>>
   * <<http://www.forestpin.com>>
-
-
 
