@@ -358,4 +358,10 @@ Mod.require ->
 
  '''
 
+ text = '''
+```
+ class Varuna extends ABS
+  name: varuna
+ '''
+
  Mod.set 'Wallapatta.Sample', text

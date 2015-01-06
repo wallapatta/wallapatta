@@ -161,8 +161,12 @@ Mod.require 'Weya.Base',
 
    type: TYPES.codeBlock
 
-   @initialize ->
+   @initialize (options) ->
     @text = ''
+    options.lang = ''
+    @lang = options.lang.trim()
+    @cssClass = ".nohighlight"
+    @cssClass = ".#{@lang}" if @lang isnt ''
 
    addText: (text) ->
     @text += '\n' if @text isnt ''
@@ -170,6 +174,7 @@ Mod.require 'Weya.Base',
 
    template: ->
     @$.elem = @pre "##{PREFIX}#{@$.id}.codeBlock", @$.text
+    # @code @$.cssClass, @$.text
 
 
   class Special extends Node

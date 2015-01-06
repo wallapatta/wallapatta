@@ -16,6 +16,9 @@ template = ->
    @link href: "lib/skeleton/css/skeleton.css", rel: "stylesheet"
    @link href: "lib/CodeMirror/lib/codemirror.css", rel: "stylesheet"
    @link href: "lib/CodeMirror/addon/fold/foldgutter.css", rel: "stylesheet"
+   @link
+    href: "http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/styles/default.min.css"
+    rel: "stylesheet"
    @link href: "css/style.css", rel: "stylesheet"
    @link href: "css/editor.css", rel: "stylesheet"
    @script '''
@@ -29,6 +32,8 @@ template = ->
    '''
 
   @body ->
+   @script src: "http://cdnjs.cloudflare.com/ajax/libs/highlight.js/8.4/highlight.min.js"
+
    @script src:"lib/CodeMirror/lib/codemirror.js"
    @script src:"js/codemirror-syntax.js"
    @script src:"lib/CodeMirror/mode/xml/xml.js"

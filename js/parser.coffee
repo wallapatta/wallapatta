@@ -195,7 +195,10 @@ Mod.require 'Weya.Base',
      switch line.type
       when TYPES.codeBlock
        indent = line.indentation + 1
-       @addNode new CodeBlock map: @map, indentation: line.indentation + 1
+       @addNode new CodeBlock
+        map: @map
+        indentation: line.indentation + 1
+ #       type: line.text
        while false
         @reader.next()
         break unless @reader.has()

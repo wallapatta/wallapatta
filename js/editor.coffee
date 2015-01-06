@@ -2,7 +2,8 @@ Mod.require 'Weya.Base',
  'CodeMirror'
  'Wallapatta.Parser'
  'Wallapatta.Sample'
- (Base, CodeMirror, Parser, Sample) ->
+ 'HLJS'
+ (Base, CodeMirror, Parser, Sample, HLJS) ->
 
   class Editor  extends Base
    @extend()
@@ -51,6 +52,7 @@ Mod.require 'Weya.Base',
     @elems.errors.textContent = ''
     render = parser.getRender()
     render.render @elems.previewMain, @elems.previewSidebar
+    HLJS.initHighlighting()
     window.requestAnimationFrame ->
      render.mediaLoaded ->
       render.setFills()
