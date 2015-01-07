@@ -119,6 +119,28 @@
         var i = 10
   }
   
+##Tables
+
+ Tables can be specified with three ``|``, and cells can be separated by ``|``. The content belonging to the table are indentified through indentation. Headers can be differentiated by following any row of cells with three equal signs (``===``).
+ 
+ ```
+  |||
+   Header 1 | Header 2 | 3rd Header
+   ===
+   Cell 1 | Cell 2 | Third Cell
+   Cell 4 | Cell 5 | Sixth Cell
+   
+ >>>
+  Other components (images, special blocks, etc) and text styling (**bold**, --italics--, etc) cannot be used inside tables yet.
+  
+  It --is-- possible to have empty cells, and columns without headers.
+   
+ |||
+  Header 1 | Header 2 | 3rd Header
+  ===
+  Cell 1 | Cell 2 | Third Cell
+  Cell 4 | Cell 5 | Sixth Cell
+  
 ##HTML Blocks
 
  HTML blocks are identified by ``<<<``.
