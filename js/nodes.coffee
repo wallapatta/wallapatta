@@ -2,17 +2,6 @@ Mod.require 'Weya.Base',
  'Weya'
  (Base, Weya) ->
 
-  ENTITY_MAP =
-    "&": "&amp;"
-    "<": "&lt;"
-    ">": "&gt;"
-    '"': '&quot;'
-    "'": '&#39;'
-    "/": '&#x2F;'
-
-  escapeHtml = (string) ->
-   String(string).replace /[&<>"'\/]/g, (s) -> ENTITY_MAP[s]
-
   TYPES =
    article: 'article'
 
@@ -198,7 +187,7 @@ Mod.require 'Weya.Base',
      @$.elem = @pre "##{PREFIX}#{@$.id}.codeBlock", ->
       codeElem = @code @$.cssClass, ""
 
-    codeElem.innerHTML = escapeHtml code
+    codeElem.textContent = code
 
   class Table extends Node
    @extend()
