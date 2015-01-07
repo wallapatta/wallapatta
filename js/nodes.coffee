@@ -187,7 +187,7 @@ Mod.require 'Weya.Base',
      @$.elem = @pre "##{PREFIX}#{@$.id}.codeBlock", ->
       codeElem = @code @$.cssClass, ""
 
-    codeElem.innerHTML = code
+    codeElem.textContent = code
 
   class Table extends Node
    @extend()
