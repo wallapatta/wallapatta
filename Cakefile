@@ -28,8 +28,8 @@ task 'clean', "Cleans up build directory", (opts) ->
 
  exec commands.join('&&'), (err, stderr, stdout) ->
   if err?
-   log stderr.trim(), RED
-   log stdout.trim(), RED
+   log stderr.trim(), 'red'
+   log stdout.trim(), 'red'
    err = 1
 
   util.finish err
