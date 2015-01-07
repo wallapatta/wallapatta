@@ -2,7 +2,7 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
  RATIO = 0
  PAGE_HEIGHT = PAGE_WIDTH = 0
 
- render = (render) ->
+ renderWeb = (render) ->
   render.mediaLoaded ->
    render.setFills()
    n = 0
@@ -42,7 +42,10 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
    main: main
    sidebar: sidebar
   window.requestAnimationFrame ->
-   renderPrint render
+   if (window.location.href.indexOf 'print') isnt -1
+    renderPrint render
+   else
+    renderWeb render
 
  processAll = ->
   docs = document.getElementsByClassName 'wallapatta'
