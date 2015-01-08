@@ -29,6 +29,8 @@ Mod.require 'Weya.Base',
    link: 'link'
    mediaInline: 'mediaInline' #TODO
 
+   comment: '///'
+
   #TODO include these in a class
   PREFIX = 'wallapatta_'
 

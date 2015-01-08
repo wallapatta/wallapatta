@@ -12,6 +12,7 @@ Mod.require 'Weya.Base',
    orderedList: '- '
    unorderedList: '* '
    media: '!'
+   comment: '///'
 
   class Reader extends Base
    @extend()
@@ -94,6 +95,8 @@ Mod.require 'Weya.Base',
      when BLOCK_TOKENS.media
       line.type = TYPES.media
 
+     when BLOCK_TOKENS.comment
+      line.type = TYPES.comment
      else
       line.type = TYPES.block
 

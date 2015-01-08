@@ -273,6 +273,8 @@ Mod.require 'Weya.Base',
         indentation: line.indentation + 1
         media: @parseMedia line.text
 
+      when TYPES.comment
+
       else
        throw new Error 'Unknown syntax'
 
