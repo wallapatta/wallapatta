@@ -2,6 +2,11 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
  RATIO = 0
  PAGE_HEIGHT = PAGE_WIDTH = 0
 
+ if (window.location.href.indexOf 'print') isnt -1
+  PRINT = true
+ else
+  PRINT = false
+
  renderWeb = (render) ->
   render.mediaLoaded ->
    render.setFills()
@@ -42,7 +47,7 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
    main: main
    sidebar: sidebar
   window.requestAnimationFrame ->
-   if (window.location.href.indexOf 'print') isnt -1
+   if PRINT
     renderPrint render
    else
     renderWeb render
@@ -51,8 +56,6 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
   docs = document.getElementsByClassName 'wallapatta'
   for doc, i in docs
    process i, doc
-
- PRINT = true
 
  if PRINT
   docs = document.getElementsByClassName 'wallapatta-container'
@@ -75,5 +78,6 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
 document.addEventListener 'DOMContentLoaded', ->
  Mod.set 'Weya', Weya
  Mod.set 'Weya.Base', Weya.Base
+ Mod.set 'HLJS', hljs
 
  Mod.initialize()

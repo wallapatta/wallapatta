@@ -21,6 +21,12 @@ class Mode
    state.htmlState = @CodeMirror.startState @htmlMode
    return OPERATOR
 
+  match = stream.match /^\|\|\|/
+  if match
+   stack.push indentation: stream.indentation(), type: 'table'
+   stream.skipToEnd()
+   return OPERATOR
+
   match = stream.match /^\+\+\+/
   if match
    stack.push indentation: stream.indentation(), type: 'special'
@@ -46,6 +52,11 @@ class Mode
   if match
    state.media = true
    return OPERATOR
+  match = stream.match /^\/\/\//
+  if match
+   state.comment = true
+   return OPERATOR
+
   match = stream.match /^\* /
   if match
    @clearState state
@@ -100,6 +111,22 @@ class Mode
    state.link = false
    return OPERATOR_INLINE
 
+  match = stream.match /^\[\[/
+  if match
+   state.inlineMedia = true
+   return OPERATOR_INLINE
+
+  match = stream.match /^\]\]/
+  if match
+   state.inlineMedia = false
+   return OPERATOR_INLINE
+
+  match = stream.match /^\|/
+  if match
+   for t in state.stack
+    if t.type is 'table'
+     return OPERATOR_INLINE
+
   return null
 
  clearState: (state) ->
@@ -109,6 +136,8 @@ class Mode
   state.superscript = false
   state.code = false
   state.link = false
+  state.inlineMedia = false
+  state.comment = false
 
  startState: ->
   stack: []
@@ -121,9 +150,12 @@ class Mode
   superscript: false
   code: false
   link: false
+  inlineMedia: false
 
   heading: false
   media: false
+
+  comment: false
 
  blankLine: (state) ->
   @clearState state
@@ -160,9 +192,13 @@ class Mode
     html: false
     special: false
     code: false
+    table: false
 
    for t in stack
     types[t.type] = true
+
+   if types.table
+    @clearState state
 
    if not types.code and not types.html
     match = @matchBlock stream, state
@@ -173,6 +209,7 @@ class Mode
    html: false
    special: false
    code: false
+   table: false
 
   for t in stack
    types[t.type] = true
@@ -184,7 +221,7 @@ class Mode
    l = "#{l}"
   else if types.code
    stream.skipToEnd()
-   l = "meta"
+   l = "comment"
   else
    if state.start
     match = @matchStart stream, state
@@ -198,14 +235,18 @@ class Mode
 
    if state.heading
     l += " header"
+   if state.comment
+    l += " meta"
    if state.bold
     l += " strong"
    if state.italics
     l += " em"
    if state.link
     l += " link"
+   if state.inlineMedia
+    l += " link"
    if state.code
-    l += " meta"
+    l += " comment"
 
   return l
 

@@ -8,6 +8,7 @@ Mod.require 'Weya.Base',
  'Wallapatta.SubScript'
  'Wallapatta.Code'
  'Wallapatta.Link'
+ 'Wallapatta.MediaInline'
 
  'Wallapatta.Block'
  'Wallapatta.Section'
@@ -27,7 +28,7 @@ Mod.require 'Weya.Base',
  'Wallapatta.Reader'
  'Wallapatta.Render'
  (Base, TYPES,
-  Text, Bold, Italics, SuperScript, SubScript, Code, Link,
+  Text, Bold, Italics, SuperScript, SubScript, Code, Link, MediaInline
   Block, Section, List, ListItem, Sidenote, Article, Media,
   CodeBlock, Table, Special, Html,
   Map, Reader, Render) ->
@@ -46,6 +47,8 @@ Mod.require 'Weya.Base',
     code: '``'
     linkBegin: '<<'
     linkEnd: '>>'
+    mediaBegin: '[['
+    mediaEnd: ']]'
 
    BLOCK_LEVEL = 10
 
@@ -141,6 +144,18 @@ Mod.require 'Weya.Base',
           @node.setLink @parseLink text.substr last, cur - last
           @node = @node.parent()
 
+        when 'mediaBegin'
+          add()
+          @addNode new MediaInline map: @map
+
+        when 'mediaEnd'
+         if @node.type isnt TYPES.mediaInline
+          throw new Error 'Unexpected media terminator'
+         else
+          @node.setMedia @parseMedia text.substr last, cur - last
+          @node = @node.parent()
+
+
         when 'code'
          add()
          @addNode new Code map: @map
@@ -189,8 +204,14 @@ Mod.require 'Weya.Base',
        if line.type isnt TYPES.list
         @node = @node.parent()
 
-      when  TYPES.codeBlock, TYPES.html, TYPES.table
+      when  TYPES.codeBlock, TYPES.html#, TYPES.table
        @node.addText line.line.substr @node.indentation
+       return
+
+      when TYPES.table
+       nodes = @node.addText (line.line.substr @node.indentation), map: @map
+       for node in nodes
+        @blocks.push node
        return
 
      switch line.type
@@ -247,9 +268,12 @@ Mod.require 'Weya.Base',
        @node.addText line.text
 
       when TYPES.media
-       @addNode new Media map: @map, indentation: line.indentation + 1, media: @parseMedia line.text
-       @prevNode = @node
-       return
+       @addNode new Media
+        map: @map
+        indentation: line.indentation + 1
+        media: @parseMedia line.text
+
+      when TYPES.comment
 
       else
        throw new Error 'Unknown syntax'

@@ -1,6 +1,7 @@
 Mod.require 'Weya.Base',
  'Weya'
- (Base, Weya) ->
+ 'HLJS'
+ (Base, Weya, HLJS) ->
 
   TYPES =
    article: 'article'
@@ -27,6 +28,8 @@ Mod.require 'Weya.Base',
    code: 'code'
    link: 'link'
    mediaInline: 'mediaInline' #TODO
+
+   comment: '///'
 
   #TODO include these in a class
   PREFIX = 'wallapatta_'
@@ -133,6 +136,21 @@ Mod.require 'Weya.Base',
    template: -> @$.elem = @a "##{PREFIX}#{@$.id}.link", href: @$.link, @$.text
 
 
+  class MediaInline extends Node
+   @extend()
+
+   type: TYPES.mediaInline
+
+   setMedia: (options) ->
+    @src = options.src
+    @alt = options.alt
+    @alt ?= options.src
+
+   template: ->
+    @$.elem = @img "##{PREFIX}#{@$.id}.image-inline", src: @$.src, alt: @$.alt
+
+   render: (options) ->
+    Weya elem: options.elem, context: this, @template
 
 
   class Block extends Node
@@ -176,8 +194,8 @@ Mod.require 'Weya.Base',
     code = @text.trimRight()
     html = false
 
-    if @lang isnt '' and hljs? and (hljs.getLanguage @lang)?
-     code = hljs.highlight @lang, code, true
+    if @lang isnt '' and HLJS? and (HLJS.getLanguage @lang)?
+     code = HLJS.highlight @lang, code, true
      code = code.value
      html = true
 
@@ -187,7 +205,10 @@ Mod.require 'Weya.Base',
      @$.elem = @pre "##{PREFIX}#{@$.id}.codeBlock", ->
       codeElem = @code @$.cssClass, ""
 
-    codeElem.textContent = code
+    if html
+     codeElem.innerHTML = code
+    else
+     codeElem.textContent = code
 
   class Table extends Node
    @extend()
@@ -198,42 +219,60 @@ Mod.require 'Weya.Base',
     @table = []
     @header = 0
 
-   addText: (text) ->
+   addText: (text, options) ->
     if (text.trim().substr 0, 3) is '==='
      @header = @table.length
-     return
+     return []
 
     text = text.split '|'
     row = []
+    nodes = []
     for cell in text
      if cell is ''
       if row.length > 0
        row[row.length - 1].span++
       continue
 
+     node = new Block map: options.map, indentation: @indentation
+     node.setParent this
+     node.addText cell.trim()
+
      row.push
       span: 1
-      text: cell.trim()
+      node: node
+
+     nodes.push node
 
     @table.push row
 
+    return nodes
+
    render: (options) ->
     codeElem = null
+    elems = []
 
     Weya elem: options.elem, context: this, ->
      @$.elem = @table "##{PREFIX}#{@$.id}.table", ->
       @thead ->
        for i in [0...@$.header]
         row = @$.table[i]
+        cells = []
         @tr ->
          for cell in row
-          @th colspan: cell.span, cell.text
+          cells.push @th colspan: cell.span
+        elems.push cells
       @tbody ->
        for i in [@$.header...@$.table.length]
         row = @$.table[i]
+        cells = []
         @tr ->
          for cell in row
-          @td colspan: cell.span, cell.text
+          cells.push @td colspan: cell.span
+        elems.push cells
+
+    for row, i in elems
+     for cell, j in row
+      @table[i][j].node.render elem: cell
 
 
 
@@ -393,6 +432,7 @@ Mod.require 'Weya.Base',
   Mod.set 'Wallapatta.SubScript', SubScript
   Mod.set 'Wallapatta.Code', Code
   Mod.set 'Wallapatta.Link', Link
+  Mod.set 'Wallapatta.MediaInline', MediaInline
 
   Mod.set 'Wallapatta.Block', Block
   Mod.set 'Wallapatta.Section', Section

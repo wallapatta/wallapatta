@@ -22,6 +22,7 @@ template = ->
     rel: 'stylesheet'
     type: 'text/css'
    @link href: "lib/skeleton/css/skeleton.css", rel: "stylesheet"
+   @link href: "lib/highlightjs/styles/default.css", rel: "stylesheet"
    @link href: "css/style.css", rel: "stylesheet"
    @link href: "css/paginate.css", rel: "stylesheet"
    @script '''
@@ -56,6 +57,8 @@ template = ->
       if options.page < options.pages - 1
        @a ".next-page.button", href: "page#{options.page + 2}.html", "next"
 
+
+   @script src: "lib/highlightjs/highlight.pack.js"
 
    @script src:"lib/weya/weya.js"
    @script src:"lib/weya/base.js"
