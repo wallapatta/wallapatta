@@ -52,6 +52,11 @@ class Mode
   if match
    state.media = true
    return OPERATOR
+  match = stream.match /^\/\/\//
+  if match
+   state.comment = true
+   return OPERATOR
+
   match = stream.match /^\* /
   if match
    @clearState state
@@ -132,6 +137,7 @@ class Mode
   state.code = false
   state.link = false
   state.inlineMedia = false
+  state.comment = false
 
  startState: ->
   stack: []
@@ -148,6 +154,8 @@ class Mode
 
   heading: false
   media: false
+
+  comment: false
 
  blankLine: (state) ->
   @clearState state
@@ -213,7 +221,7 @@ class Mode
    l = "#{l}"
   else if types.code
    stream.skipToEnd()
-   l = "meta"
+   l = "comment"
   else
    if state.start
     match = @matchStart stream, state
@@ -227,14 +235,18 @@ class Mode
 
    if state.heading
     l += " header"
+   if state.comment
+    l += " meta"
    if state.bold
     l += " strong"
    if state.italics
     l += " em"
    if state.link
     l += " link"
+   if state.inlineMedia
+    l += " link"
    if state.code
-    l += " meta"
+    l += " comment"
 
   return l
 
