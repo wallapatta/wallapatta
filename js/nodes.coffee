@@ -217,42 +217,60 @@ Mod.require 'Weya.Base',
     @table = []
     @header = 0
 
-   addText: (text) ->
+   addText: (text, options) ->
     if (text.trim().substr 0, 3) is '==='
      @header = @table.length
-     return
+     return []
 
     text = text.split '|'
     row = []
+    nodes = []
     for cell in text
      if cell is ''
       if row.length > 0
        row[row.length - 1].span++
       continue
 
+     node = new Block map: options.map, indentation: @indentation
+     node.setParent this
+     node.addText cell.trim()
+
      row.push
       span: 1
-      text: cell.trim()
+      node: node
+
+     nodes.push node
 
     @table.push row
 
+    return nodes
+
    render: (options) ->
     codeElem = null
+    elems = []
 
     Weya elem: options.elem, context: this, ->
      @$.elem = @table "##{PREFIX}#{@$.id}.table", ->
       @thead ->
        for i in [0...@$.header]
         row = @$.table[i]
+        cells = []
         @tr ->
          for cell in row
-          @th colspan: cell.span, cell.text
+          cells.push @th colspan: cell.span
+        elems.push cells
       @tbody ->
        for i in [@$.header...@$.table.length]
         row = @$.table[i]
+        cells = []
         @tr ->
          for cell in row
-          @td colspan: cell.span, cell.text
+          cells.push @td colspan: cell.span
+        elems.push cells
+
+    for row, i in elems
+     for cell, j in row
+      @table[i][j].node.render elem: cell
 
 
 

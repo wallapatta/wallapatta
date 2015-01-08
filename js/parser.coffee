@@ -204,8 +204,15 @@ Mod.require 'Weya.Base',
        if line.type isnt TYPES.list
         @node = @node.parent()
 
-      when  TYPES.codeBlock, TYPES.html, TYPES.table
+      when  TYPES.codeBlock, TYPES.html#, TYPES.table
        @node.addText line.line.substr @node.indentation
+       return
+
+      when TYPES.table
+       nodes = @node.addText (line.line.substr @node.indentation), map: @map
+       for node in nodes
+        @blocks.push node
+
        return
 
      switch line.type
