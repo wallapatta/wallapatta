@@ -134,6 +134,21 @@ Mod.require 'Weya.Base',
    template: -> @$.elem = @a "##{PREFIX}#{@$.id}.link", href: @$.link, @$.text
 
 
+  class MediaInline extends Node
+   @extend()
+
+   type: TYPES.mediaInline
+
+   setMedia: (options) ->
+    @src = options.src
+    @alt = options.alt
+    @alt ?= options.src
+
+   template: ->
+    @$.elem = @img "##{PREFIX}#{@$.id}.image-inline", src: @$.src, alt: @$.alt
+
+   render: (options) ->
+    Weya elem: options.elem, context: this, @template
 
 
   class Block extends Node
@@ -397,6 +412,7 @@ Mod.require 'Weya.Base',
   Mod.set 'Wallapatta.SubScript', SubScript
   Mod.set 'Wallapatta.Code', Code
   Mod.set 'Wallapatta.Link', Link
+  Mod.set 'Wallapatta.MediaInline', MediaInline
 
   Mod.set 'Wallapatta.Block', Block
   Mod.set 'Wallapatta.Section', Section

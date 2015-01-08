@@ -8,6 +8,7 @@ Mod.require 'Weya.Base',
  'Wallapatta.SubScript'
  'Wallapatta.Code'
  'Wallapatta.Link'
+ 'Wallapatta.MediaInline'
 
  'Wallapatta.Block'
  'Wallapatta.Section'
@@ -27,7 +28,7 @@ Mod.require 'Weya.Base',
  'Wallapatta.Reader'
  'Wallapatta.Render'
  (Base, TYPES,
-  Text, Bold, Italics, SuperScript, SubScript, Code, Link,
+  Text, Bold, Italics, SuperScript, SubScript, Code, Link, MediaInline
   Block, Section, List, ListItem, Sidenote, Article, Media,
   CodeBlock, Table, Special, Html,
   Map, Reader, Render) ->
@@ -46,6 +47,8 @@ Mod.require 'Weya.Base',
     code: '``'
     linkBegin: '<<'
     linkEnd: '>>'
+    mediaBegin: '[['
+    mediaEnd: ']]'
 
    BLOCK_LEVEL = 10
 
@@ -140,6 +143,18 @@ Mod.require 'Weya.Base',
          else
           @node.setLink @parseLink text.substr last, cur - last
           @node = @node.parent()
+
+        when 'mediaBegin'
+          add()
+          @addNode new MediaInline map: @map
+
+        when 'mediaEnd'
+         if @node.type isnt TYPES.mediaInline
+          throw new Error 'Unexpected media terminator'
+         else
+          @node.setMedia @parseMedia text.substr last, cur - last
+          @node = @node.parent()
+
 
         when 'code'
          add()
