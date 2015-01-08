@@ -21,6 +21,12 @@ class Mode
    state.htmlState = @CodeMirror.startState @htmlMode
    return OPERATOR
 
+  match = stream.match /^\|\|\|/
+  if match
+   stack.push indentation: stream.indentation(), type: 'table'
+   stream.skipToEnd()
+   return OPERATOR
+
   match = stream.match /^\+\+\+/
   if match
    stack.push indentation: stream.indentation(), type: 'special'
@@ -100,6 +106,22 @@ class Mode
    state.link = false
    return OPERATOR_INLINE
 
+  match = stream.match /^\[\[/
+  if match
+   state.inlineMedia = true
+   return OPERATOR_INLINE
+
+  match = stream.match /^\]\]/
+  if match
+   state.inlineMedia = false
+   return OPERATOR_INLINE
+
+  match = stream.match /^\|/
+  if match
+   for t in state.stack
+    if t.type is 'table'
+     return OPERATOR_INLINE
+
   return null
 
  clearState: (state) ->
@@ -109,6 +131,7 @@ class Mode
   state.superscript = false
   state.code = false
   state.link = false
+  state.inlineMedia = false
 
  startState: ->
   stack: []
@@ -121,6 +144,7 @@ class Mode
   superscript: false
   code: false
   link: false
+  inlineMedia: false
 
   heading: false
   media: false
@@ -160,6 +184,7 @@ class Mode
     html: false
     special: false
     code: false
+    table: false
 
    for t in stack
     types[t.type] = true
@@ -173,6 +198,7 @@ class Mode
    html: false
    special: false
    code: false
+   table: false
 
   for t in stack
    types[t.type] = true
