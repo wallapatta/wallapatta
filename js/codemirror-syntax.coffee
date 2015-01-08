@@ -189,6 +189,9 @@ class Mode
    for t in stack
     types[t.type] = true
 
+   if types.table
+    @clearState state
+
    if not types.code and not types.html
     match = @matchBlock stream, state
     return match if match?
