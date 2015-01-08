@@ -6,6 +6,7 @@ Mod.set 'Weya', require './lib/weya/weya'
 Mod.set 'Weya.Base', require './lib/weya/base'
 Mod.set 'yamljs', require 'yamljs'
 Mod.set 'path', require 'path'
+Mod.set 'HLJS', require 'highlight.js'
 {exec} = require 'child_process'
 
 require './file'

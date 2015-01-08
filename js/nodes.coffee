@@ -1,6 +1,7 @@
 Mod.require 'Weya.Base',
  'Weya'
- (Base, Weya) ->
+ 'HLJS'
+ (Base, Weya, HLJS) ->
 
   TYPES =
    article: 'article'
@@ -176,8 +177,8 @@ Mod.require 'Weya.Base',
     code = @text.trimRight()
     html = false
 
-    if @lang isnt '' and hljs? and (hljs.getLanguage @lang)?
-     code = hljs.highlight @lang, code, true
+    if @lang isnt '' and HLJS? and (HLJS.getLanguage @lang)?
+     code = HLJS.highlight @lang, code, true
      code = code.value
      html = true
 
@@ -187,7 +188,10 @@ Mod.require 'Weya.Base',
      @$.elem = @pre "##{PREFIX}#{@$.id}.codeBlock", ->
       codeElem = @code @$.cssClass, ""
 
-    codeElem.textContent = code
+    if html
+     codeElem.innerHTML = code
+    else
+     codeElem.textContent = code
 
   class Table extends Node
    @extend()

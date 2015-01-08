@@ -27,6 +27,7 @@ template = ->
     type: 'text/css'
 
    @link href: "lib/skeleton/css/skeleton.css", rel: "stylesheet"
+   @link href: "lib/highlightjs/styles/default.css", rel: "stylesheet"
    @link href: "css/style.css", rel: "stylesheet"
    @script '''
      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
@@ -47,6 +48,8 @@ template = ->
       @div ".wallapatta-main.nine.columns", "###MAIN###"
       @div ".wallapatta-sidebar.three.columns", "###SIDEBAR###"
       @div style: {display: 'none'}, "###CODE###"
+
+   @script src: "lib/highlightjs/highlight.pack.js"
 
    @script src:"lib/weya/weya.js"
    @script src:"lib/weya/base.js"

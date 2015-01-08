@@ -78,5 +78,6 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
 document.addEventListener 'DOMContentLoaded', ->
  Mod.set 'Weya', Weya
  Mod.set 'Weya.Base', Weya.Base
+ Mod.set 'HLJS', hljs
 
  Mod.initialize()
