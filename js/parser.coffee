@@ -212,7 +212,6 @@ Mod.require 'Weya.Base',
        nodes = @node.addText (line.line.substr @node.indentation), map: @map
        for node in nodes
         @blocks.push node
-
        return
 
      switch line.type
@@ -269,9 +268,10 @@ Mod.require 'Weya.Base',
        @node.addText line.text
 
       when TYPES.media
-       @addNode new Media map: @map, indentation: line.indentation + 1, media: @parseMedia line.text
-       @prevNode = @node
-       return
+       @addNode new Media
+        map: @map
+        indentation: line.indentation + 1
+        media: @parseMedia line.text
 
       else
        throw new Error 'Unknown syntax'
