@@ -23,7 +23,7 @@ FILES = [
 exports.npm = (callback) ->
  commands = []
  if fs.existsSync "#{NPM}/js"
-  commands.push "rm #{NPM}/* -r"
+  commands.push "rm -r #{NPM}/*"
 
  commands = commands.concat [
   "mkdir #{NPM}/css"
