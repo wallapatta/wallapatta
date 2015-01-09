@@ -1,5 +1,5 @@
 OPERATOR = "tag strong"
-OPERATOR_INLINE = "string"
+OPERATOR_INLINE = "tag strong"
 
 class Mode
  constructor: (CodeMirror) ->
@@ -221,7 +221,7 @@ class Mode
    l = "#{l}"
   else if types.code
    stream.skipToEnd()
-   l = "comment"
+   l = "meta"
   else
    if state.start
     match = @matchStart stream, state
@@ -236,7 +236,7 @@ class Mode
    if state.heading
     l += " header"
    if state.comment
-    l += " meta"
+    l += " comment"
    if state.bold
     l += " strong"
    if state.italics
@@ -246,7 +246,7 @@ class Mode
    if state.inlineMedia
     l += " link"
    if state.code
-    l += " comment"
+    l += " meta"
 
   return l
 
