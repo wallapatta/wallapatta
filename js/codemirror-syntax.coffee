@@ -227,11 +227,11 @@ class Mode
     match = @matchStart stream, state
     return match if match
 
+   state.start = false
    match = @matchInline stream, state
    return match if match?
 
    stream.next()
-   state.start = false
 
    if state.heading
     l += " header"
