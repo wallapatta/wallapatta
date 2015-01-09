@@ -23,11 +23,11 @@ UI_LESS = [
 assets = exports.assets = taskUiAssets = (callback) ->
  commands = []
  if fs.existsSync "#{BUILD}/lib"
-  commands.push "rm #{BUILD}/lib -r"
+  commands.push "rm -r #{BUILD}/lib"
  if fs.existsSync "#{BUILD}/css"
-  commands.push "rm #{BUILD}/css -r"
+  commands.push "rm -r #{BUILD}/css"
  if fs.existsSync "#{BUILD}/assets"
-  commands.push "rm #{BUILD}/assets -r"
+  commands.push "rm -r #{BUILD}/assets"
 
  commands = commands.concat [
   "mkdir #{BUILD}/css"
@@ -116,7 +116,7 @@ dirList = (files) ->
 exports.js = (callback) ->
  mkdir = dirList UI_JS
  if fs.existsSync "#{BUILD}/js"
-  commands = ["rm #{BUILD}/js -r"]
+  commands = ["rm -r #{BUILD}/js"]
  else
   commands = []
 

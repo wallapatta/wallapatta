@@ -23,7 +23,7 @@ FILES = [
 exports.npm = (callback) ->
  commands = []
  if fs.existsSync "#{NPM}/js"
-  commands.push "rm #{NPM}/* -r"
+  commands.push "rm -r #{NPM}/*"
 
  commands = commands.concat [
   "mkdir #{NPM}/css"
@@ -34,7 +34,7 @@ exports.npm = (callback) ->
 
  commands = commands.concat [
   "cp -r #{BUILD}/lib/* #{NPM}/lib/"
-  "rm #{NPM}/lib/CodeMirror -r"
+  "rm -r #{NPM}/lib/CodeMirror"
   "coffee -c -o #{NPM}/templates templates/*.coffee"
   "coffee -c -o #{NPM}/ *.coffee"
  ]
