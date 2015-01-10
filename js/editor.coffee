@@ -13,10 +13,13 @@ Mod.require 'Weya.Base',
      @div ".row", ->
       @div ".five.columns", ->
         @div ".toolbar", ->
-         @i ".fa.fa-bold.fa-lg", on:
-          click: @$.on.bold
-         @i ".fa.fa-italic.fa-lg", on:
-          click: @$.on.italic
+         @i ".fa.fa-header.fa-lg", on: {click: @$.on.header}
+         @i ".fa.fa-bold.fa-lg", on: {click: @$.on.bold}
+         @i ".fa.fa-italic.fa-lg", on: {click: @$.on.italic}
+         @i ".fa.fa-link.fa-lg", on: {click: @$.on.link}
+         @i ".fa.fa-code.fa-lg", on: {click: @$.on.inlineCode}
+         @i ".fa.fa-camera.fa-lg", on: {click: @$.on.inlineMedia}
+
         @$.elems.textarea = @textarea ".editor",
          autocomplete: "off"
          spellcheck: "false"
@@ -46,10 +49,20 @@ Mod.require 'Weya.Base',
     @editor.replaceSelection "#{b}#{s}#{e}"
     @editor.focus()
 
+   @listen 'header', ->
+    s = @editor.getSelection()
+    @editor.replaceSelection "\n\n##{s}\n"
+    {line} = @editor.getCursor()
+    @editor.indentLine line - 1, 'prev'
+    @editor.indentLine line, 'prev'
+    @editor.indentLine line, 'add'
+    @editor.focus()
+
    @listen 'bold', -> @wrapSelection '**', '**'
-
    @listen 'italic', -> @wrapSelection '--', '--'
-
+   @listen 'inlineCode', -> @wrapSelection '``', '``'
+   @listen 'link', -> @wrapSelection '<<', '>>'
+   @listen 'inlineMedia', -> @wrapSelection '[[', ']]'
 
    preview: ->
     text = @editor.getValue()
