@@ -10,3 +10,6 @@
 [submodule "ui-assets/lib/skeleton"]
 	path = ui-assets/lib/skeleton
 	url = git@github.com:dhg/Skeleton.git
+[submodule "ui-assets/lib/Font-Awesome"]
+	path = ui-assets/lib/Font-Awesome
+	url = git@github.com:FortAwesome/Font-Awesome.git

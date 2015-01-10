@@ -13,6 +13,7 @@ template = ->
     href: 'http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900'
     rel: 'stylesheet'
     type: 'text/css'
+   @link href: "lib/Font-Awesome/css/font-awesome.min.css", rel: "stylesheet"
    @link href: "lib/skeleton/css/skeleton.css", rel: "stylesheet"
    @link href: "lib/CodeMirror/lib/codemirror.css", rel: "stylesheet"
    @link href: "lib/CodeMirror/addon/fold/foldgutter.css", rel: "stylesheet"

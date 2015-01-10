@@ -12,6 +12,11 @@ Mod.require 'Weya.Base',
     @div ".container.wallapatta-editor", ->
      @div ".row", ->
       @div ".five.columns", ->
+        @div ".toolbar", ->
+         @i ".fa.fa-bold.fa-lg", on:
+          click: @$.on.bold
+         @i ".fa.fa-italic.fa-lg", on:
+          click: @$.on.italic
         @$.elems.textarea = @textarea ".editor",
          autocomplete: "off"
          spellcheck: "false"
@@ -35,6 +40,16 @@ Mod.require 'Weya.Base',
    @listen 'parse', (e) ->
     e.preventDefault()
     @preview()
+
+   wrapSelection: (b, e) ->
+    s = @editor.getSelection()
+    @editor.replaceSelection "#{b}#{s}#{e}"
+    @editor.focus()
+
+   @listen 'bold', -> @wrapSelection '**', '**'
+
+   @listen 'italic', -> @wrapSelection '--', '--'
+
 
    preview: ->
     text = @editor.getValue()
