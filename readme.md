@@ -6,7 +6,7 @@ inspired by handouts of Edward R. Tufte.
 
 ##Overview
 
-Wallapatta uses indentation to specify the hierarchy of content, and identify the context each component belongs to.
+Wallapatta uses indentation to specify the hierarchy of content.
 
 ```
 ###Heading1

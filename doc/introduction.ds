@@ -13,7 +13,7 @@ documentations at <<http://forestpin.com(Forestpin)>>.
 
 ##Overview
 
- Wallapatta uses indentation to specify the hierarchy of content, and identify the context each component belongs to. Here's an example:
+ Wallapatta uses indentation to specify the hierarchy of content.
 
  ```
   ###Heading 1
