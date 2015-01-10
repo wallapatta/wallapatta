@@ -36,9 +36,6 @@ Mod.require 'Weya.Base',
         @$.elems.textarea = @textarea ".editor",
          autocomplete: "off"
          spellcheck: "false"
-        @$.elems.parse = @button ".button-primary",
-         on: {click: @$.on.parse}
-         "Render"
 
       @$.elems.preview = @div ".preview.seven.columns", ->
        @$.elems.errors = @div ".row.error", null
@@ -157,8 +154,8 @@ Mod.require 'Weya.Base',
     @editor.on 'change', @on.change
     height = window.innerHeight
     console.log height
-    @editor.setSize null, "#{height - 120}px"
-    @elems.preview.style.maxHeight = "#{height - 120}px"
+    @editor.setSize null, "#{height - 100}px"
+    @elems.preview.style.maxHeight = "#{height - 50}px"
     @editor.setValue Sample
 
    render: ->
