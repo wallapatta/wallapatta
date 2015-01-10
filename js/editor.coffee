@@ -14,11 +14,16 @@ Mod.require 'Weya.Base',
       @div ".five.columns", ->
         @div ".toolbar", ->
          @i ".fa.fa-header.fa-lg", on: {click: @$.on.header}
+
          @i ".fa.fa-bold.fa-lg", on: {click: @$.on.bold}
          @i ".fa.fa-italic.fa-lg", on: {click: @$.on.italic}
          @i ".fa.fa-link.fa-lg", on: {click: @$.on.link}
          @i ".fa.fa-code.fa-lg", on: {click: @$.on.inlineCode}
          @i ".fa.fa-camera.fa-lg", on: {click: @$.on.inlineMedia}
+         @i ".fa.fa-superscript.fa-lg", on: {click: @$.on.superscript}
+         @i ".fa.fa-subscript.fa-lg", on: {click: @$.on.subscript}
+
+         @i ".fa.fa-table.fa-lg", on: {click: @$.on.table}
 
         @$.elems.textarea = @textarea ".editor",
          autocomplete: "off"
@@ -51,7 +56,7 @@ Mod.require 'Weya.Base',
 
    @listen 'header', ->
     s = @editor.getSelection()
-    @editor.replaceSelection "\n\n##{s}\n"
+    @editor.replaceSelection "\n##{s}\n"
     {line} = @editor.getCursor()
     @editor.indentLine line - 1, 'prev'
     @editor.indentLine line, 'prev'
@@ -63,6 +68,22 @@ Mod.require 'Weya.Base',
    @listen 'inlineCode', -> @wrapSelection '``', '``'
    @listen 'link', -> @wrapSelection '<<', '>>'
    @listen 'inlineMedia', -> @wrapSelection '[[', ']]'
+   @listen 'superscript', -> @wrapSelection '^^', '^^'
+   @listen 'subscript', -> @wrapSelection '__', '__'
+
+   @listen 'table', ->
+    s = @editor.getSelection()
+    @editor.replaceSelection "\n|||\ncol1|col2\n===\n1,1|1,2\n2,1|2,2\n#{s}"
+    {line} = @editor.getCursor()
+    @editor.indentLine line - 5, 'prev'
+    @editor.indentLine line - 4, 'prev'
+    @editor.indentLine line - 4, 'add'
+    @editor.indentLine line - 3, 'prev'
+    @editor.indentLine line - 2, 'prev'
+    @editor.indentLine line - 1, 'prev'
+    @editor.indentLine line, 'prev'
+    @editor.indentLine line, 'subtract'
+    @editor.focus()
 
    preview: ->
     text = @editor.getValue()
