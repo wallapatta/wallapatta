@@ -13,20 +13,25 @@ Mod.require 'Weya.Base',
      @div ".row", ->
       @div ".five.columns", ->
         @div ".toolbar", ->
-         @i ".fa.fa-header.fa-lg", on: {click: @$.on.header}
+         @i ".fa.fa-header", on: {click: @$.on.header}
 
-         @i ".fa.fa-bold.fa-lg", on: {click: @$.on.bold}
-         @i ".fa.fa-italic.fa-lg", on: {click: @$.on.italic}
-         @i ".fa.fa-link.fa-lg", on: {click: @$.on.link}
-         @i ".fa.fa-code.fa-lg", on: {click: @$.on.inlineCode}
-         @i ".fa.fa-camera.fa-lg", on: {click: @$.on.inlineMedia}
-         @i ".fa.fa-superscript.fa-lg", on: {click: @$.on.superscript}
-         @i ".fa.fa-subscript.fa-lg", on: {click: @$.on.subscript}
+         @i ".fa.fa-bold", on: {click: @$.on.bold}
+         @i ".fa.fa-italic", on: {click: @$.on.italic}
+         @i ".fa.fa-link", on: {click: @$.on.link}
+         @i ".fa.fa-code", on: {click: @$.on.inlineCode}
+         @i ".fa.fa-camera", on: {click: @$.on.inlineMedia}
+         @i ".fa.fa-superscript", on: {click: @$.on.superscript}
+         @i ".fa.fa-subscript", on: {click: @$.on.subscript}
 
-         @i ".fa.fa-table.fa-lg", on: {click: @$.on.table}
+         @i ".fa.fa-table", on: {click: @$.on.table}
 
-         @i ".fa.fa-indent.fa-lg", on: {click: @$.on.indent}
-         @i ".fa.fa-outdent.fa-lg", on: {click: @$.on.indent}
+         @i ".fa.fa-list-ol", on: {click: @$.on.listOl}
+         @i ".fa.fa-list-ul", on: {click: @$.on.listUl}
+
+         @i ".fa.fa-indent", on: {click: @$.on.indent}
+         @i ".fa.fa-outdent", on: {click: @$.on.outdent}
+
+         @i ".fa.fa-columns", on: {click: @$.on.sidenote}
 
         @$.elems.textarea = @textarea ".editor",
          autocomplete: "off"
@@ -57,14 +62,18 @@ Mod.require 'Weya.Base',
     @editor.replaceSelection "#{b}#{s}#{e}"
     @editor.focus()
 
-   @listen 'header', ->
+   addSegment: (b) ->
     s = @editor.getSelection()
-    @editor.replaceSelection "\n##{s}\n"
+    @editor.replaceSelection "\n#{b}#{s}\n"
     {line} = @editor.getCursor()
     @editor.indentLine line - 1, 'prev'
     @editor.indentLine line, 'prev'
     @editor.indentLine line, 'add'
     @editor.focus()
+
+
+   @listen 'header', ->
+    @addSegment '#'
 
    @listen 'bold', -> @wrapSelection '**', '**'
    @listen 'italic', -> @wrapSelection '--', '--'
@@ -99,6 +108,20 @@ Mod.require 'Weya.Base',
     for sel in sels
      for i in [sel.anchor.line..sel.head.line]
       @editor.indentLine i, 'subtract'
+
+   @listen 'listOl', -> @addSegment '- '
+   @listen 'listUl', -> @addSegment '* '
+
+   @listen 'sidenote', ->
+    s = @editor.getSelection()
+    @editor.replaceSelection "\n>>>\n#{s}"
+    {line} = @editor.getCursor()
+    @editor.indentLine line - 1, 'prev'
+    @editor.indentLine line, 'prev'
+    @editor.indentLine line, 'add'
+    @editor.focus()
+
+
 
 
    preview: ->
