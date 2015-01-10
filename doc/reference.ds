@@ -61,7 +61,13 @@
  ```
   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
   
- Inline images can be added by surrounding the image URL with double square brackets (``[[`` and ``]]``). 
+ Inline images can be added by surrounding the image URL with double square brackets (``[[`` and ``]]``).
+ 
+ ```
+  This is a sentence which contains an [[https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png]] inline image.
+ 
+ >>>
+  This is a sentence which contains an [[https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png]] inline image.
   
 ##Side Notes
 
@@ -249,5 +255,20 @@
   
 ##Comments
 
- Comments can be specified with three forward slashes (``///``).
+ Comments can be specified with three forward slashes (``///``). All text that belong in a comment will be ignored, along with any other components or formatting used inside.
+ 
+ ```
+  >>>
+   This is a sentence.
+   
+   ///This is a **comment** with some text, which won't appear
+   
+   And this is yet another sentence.
+ 
+ >>>
+  This is a sentence.
+  
+  ///This is a **comment** with some text, which won't appear
+  
+  And this is yet another sentence.
 
