@@ -1,4 +1,4 @@
-While the online Wallapatta editor might be easier and more fun to use, you might need to use a separate editor for extensive writing.
+While the online Wallapatta editor might be easier to use, you might need to use a separate editor for extensive writing.
 
 And for this you can use any editor you're comfortable with; But right now, only Brackets supports syntax highlighting (via an extension). Just follow the guide below to get started:
 
@@ -21,5 +21,5 @@ And for this you can use any editor you're comfortable with; But right now, only
 
 ##4. Restart Brackets
 
- That's all there is to it. Just restart Brackets and start writing Wallapatta! Remember to save files with the extension ``.DS`` for Brackets to recognize the file type as Wallapatta.
+ That's all there is to it. Just restart Brackets and start writing in Wallapatta! Remember to save files with the extension ``.DS`` for Brackets to recognize the file type as Wallapatta.
 

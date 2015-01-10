@@ -139,8 +139,6 @@
    Cell 4 | Cell 5 | Sixth Cell
    
  >>>
-  Other components (images, special blocks, etc) and text styling (**bold**, --italics--, etc) cannot be used inside tables yet.
-  
   It's possible to have empty cells, have more than one header-styled row, and have spanned columns.
    
  |||
@@ -230,7 +228,7 @@
   * 2^^2^^ = 4
   * CO__2__
 
-##Inline code
+##Inline Code
 
  Inline code is identified by two backticks (`).
 
@@ -255,7 +253,7 @@
   
 ##Comments
 
- Comments can be specified with three forward slashes (``///``). All text that belong in a comment will be ignored, along with any other components or formatting used inside.
+ Comments can be specified with three forward slashes (``///``). All text typed inside a comment will be ignored, along with any other components or formatting used inside.
  
  ```
   >>>
@@ -271,4 +269,3 @@
   ///This is a **comment** with some text, which won't appear
   
   And this is yet another sentence.
-
