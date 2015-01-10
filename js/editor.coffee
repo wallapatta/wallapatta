@@ -25,6 +25,9 @@ Mod.require 'Weya.Base',
 
          @i ".fa.fa-table.fa-lg", on: {click: @$.on.table}
 
+         @i ".fa.fa-indent.fa-lg", on: {click: @$.on.indent}
+         @i ".fa.fa-outdent.fa-lg", on: {click: @$.on.indent}
+
         @$.elems.textarea = @textarea ".editor",
          autocomplete: "off"
          spellcheck: "false"
@@ -85,6 +88,19 @@ Mod.require 'Weya.Base',
     @editor.indentLine line, 'subtract'
     @editor.focus()
 
+   @listen 'indent', ->
+    sels = @editor.listSelections()
+    for sel in sels
+     for i in [sel.anchor.line..sel.head.line]
+      @editor.indentLine i, 'add'
+
+   @listen 'outdent', ->
+    sels = @editor.listSelections()
+    for sel in sels
+     for i in [sel.anchor.line..sel.head.line]
+      @editor.indentLine i, 'subtract'
+
+
    preview: ->
     text = @editor.getValue()
 
@@ -111,6 +127,7 @@ Mod.require 'Weya.Base',
      lineNumbers: true
      lineWrapping: true
      tabSize: 1
+     indentUnit: 1
      foldGutter: true
      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
 
