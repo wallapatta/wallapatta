@@ -17,6 +17,7 @@ Mod.require 'Weya.Base',
     block: 1500
     media: 1000
     article: 0
+    table: 1500
 
    PAGE_MARGIN = '1000px'
    START = 1
