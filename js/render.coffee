@@ -251,6 +251,7 @@ Mod.require 'Weya.Base',
        elemSidenote.parentNode.insertBefore fill, elemSidenote
 
       @adjust elemSidenote, elemContent
+      first = false
 
      return found
 
