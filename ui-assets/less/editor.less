@@ -34,4 +34,21 @@
  overflow-y: hidden;
 }
 
+.wallapatta-editor-print {
+ .editor {
+  display: none;
+ }
+ .CodeMirror {
+  display: none;
+ }
+ .preview {
+  display: none;
+ }
+}
+
+@media print {
+ .wallapatta-editor {
+  display: none;
+ }
+}
 

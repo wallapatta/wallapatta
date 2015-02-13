@@ -9,7 +9,7 @@ Mod.require 'Weya.Base',
    @extend()
 
    template: ->
-    @div ".container.wallapatta-editor", ->
+    @$.elems.editorContainer = @div ".container.wallapatta-editor", ->
      @div ".row", ->
       @div ".five.columns", ->
         @div ".toolbar", ->
@@ -33,6 +33,8 @@ Mod.require 'Weya.Base',
 
          @i ".fa.fa-columns", on: {click: @$.on.sidenote}
 
+         @i ".fa.fa-print", on: {click: @$.on.pdf}
+
         @$.elems.textarea = @textarea ".editor",
          autocomplete: "off"
          spellcheck: "false"
@@ -44,8 +46,16 @@ Mod.require 'Weya.Base',
         @$.elems.previewMain = @div ".nine.columns", null
         @$.elems.previewSidebar = @div ".three.columns", null
 
+    @$.elems.printContainer = @div ".container.wallapatta-container.wallapatta-print", ->
+     @$.elems.printDoc = @div ".row.wallapatta", ->
+      @$.elems.printMain = @div ".nine.columns", null
+      @$.elems.printSidebar = @div ".three.columns", null
+
+
+
    @initialize ->
     @elems = {}
+    @_isPrint = false
 
    @listen 'change', ->
     @preview()
@@ -119,6 +129,39 @@ Mod.require 'Weya.Base',
     @editor.focus()
 
 
+   @listen 'pdf', ->
+    if not @_isPrint
+     @_isPrint = true
+     @elems.editorContainer.classList.add 'wallapatta-editor-print'
+     @elems.printContainer.style.display = 'block'
+     text = @editor.getValue()
+
+     @elems.printMain.innerHTML = ''
+     @elems.printSidebar.innerHTML = ''
+     parser = new Parser text: text
+
+     try
+      parser.parse()
+     catch e
+      @elems.errors.textContent = e.message
+      return
+
+     @elems.errors.textContent = ''
+     render = parser.getRender()
+     render.render @elems.printMain, @elems.printSidebar
+     window.requestAnimationFrame =>
+      ratio = @elems.printDoc.offsetWidth / 170
+      width = ratio * 170
+      height = ratio * 225
+      render.mediaLoaded ->
+       setTimeout ->
+        render.setPages height
+       , 500
+
+    else
+     @_isPrint = false
+     @elems.editorContainer.classList.remove 'wallapatta-editor-print'
+     @elems.printContainer.style.display = 'none'
 
 
    preview: ->
