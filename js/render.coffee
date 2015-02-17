@@ -9,7 +9,7 @@ Mod.require 'Weya.Base',
    PAGE_COST = 100
    BREAK_COST =
     codeBlock: 1000
-    special: 1000
+    special: 2000
     html: 1000
     heading: 2000
     list: 1000
@@ -24,7 +24,7 @@ Mod.require 'Weya.Base',
 
    EMPTY_PAGE_COST = (filled, height) ->
     p = filled / height
-    return 1000 / p - 1000
+    return 1500 / p - 1500
 
 
    class Render extends Base
