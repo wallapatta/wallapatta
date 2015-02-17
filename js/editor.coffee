@@ -47,11 +47,9 @@ Mod.require 'Weya.Base',
         @$.elems.previewSidebar = @div ".three.columns", null
 
     @$.elems.printForm = @div ".container.print-form", style: {display: 'none'}, ->
-     @div ".row", ->
-      @div ".six.columns", ->
-        @div ".toolbar", ->
-         @i ".fa.fa-code", on: {click: @$.on.closePrint}
      @form ->
+      @button "Edit",
+       on: {click: @$.on.closePrint}
       @div ".row", ->
        @div ".six.columns", ->
         @label for: "width-input", "Width (mm)"
@@ -62,7 +60,7 @@ Mod.require 'Weya.Base',
         @$.elems.heightInput = @input "#height-input.u-full-width",
          type: "number"
          value: "225"
-        @button ".button-primary", "Button element",
+        @button ".button-primary", "Render",
          on: {click: @$.on.renderPrint}
 
 
