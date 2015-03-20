@@ -33,7 +33,7 @@ Mod.require 'Weya.Base',
 
          @i ".fa.fa-columns", on: {click: @$.on.sidenote}
 
-         @i ".fa.fa-print", on: {click: @$.on.pdf}
+         @i ".fa.fa-print", on: {click: @$.on.print}
 
         @$.elems.textarea = @textarea ".editor",
          autocomplete: "off"
@@ -45,6 +45,24 @@ Mod.require 'Weya.Base',
        @div ".row.wallapatta", ->
         @$.elems.previewMain = @div ".nine.columns", null
         @$.elems.previewSidebar = @div ".three.columns", null
+
+    @$.elems.printForm = @div ".container.print-form", style: {display: 'none'}, ->
+     @form ->
+      @button "Edit",
+       on: {click: @$.on.closePrint}
+      @div ".row", ->
+       @div ".six.columns", ->
+        @label for: "width-input", "Width (mm)"
+        @$.elems.widthInput = @input "#width-input.u-full-width",
+         type: "number"
+         value: "170"
+        @label for: "height-input", "Height (mm)"
+        @$.elems.heightInput = @input "#height-input.u-full-width",
+         type: "number"
+         value: "225"
+        @button ".button-primary", "Render",
+         on: {click: @$.on.renderPrint}
+
 
     @$.elems.printContainer = @div ".container.wallapatta-container.wallapatta-print", ->
      @$.elems.printDoc = @div ".row.wallapatta", ->
@@ -129,39 +147,48 @@ Mod.require 'Weya.Base',
     @editor.focus()
 
 
-   @listen 'pdf', ->
-    if not @_isPrint
-     @_isPrint = true
-     @elems.editorContainer.classList.add 'wallapatta-editor-print'
-     @elems.printContainer.style.display = 'block'
-     text = @editor.getValue()
+   @listen 'print', ->
+    @elems.editorContainer.classList.add 'wallapatta-editor-print'
+    @elems.printContainer.style.display = 'block'
+    @elems.printForm.style.display = 'block'
 
-     @elems.printMain.innerHTML = ''
-     @elems.printSidebar.innerHTML = ''
-     parser = new Parser text: text
+   @listen 'renderPrint', (e) ->
+    e.preventDefault()
+    WIDTH = parseInt @elems.widthInput.value
+    if isNaN WIDTH
+     WIDTH = 170
+    HEIGHT = parseInt @elems.heightInput.value
+    if isNaN HEIGHT
+     HEIGHT = 225
+    text = @editor.getValue()
 
-     try
-      parser.parse()
-     catch e
-      @elems.errors.textContent = e.message
-      return
+    @elems.printMain.innerHTML = ''
+    @elems.printSidebar.innerHTML = ''
+    parser = new Parser text: text
 
-     @elems.errors.textContent = ''
-     render = parser.getRender()
-     render.render @elems.printMain, @elems.printSidebar
-     window.requestAnimationFrame =>
-      ratio = @elems.printDoc.offsetWidth / 170
-      width = ratio * 170
-      height = ratio * 225
-      render.mediaLoaded ->
-       setTimeout ->
-        render.setPages height
-       , 500
+    try
+     parser.parse()
+    catch e
+     @elems.errors.textContent = e.message
+     return
 
-    else
-     @_isPrint = false
-     @elems.editorContainer.classList.remove 'wallapatta-editor-print'
-     @elems.printContainer.style.display = 'none'
+    @elems.errors.textContent = ''
+    render = parser.getRender()
+    render.render @elems.printMain, @elems.printSidebar
+    @elems.printContainer.style.width = "#{WIDTH}mm"
+    window.requestAnimationFrame =>
+     ratio = @elems.printDoc.offsetWidth / WIDTH
+     width = ratio * WIDTH
+     height = ratio * HEIGHT
+     render.mediaLoaded ->
+      setTimeout ->
+       render.setPages height
+      , 500
+
+   @listen 'closePrint', ->
+    @elems.editorContainer.classList.remove 'wallapatta-editor-print'
+    @elems.printContainer.style.display = 'none'
+    @elems.printForm.style.display = 'none'
 
    setText: (text) ->
     @editor.setValue text

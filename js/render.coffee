@@ -9,7 +9,7 @@ Mod.require 'Weya.Base',
    PAGE_COST = 100
    BREAK_COST =
     codeBlock: 1000
-    special: 1000
+    special: 2000
     html: 1000
     heading: 2000
     list: 1000
@@ -21,6 +21,10 @@ Mod.require 'Weya.Base',
 
    PAGE_MARGIN = '1000px'
    START = 1
+
+   EMPTY_PAGE_COST = (filled, height) ->
+    p = filled / height
+    return 1500 / p - 1500
 
 
    class Render extends Base
@@ -106,7 +110,7 @@ Mod.require 'Weya.Base',
             (@getOffsetTop elem, @elems.main)
       break if pos > H
 
-      c = @broken[i] + @breakCost[i] + PAGE_COST
+      c = @broken[i] + @breakCost[i] + PAGE_COST + EMPTY_PAGE_COST pos, H
       if @broken[n] >= c
        @broken[n] = c
        @nextBreak[n] = i
