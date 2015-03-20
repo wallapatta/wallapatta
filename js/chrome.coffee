@@ -1,81 +1,68 @@
-Mod.require 'Editor',
- (Editor) ->
+Mod.require 'Weya.Base',
+ 'Weya'
+ 'Editor'
+ (Base, Weya, Editor) ->
 
-  onError = (e) ->
-   console.error e
+  class App extends Base
+   @initialize ->
+    @elems = {}
+    @resources = {}
+    window.requestAnimationFrame =>
+     @render()
 
-  addToFileSystem = (entry, content) ->
-   name = entry.name
-   regex = /^data.+;base64,/
-   if regex.test content
-    content = content.replace regex, ""
-    #imgobj = B64.decode(imgobj);
-    content = window.atob content
-   else
-    console.log "it's already :", typeof content
+   @listen 'error', (e) ->
+    console.error e
 
-   onFileSystem = (fs) ->
-    fs.root.getFile name,
-     create: true
-     (entry) ->
-      console.log entry
-      entry.createWriter (writer) ->
-       writer.onwriteend = (e) ->
-        console.log "write complete: ", e
-        console.log "size of file: ", e.total
-        console.log entry.toURL()
-        #document.body.innerHTML = "<img src=\"#{entry.toURL()}\">"
-       writer.onerror = (e) ->
-        console.log "Write failed: ", e.toString()
+   render: ->
+    @elems.toolbar = document.getElementById 'toolbar'
+    Weya elem: @elems.toolbar, context: this, ->
+     @$.elems.folder = @i ".fa.fa-folder-open", on: {click: @$.on.folder}
+     @$.elems.open = @i ".fa.fa-file", on: {click: @$.on.file}
+     @$.elems.save = @i ".fa.fa-save", on: {click: @$.on.save}
 
-       data = new Blob [content], type: "image/png"
-       writer.write data
-      , onError
-     onError
+    @elems.save.style.display = 'none'
 
-   window.webkitRequestFileSystem window.TEMPORARY, 100*1024*1024, onFileSystem, onError
+   @listen 'openDirectory', (entry) ->
+    return unless entry?
 
+    chrome.storage.local.set
+     directory: chrome.fileSystem.retainEntry entry
 
-  readAsText = (entry, callback) ->
-   entry.file (file) ->
-    document.body.innerHTML = "<img src=\"#{window.URL.createObjectURL(file)}\">"
-    reader = new FileReader()
+    @loadDirEntry entry
 
-    reader.onerror = onError
-    reader.onload = (e) ->
-     callback e.target.result
+   @listen 'folder', (e) ->
+    chrome.fileSystem.chooseEntry type: 'openDirectory', @on.openDirectory
 
-    reader.readAsText file
+   addResource: (entry) ->
+    entry.file (file) =>
+     @resources[entry.fullPath] = window.URL.createObjectURL file
+     console.log entry.fullPath
 
-  loadDirEntry = (entry) ->
-   return unless entry.isDirectory
-   reader = entry.createReader()
+   loadDirEntry: (entry, callback) ->
+    return unless entry.isDirectory
+    console.log entry.fullPath
+    reader = entry.createReader()
+    self = this
+    dirs = []
 
-   readEntries = ->
-    reader.readEntries onRead, onError
+    readEntries = ->
+     reader.readEntries onRead, self.on.error
 
-   onRead = (results) ->
-    if results.length is 0
-     console.log 'finished'
-    else
+    onRead = (results) ->
+     if results.length is 0
+      for e in dirs
+       self.loadDirEntry e
+      dirs = []
+      return
+
      for e in results
-      console.log e.fullPath
-      do (e) ->
-       readAsText e, (content) ->
-        console.log 'read'
-        addToFileSystem e, content
-     readEntries()
+      if e.isDirectory
+       dirs.push e
+      else
+       self.addResource e
+      readEntries()
 
-   readEntries()
+    readEntries()
 
-  chrome.fileSystem.chooseEntry type: 'openDirectory', (entry) ->
-   if not entry?
-    chrome.error 'No dirrectory selected'
-    return
-
-   chrome.storage.local.set
-    directory: chrome.fileSystem.retainEntry entry
-
-   loadDirEntry entry
-
+  APP = new App()
 

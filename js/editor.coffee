@@ -12,7 +12,7 @@ Mod.require 'Weya.Base',
     @$.elems.editorContainer = @div ".container.wallapatta-editor", ->
      @div ".row", ->
       @div ".five.columns", ->
-        @div ".toolbar", ->
+        @div "#toolbar.toolbar", ->
          @i ".fa.fa-header", on: {click: @$.on.header}
 
          @i ".fa.fa-bold", on: {click: @$.on.bold}
