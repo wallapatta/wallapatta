@@ -26,7 +26,7 @@ Mod.require 'Weya.Base',
      @$.elems.open = @i ".fa.fa-file", on: {click: @$.on.file}
      @$.elems.save = @span ->
       @i ".fa.fa-save", on: {click: @$.on.save}
-      @$.elems.saveName = @span ""
+      @$.elems.saveName = @span ".file-name", ""
 
     @elems.save.style.display = 'none'
 

@@ -12,28 +12,31 @@ Mod.require 'Weya.Base',
     @$.elems.editorContainer = @div ".container.wallapatta-editor", ->
      @div ".row", ->
       @div ".five.columns", ->
-        @div "#toolbar.toolbar", ->
-         @i ".fa.fa-header", on: {click: @$.on.header}
+        @div ".toolbar", ->
+         @div "#toolbar", ->
+          @i ".fa.fa-print", on: {click: @$.on.print}
 
-         @i ".fa.fa-bold", on: {click: @$.on.bold}
-         @i ".fa.fa-italic", on: {click: @$.on.italic}
-         @i ".fa.fa-link", on: {click: @$.on.link}
-         @i ".fa.fa-code", on: {click: @$.on.inlineCode}
-         @i ".fa.fa-camera", on: {click: @$.on.inlineMedia}
-         @i ".fa.fa-superscript", on: {click: @$.on.superscript}
-         @i ".fa.fa-subscript", on: {click: @$.on.subscript}
+         @div ->
+          @i ".fa.fa-header", on: {click: @$.on.header}
 
-         @i ".fa.fa-table", on: {click: @$.on.table}
+          @i ".fa.fa-bold", on: {click: @$.on.bold}
+          @i ".fa.fa-italic", on: {click: @$.on.italic}
+          @i ".fa.fa-link", on: {click: @$.on.link}
+          @i ".fa.fa-code", on: {click: @$.on.inlineCode}
+          @i ".fa.fa-camera", on: {click: @$.on.inlineMedia}
+          @i ".fa.fa-superscript", on: {click: @$.on.superscript}
+          @i ".fa.fa-subscript", on: {click: @$.on.subscript}
 
-         @i ".fa.fa-list-ol", on: {click: @$.on.listOl}
-         @i ".fa.fa-list-ul", on: {click: @$.on.listUl}
+          @i ".fa.fa-table", on: {click: @$.on.table}
 
-         @i ".fa.fa-indent", on: {click: @$.on.indent}
-         @i ".fa.fa-outdent", on: {click: @$.on.outdent}
+          @i ".fa.fa-list-ol", on: {click: @$.on.listOl}
+          @i ".fa.fa-list-ul", on: {click: @$.on.listUl}
 
-         @i ".fa.fa-columns", on: {click: @$.on.sidenote}
+          @i ".fa.fa-indent", on: {click: @$.on.indent}
+          @i ".fa.fa-outdent", on: {click: @$.on.outdent}
 
-         @i ".fa.fa-print", on: {click: @$.on.print}
+          @i ".fa.fa-columns", on: {click: @$.on.sidenote}
+
 
         @$.elems.textarea = @textarea ".editor",
          autocomplete: "off"
