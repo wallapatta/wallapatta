@@ -163,6 +163,11 @@ Mod.require 'Weya.Base',
      @elems.editorContainer.classList.remove 'wallapatta-editor-print'
      @elems.printContainer.style.display = 'none'
 
+   setText: (text) ->
+    @editor.setValue text
+
+   getText: ->
+    @editor.getValue()
 
    preview: ->
     text = @editor.getValue()

@@ -30,6 +30,27 @@ Mod.require 'Weya.Base',
 
     @loadDirEntry entry
 
+   @listen 'file', (e) ->
+    chrome.fileSystem.chooseEntry type: 'openFile', @on.openFile
+
+   @listen 'openFile', (entry) ->
+    return unless entry?
+
+    chrome.storage.local.set
+     file: chrome.fileSystem.retainEntry entry
+
+    @elems.save.style.display = 'inline-block'
+    @file = entry
+    entry.file (file) =>
+     reader = new FileReader()
+
+     reader.onerror = @on.error
+     reader.onload = (e) ->
+      Editor.setText e.target.result
+
+     reader.readAsText file
+
+
    @listen 'folder', (e) ->
     chrome.fileSystem.chooseEntry type: 'openDirectory', @on.openDirectory
 
