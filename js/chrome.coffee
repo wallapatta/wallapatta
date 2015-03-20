@@ -67,7 +67,9 @@ Mod.require 'Weya.Base',
     @loadDirEntry entry
 
    @listen 'file', (e) ->
-    chrome.fileSystem.chooseEntry type: 'openFile', @on.openFile
+    chrome.fileSystem.chooseEntry
+     type: 'openFile'
+     @on.openFile
 
    @listen 'openFile', (entry) ->
     return unless entry?
