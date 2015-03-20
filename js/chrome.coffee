@@ -22,6 +22,40 @@ Mod.require 'Weya.Base',
 
     @elems.save.style.display = 'none'
 
+   @listen 'save', (e) ->
+    return unless @file?
+
+    @file.createWriter @on.writer, @on.error
+
+   @listen 'writeEnd', (e) ->
+    console.log 'write end', e
+
+   @listen 'writer', (writer) ->
+    writer.onerror = @on.error
+    writer.onwriteend = @on.writeEnd
+
+    blob = new Blob [Editor.getText()], type: 'text/plain'
+
+    writer.truncate blob.size
+    @waitForIO writer, ->
+     writer.seek 0
+     writer.write blob
+
+   waitForIO: (writer, callback) ->
+    start = Date.now()
+    reentrant = ->
+     if writer.readyState is writer.WRITING and Date.now() - start < 4000
+      setTimeout reentrant, 100
+
+     if writer.readyState is writer.WRITING
+       console.error "Write operation taking too long, aborting!
+          (current writer readyState is #{writer.readyState})"
+       writer.abort()
+     else
+      callback()
+
+    setTimeout reentrant, 100
+
    @listen 'openDirectory', (entry) ->
     return unless entry?
 
