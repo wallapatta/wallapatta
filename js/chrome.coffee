@@ -21,6 +21,7 @@ Mod.require 'Weya.Base',
 
    render: ->
     @elems.toolbar = document.getElementById 'toolbar'
+    @elems.toolbar.innerHTML = ''
     Weya elem: @elems.toolbar, context: this, ->
      @$.elems.folder = @i ".fa.fa-folder-open", on: {click: @$.on.folder}
      @$.elems.open = @i ".fa.fa-file", on: {click: @$.on.file}
@@ -83,7 +84,7 @@ Mod.require 'Weya.Base',
 
    @listen 'watchChanges', ->
     if Editor.getText() isnt @content
-     @elems.saveName.textContent = "*#{@file.name}"
+     @elems.saveName.textContent = "#{@file.name} *"
     else
      @elems.saveName.textContent = "#{@file.name}"
 
