@@ -207,5 +207,7 @@ Mod.require 'Weya.Base',
 
     window.requestAnimationFrame @on.setupEditor
 
-  editor = new Editor
-  editor.render()
+  EDITOR = new Editor
+  EDITOR.render()
+
+  Mod.set 'Editor', EDITOR

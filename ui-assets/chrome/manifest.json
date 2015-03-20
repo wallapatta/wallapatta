@@ -1,0 +1,24 @@
+{
+  "name": "Wallapatta",
+  "description": "Document editor",
+  "version": "0.0.0.0",
+  "author": "Varuna Jayasiri, Roshnal Lihinikadu",
+  "manifest_version": 2,
+  "icons": {
+  },
+  "app": {
+    "background": {
+      "scripts": ["background.js"]
+    }
+  },
+  "offline_enabled": true,
+  "permissions": [
+   "storage",
+   "https://*/",
+   "http://*/",
+   "http://fonts.googleapis.com/",
+   "https://fonts.googleapis.com/",
+   {"fileSystem": ["write", "retainEntries", "directory"]}
+  ]
+}
+
