@@ -18,7 +18,9 @@ Mod.require 'Weya.Base',
     Weya elem: @elems.toolbar, context: this, ->
      @$.elems.folder = @i ".fa.fa-folder-open", on: {click: @$.on.folder}
      @$.elems.open = @i ".fa.fa-file", on: {click: @$.on.file}
-     @$.elems.save = @i ".fa.fa-save", on: {click: @$.on.save}
+     @$.elems.save = @span ->
+      @i ".fa.fa-save", on: {click: @$.on.save}
+      @$.elems.saveName = @span ""
 
     @elems.save.style.display = 'none'
 
@@ -74,6 +76,7 @@ Mod.require 'Weya.Base',
      file: chrome.fileSystem.retainEntry entry
 
     @elems.save.style.display = 'inline-block'
+    @elems.saveName.textContent = entry.name
     @file = entry
     entry.file (file) =>
      reader = new FileReader()
