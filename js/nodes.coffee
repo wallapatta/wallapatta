@@ -3,9 +3,11 @@ Mod.require 'Weya.Base',
  'HLJS'
  (Base, Weya, HLJS) ->
 
-  decodeURL = (url) -> url
-  if window.wallapattaDecodeURL?
-   decodeURL = window.wallapattaDecodeURL
+  decodeURL = (url) ->
+   if window.wallapattaDecodeURL?
+    return window.wallapattaDecodeURL url
+   else
+    return url
 
 
   TYPES =

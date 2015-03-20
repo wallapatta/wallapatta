@@ -237,4 +237,4 @@ Mod.require ->
  1|2
  '''
 
- Mod.set 'Wallapatta.Sample', text
+ Mod.set 'Wallapatta.Sample', textTemp
