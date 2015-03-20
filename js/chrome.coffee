@@ -3,6 +3,12 @@ Mod.require 'Weya.Base',
  'Editor'
  (Base, Weya, Editor) ->
 
+  window.wallapattaDecodeURL = (url) ->
+   if APP.resources[url]?
+    return APP.resources[url]
+   else
+    return url
+
   class App extends Base
    @initialize ->
     @elems = {}
@@ -31,12 +37,16 @@ Mod.require 'Weya.Base',
 
    @listen 'writeEnd', (e) ->
     console.log 'write end', e
+    if @contentWriting?
+     @content = @contentWriting
+     @contentWriting = null
 
    @listen 'writer', (writer) ->
     writer.onerror = @on.error
     writer.onwriteend = @on.writeEnd
 
     blob = new Blob [Editor.getText()], type: 'text/plain'
+    @contentWriting = Editor.getText()
 
     writer.truncate blob.size
     @waitForIO writer, ->
@@ -71,6 +81,12 @@ Mod.require 'Weya.Base',
      type: 'openFile'
      @on.openFile
 
+   @listen 'watchChanges', ->
+    if Editor.getText() isnt @content
+     @elems.saveName.textContent = "*#{@file.name}"
+    else
+     @elems.saveName.textContent = "#{@file.name}"
+
    @listen 'openFile', (entry) ->
     return unless entry?
 
@@ -79,13 +95,16 @@ Mod.require 'Weya.Base',
 
     @elems.save.style.display = 'inline-block'
     @elems.saveName.textContent = entry.name
+    setInterval @on.watchChanges, 500
     @file = entry
+    self = this
     entry.file (file) =>
      reader = new FileReader()
 
      reader.onerror = @on.error
      reader.onload = (e) ->
       Editor.setText e.target.result
+      self.content = e.target.result
 
      reader.readAsText file
 

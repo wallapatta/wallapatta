@@ -3,6 +3,11 @@ Mod.require 'Weya.Base',
  'HLJS'
  (Base, Weya, HLJS) ->
 
+  decodeURL = (url) -> url
+  if window.wallapattaDecodeURL?
+   decodeURL = window.wallapattaDecodeURL
+
+
   TYPES =
    article: 'article'
 
@@ -147,7 +152,9 @@ Mod.require 'Weya.Base',
     @alt ?= options.src
 
    template: ->
-    @$.elem = @img "##{PREFIX}#{@$.id}.image-inline", src: @$.src, alt: @$.alt
+    @$.elem = @img "##{PREFIX}#{@$.id}.image-inline",
+     src: (decodeURL @$.src)
+     alt: @$.alt
 
    render: (options) ->
     Weya elem: options.elem, context: this, @template
@@ -419,7 +426,9 @@ Mod.require 'Weya.Base',
 
    template: ->
     @$.elem = @div "##{PREFIX}#{@$.id}.image-container", ->
-     @$.elems.img = @img ".image", src: @$.src, alt: @$.alt
+     @$.elems.img = @img ".image",
+      src: (decodeURL @$.src)
+      alt: @$.alt
 
    render: (options) ->
     Weya elem: options.elem, context: this, @template
