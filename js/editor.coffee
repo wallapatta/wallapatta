@@ -80,6 +80,7 @@ Mod.require 'Weya.Base',
 
    @listen 'change', ->
     @preview()
+    @onChangeListener?()
 
    @listen 'parse', (e) ->
     e.preventDefault()

@@ -9,15 +9,29 @@ Mod.require 'Weya.Base',
    else
     return url
 
+  CONTENT = null
+
+  chrome.storage.local.get 'content', (value) ->
+   if value?.content?
+    CONTENT = value.content
+    Editor.setText value.content
+
+  saveContent = (value) ->
+   chrome.storage.local.set content: value, -> null
+
   class App extends Base
    @initialize ->
     @elems = {}
     @resources = {}
     window.requestAnimationFrame =>
+     Editor.onChangeListener = @on.change
      @render()
 
    @listen 'error', (e) ->
     console.error e
+
+   @listen 'change', ->
+    saveContent Editor.getText()
 
    render: ->
     @elems.toolbar = document.getElementById 'toolbar'
@@ -80,6 +94,7 @@ Mod.require 'Weya.Base',
    @listen 'file', (e) ->
     chrome.fileSystem.chooseEntry
      type: 'openFile'
+     #type: 'saveFile'
      @on.openFile
 
    @listen 'watchChanges', ->
