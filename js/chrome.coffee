@@ -89,10 +89,11 @@ Mod.require 'Weya.Base',
       @i ".fa.fa-lg.fa-download",
        title: 'Save file'
        on: {click: @$.on.save}
-      @i ".fa.fa-lg.fa-save",
-       title: 'Save as'
-       on: {click: @$.on.saveas}
-      @$.elems.saveName = @span ".file-name", ""
+
+     @i ".fa.fa-lg.fa-save",
+      title: 'Save as'
+      on: {click: @$.on.saveAs}
+     @$.elems.saveName = @span ".file-name", ""
 
     @elems.save.style.display = 'none'
 
@@ -148,6 +149,24 @@ Mod.require 'Weya.Base',
      #type: 'saveFile'
      @on.openFile
 
+   @listen 'saveAs', (e) ->
+    chrome.fileSystem.chooseEntry
+     type: 'saveFile'
+     @on.saveAsFile
+
+   @listen 'saveAsFile', (entry) ->
+    return unless entry?
+
+    chrome.storage.local.set
+     file: chrome.fileSystem.retainEntry entry
+
+    @elems.save.style.display = 'inline-block'
+    @elems.saveName.textContent = entry.name
+    if not @_watchInterval?
+     @_watchInterval = setInterval @on.watchChanges, 500
+    @file = entry
+    @file.createWriter @on.writer, @on.error
+
    @listen 'watchChanges', ->
     if Editor.getText() isnt @content
      @elems.saveName.textContent = "#{@file.name} *"
@@ -162,7 +181,8 @@ Mod.require 'Weya.Base',
 
     @elems.save.style.display = 'inline-block'
     @elems.saveName.textContent = entry.name
-    setInterval @on.watchChanges, 500
+    if not @_watchInterval?
+     @_watchInterval = setInterval @on.watchChanges, 500
     @file = entry
     self = this
     entry.file (file) =>
