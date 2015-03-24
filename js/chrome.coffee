@@ -108,11 +108,21 @@ Mod.require 'Weya.Base',
      @content = @contentWriting
      @contentWriting = null
 
+   removeTrailingSpace: (text) ->
+    lines = text.split '\n'
+    for line, i in lines
+     lines[i] = line.trimRight()
+
+    lines.join '\n'
+
    @listen 'writer', (writer) ->
     writer.onerror = @on.error
     writer.onwriteend = @on.writeEnd
 
-    blob = new Blob [Editor.getText()], type: 'text/plain'
+    text = @removeTrailingSpace Editor.getText()
+    Editor.setText text
+
+    blob = new Blob [text], type: 'text/plain'
     @contentWriting = Editor.getText()
 
     writer.truncate blob.size
