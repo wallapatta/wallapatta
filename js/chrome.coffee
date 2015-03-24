@@ -9,38 +9,89 @@ Mod.require 'Weya.Base',
    else
     return url
 
-  CONTENT = null
-
-  chrome.storage.local.get 'content', (value) ->
-   if value?.content?
-    CONTENT = value.content
-    Editor.setText value.content
-
-  saveContent = (value) ->
-   chrome.storage.local.set content: value, -> null
-
   class App extends Base
    @initialize ->
     @elems = {}
     @resources = {}
+    @_loading = true
+
     window.requestAnimationFrame =>
      Editor.onChangeListener = @on.change
      @render()
+     @loadRetainedDirectory =>
+      @loadRetainedFile =>
+       window.requestAnimationFrame =>
+        @loadSavedContent =>
+         @_loading = false
+
+   loadRetainedDirectory: (callback) ->
+    chrome.storage.local.get 'directory', (directory) =>
+     directory = directory?.directory
+     if directory?
+      chrome.fileSystem.isRestorable directory, (isRestorable) =>
+       if isRestorable
+        console.info "Restoring #{directory}"
+        chrome.fileSystem.restoreEntry directory, (d) =>
+         if d? and d.isDirectory
+          @on.openDirectory d
+         callback()
+       else
+        callback()
+     else
+      callback()
+
+   loadRetainedFile: (callback) ->
+    chrome.storage.local.get 'file', (file) =>
+     file = file?.file
+     if file?
+      chrome.fileSystem.isRestorable file, (isRestorable) =>
+       if isRestorable
+        console.info "Restoring #{file}"
+        chrome.fileSystem.restoreEntry file, (d) =>
+         if d? and d.isFile
+          @on.openFile d, callback
+       else
+        callback()
+     else
+      callback()
+
+   saveContent: (value, callback) ->
+    return if @_loading
+    chrome.storage.local.set content: value, ->
+     callback?()
+
+   loadSavedContent: (callback) ->
+    chrome.storage.local.get 'content', (value) =>
+     console.log 'read content'
+     if value?.content?
+      Editor.setText value.content
+
+     callback()
 
    @listen 'error', (e) ->
     console.error e
 
    @listen 'change', ->
-    saveContent Editor.getText()
+    @saveContent Editor.getText()
 
    render: ->
     @elems.toolbar = document.getElementById 'toolbar'
     @elems.toolbar.innerHTML = ''
     Weya elem: @elems.toolbar, context: this, ->
-     @$.elems.folder = @i ".fa.fa-folder-open", on: {click: @$.on.folder}
-     @$.elems.open = @i ".fa.fa-file", on: {click: @$.on.file}
+     @span ->
+      @$.elems.folder = @i ".fa.fa-lg.fa-folder",
+       title: 'Select images folder'
+       on: {click: @$.on.folder}
+      @$.elems.open = @i ".fa.fa-lg.fa-upload",
+       title: 'Open file'
+       on: {click: @$.on.file}
      @$.elems.save = @span ->
-      @i ".fa.fa-save", on: {click: @$.on.save}
+      @i ".fa.fa-lg.fa-download",
+       title: 'Save file'
+       on: {click: @$.on.save}
+      @i ".fa.fa-lg.fa-save",
+       title: 'Save as'
+       on: {click: @$.on.saveas}
       @$.elems.saveName = @span ".file-name", ""
 
     @elems.save.style.display = 'none'
@@ -103,7 +154,7 @@ Mod.require 'Weya.Base',
     else
      @elems.saveName.textContent = "#{@file.name}"
 
-   @listen 'openFile', (entry) ->
+   @listen 'openFile', (entry, callback) ->
     return unless entry?
 
     chrome.storage.local.set
@@ -119,8 +170,10 @@ Mod.require 'Weya.Base',
 
      reader.onerror = @on.error
      reader.onload = (e) ->
+      console.log 'read file'
       Editor.setText e.target.result
       self.content = e.target.result
+      callback?()
 
      reader.readAsText file
 
