@@ -85,6 +85,7 @@ Mod.require 'Weya.Base',
       @$.elems.open = @i ".fa.fa-lg.fa-upload",
        title: 'Open file'
        on: {click: @$.on.file}
+
      @$.elems.save = @span ->
       @i ".fa.fa-lg.fa-download",
        title: 'Save file'
@@ -95,7 +96,12 @@ Mod.require 'Weya.Base',
       on: {click: @$.on.saveAs}
      @$.elems.saveName = @span ".file-name", ""
 
+     ##@i ".fa.fa-lg.fa-print", on: {click: @$.on.print}
+
     @elems.save.style.display = 'none'
+
+   @listen 'print', ->
+    Editor.on.print()
 
    @listen 'save', (e) ->
     return unless @file?
