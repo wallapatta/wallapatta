@@ -69,24 +69,6 @@
  margin: 0;
 }
 
-@media print {
- @page {
-  size: A4;
-  margin-top: 10mm;
- }
-}
-
-@page {
-  size: A4;
-}
-@media print {
-  html, body {
-    //width: 210mm;
-    //height: 297mm;
-  }
-  /* ... the rest of the rules ... */
-}
-
 h2.heading {
     margin-top: 40px;
     margin-right: 0;
@@ -119,5 +101,35 @@ h1 {
 .table th {
     padding: 12px 20px;
     background-color: #F5F5F5;
+}
+
+
+@media print {
+  .columns {
+    margin-left: 4%; }
+  .column:first-child,
+  .columns:first-child {
+    margin-left: 0; }
+
+ .one.column,
+ .one.columns                    { width: 4.66666666667%; }
+ .two.columns                    { width: 13.3333333333%; }
+ .three.columns                  { width: 22%;            }
+ .four.columns                   { width: 30.6666666667%; }
+ .five.columns                   { width: 39.3333333333%; }
+ .six.columns                    { width: 48%;            }
+ .seven.columns                  { width: 56.6666666667%; }
+ .eight.columns                  { width: 65.3333333333%; }
+ .nine.columns                   { width: 74.0%;          }
+ .ten.columns                    { width: 82.6666666667%; }
+ .eleven.columns                 { width: 91.3333333333%; }
+ .twelve.columns                 { width: 100%; margin-left: 0; }
+
+ h1 { font-size: 5.0rem; }
+ h2 { font-size: 4.2rem; }
+ h3 { font-size: 3.6rem; }
+ h4 { font-size: 3.0rem; }
+ h5 { font-size: 2.4rem; }
+ h6 { font-size: 1.5rem; }
 }
 
