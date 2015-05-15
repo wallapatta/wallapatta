@@ -71,6 +71,13 @@ Mod.require 'Weya.Base',
    setParent: (parent) ->  @_parent = parent
    parent: -> @_parent
 
+   isFirstChild: (node) ->
+    return false if @children.length is 0
+    if node.id is @children[0].id
+     return true
+    else
+     return false
+
    _add: (node) ->
     node.setParent this
     @children.push node

@@ -18,6 +18,7 @@ Mod.require 'Weya.Base',
     media: 1000
     article: 0
     table: 1500
+   FIRST_CHILD_COST = 10000
 
    PAGE_MARGIN = '1000px'
    START = 1
@@ -39,6 +40,8 @@ Mod.require 'Weya.Base',
 
      if node.parent()?
       cost = @getBreakCost node.parent(), true
+      if node.parent().isFirstChild node
+       cost += FIRST_CHILD_COST
      else
       if node.type isnt 'article'
        throw new Error 'oops'
