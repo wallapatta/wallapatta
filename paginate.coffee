@@ -32,8 +32,8 @@ Mod.require 'fs',
         main: main
         sidebar: sidebar
         code: code
-        title: input.title
-        id: input.id
+       for k, v of input
+        results[i][k] = v
        n++
        if n is options.input.length
         finished()
@@ -45,6 +45,8 @@ Mod.require 'fs',
      page: options.page
 
     fs.writeFileSync "./#{options.output}/page#{options.page + 1}.html", output
+    if options.page is 0
+     fs.writeFileSync "./#{options.output}/index.html", output
 
   Mod.set 'Wallapatta.Paginate', render
 

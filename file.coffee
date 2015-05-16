@@ -14,11 +14,12 @@ Mod.require 'fs',
     sidebar = window.document.getElementById 'sidebar'
     render = parser.getRender()
     render.render main, sidebar
-    output = template.html
+    opt =
      main: main.innerHTML
      sidebar: sidebar.innerHTML
      code: input
-     title: options.title
+    opt[k] = v for k, v of options
+    output = template.html opt
 
     fs.writeFileSync options.output, output
 

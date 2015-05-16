@@ -124,15 +124,16 @@ Mod.require 'jsdom',
     inputs = []
 
    for post in blog.posts
-    FileRender
-     file: path.resolve cwd, post.file
+    opt =
      template: postTemplate
      output: path.resolve options.output, "#{post.id}.html"
-     title: post.title
-    inputs.push
-     file: path.resolve cwd, post.file
-     id: post.id
-     title: post.title
+    opt[k] = v for k, v of post
+    opt.file = path.resolve cwd, post.file
+    FileRender opt
+    opt = {}
+    opt[k] = v for k, v of post
+    opt.file = path.resolve cwd, post.file
+    inputs.push opt
     if inputs.length is blog.postsPerPage
      paginate()
 
