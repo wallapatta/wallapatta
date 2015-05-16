@@ -18,9 +18,9 @@ option '-m', '--map',  'Source map'
 task 'clean', "Cleans up build directory", (opts) ->
  commands = []
  if fs.existsSync "#{BUILD}"
-  commands.push "rm #{BUILD}/ -r"
+  commands.push "rm -r #{BUILD}/"
  if fs.existsSync "#{NPM}"
-  commands.push "rm #{NPM}/ -r"
+  commands.push "rm -r #{NPM}/"
 
  commands = commands.concat [
   "mkdir #{BUILD}"
