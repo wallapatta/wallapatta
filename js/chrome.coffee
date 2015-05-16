@@ -4,6 +4,8 @@ Mod.require 'Weya.Base',
  (Base, Weya, Editor) ->
 
   window.wallapattaDecodeURL = (url) ->
+   if url[0] isnt '/'
+    url = "/#{url}"
    if APP.resources[url]?
     return APP.resources[url]
    else

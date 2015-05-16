@@ -4,7 +4,7 @@ Mod.require 'Weya.Base',
  (Base, Weya, HLJS) ->
 
   decodeURL = (url) ->
-   if window.wallapattaDecodeURL?
+   if window?.wallapattaDecodeURL?
     return window.wallapattaDecodeURL url
    else
     return url
