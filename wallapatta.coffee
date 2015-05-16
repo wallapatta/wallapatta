@@ -98,26 +98,39 @@ Mod.require 'jsdom',
 
 
   exports.blog = (options, callback) ->
-   data = YAML.parse "#{fs.readFileSync options.blog}"
-   POSTS = parseInt options.posts
+   blog = YAML.parse "#{fs.readFileSync options.blog}"
    inputs = []
    pages = 0
-   N = Math.ceil data.length / POSTS
+   N = Math.ceil blog.posts.length / blog.postsPerPage
+   cwd = path.dirname options.blog
+   paginateTemplate =
+    path.resolve __dirname,
+                 path.resolve cwd, blog.paginateTemplate
+   postTemplate =
+    path.resolve __dirname,
+                 path.resolve cwd, blog.postTemplate
 
    paginate = ->
     Paginate
      input: inputs
      page: pages
-     template: path.resolve __dirname, options.paginate
+     template: paginateTemplate
      output: options.output
      pages: N
     pages++
     inputs = []
 
-   for i in data
-    renderPost options, i
-    inputs.push i
-    if inputs.length is POSTS
+   for post in blog.posts
+    FileRender
+     file: path.resolve cwd, post.file
+     template: postTemplate
+     output: path.resolve options.output, "#{post.id}.html"
+     title: post.title
+    inputs.push
+     file: path.resolve cwd, post.file
+     id: post.id
+     title: post.title
+    if inputs.length is blog.postsPerPage
      paginate()
 
    if inputs.length > 0

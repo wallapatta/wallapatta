@@ -17,16 +17,10 @@ argv = require 'optimist'
  .describe 'toc', 'Table of Contents Template'
  .default 'toc', './templates/toc'
 
- .describe 'paginate', 'Paginate Template'
- .default 'paginate', './templates/blog'
-
  .describe 'blog', 'Blog YAML file'
  .describe 'book', 'Book YAML file'
 
  .describe 'static', 'Copy static files'
-
- .describe 'posts', 'Posts per page'
- .default 'posts', '3'
 
  .argv
 

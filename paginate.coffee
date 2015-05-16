@@ -32,7 +32,8 @@ Mod.require 'fs',
         main: main
         sidebar: sidebar
         code: code
-        options: input
+        title: input.title
+        id: input.id
        n++
        if n is options.input.length
         finished()
@@ -40,7 +41,8 @@ Mod.require 'fs',
    finished = ->
     output = template.html
      posts: results
-     options: options
+     pages: options.pages
+     page: options.page
 
     fs.writeFileSync "./#{options.output}/page#{options.page + 1}.html", output
 

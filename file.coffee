@@ -4,6 +4,7 @@ Mod.require 'fs',
  'Wallapatta.Parser'
  (fs, jsdom, Weya, Parser) ->
   render = (options) ->
+   console.log options
    input = "#{fs.readFileSync options.file}"
    template = require options.template
    parser = new Parser text: input
@@ -18,7 +19,7 @@ Mod.require 'fs',
      main: main.innerHTML
      sidebar: sidebar.innerHTML
      code: input
-     options: options
+     title: options.title
 
     fs.writeFileSync options.output, output
 
