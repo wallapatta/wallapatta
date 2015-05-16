@@ -4,7 +4,6 @@ Mod.require 'fs',
  'Wallapatta.Parser'
  (fs, jsdom, Weya, Parser) ->
   render = (options) ->
-   console.log options
    input = "#{fs.readFileSync options.file}"
    template = require options.template
    parser = new Parser text: input

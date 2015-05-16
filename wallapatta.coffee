@@ -32,20 +32,23 @@ Mod.require 'jsdom',
     return
 
    commands = []
-   if fs.existsSync "#{options.output}/js"
-    commands.push "rm #{options.output}/js -r"
-   if fs.existsSync "#{options.output}/css"
-    commands.push "rm #{options.output}/css -r"
-   if fs.existsSync "#{options.output}/lib"
-    commands.push "rm #{options.output}/lib -r"
+   js = path.resolve options.output, 'js'
+   css = path.resolve options.output, 'css'
+   lib  = path.resolve options.output, 'lib'
+   if fs.existsSync js
+    commands.push "rm -r #{js}"
+   if fs.existsSync css
+    commands.push "rm -r #{css}"
+   if fs.existsSync lib
+    commands.push "rm -r #{lib}"
 
    commands = commands.concat [
-    "mkdir #{options.output}/js"
-    "mkdir #{options.output}/css"
-    "mkdir #{options.output}/lib"
-    "cp -r #{path.resolve __dirname, 'build/js/*'} #{options.output}/js/"
-    "cp -r #{path.resolve __dirname, 'build/css/*'} #{options.output}/css/"
-    "cp -r #{path.resolve __dirname, 'build/lib/*'} #{options.output}/lib/"
+    "mkdir #{js}"
+    "mkdir #{css}"
+    "mkdir #{lib}"
+    "cp -r #{path.resolve __dirname, 'build/js/*'} #{js}"
+    "cp -r #{path.resolve __dirname, 'build/css/*'} #{css}"
+    "cp -r #{path.resolve __dirname, 'build/lib/*'} #{lib}"
    ]
 
    exec commands.join('&&'), (e, stderr, stdout) ->
