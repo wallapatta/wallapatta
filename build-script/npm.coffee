@@ -8,6 +8,7 @@ UI_JS = [
  'reader'
  'nodes'
  'static'
+ 'render'
 ]
 UI_LESS = [
  'style'
@@ -30,6 +31,7 @@ exports.npm = (callback) ->
   "mkdir #{NPM}/lib"
   "mkdir #{NPM}/js"
   "mkdir #{NPM}/templates"
+  "mkdir #{NPM}/build"
  ]
 
  commands = commands.concat [
@@ -37,6 +39,7 @@ exports.npm = (callback) ->
   "rm -r #{NPM}/lib/CodeMirror"
   "coffee -c -o #{NPM}/templates templates/*.coffee"
   "coffee -c -o #{NPM}/ *.coffee"
+  "cp -r #{BUILD}/* #{NPM}/build/"
  ]
 
  for file in UI_LESS
