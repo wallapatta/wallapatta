@@ -8,15 +8,23 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
   PRINT = false
 
  renderWeb = (render) ->
-  render.mediaLoaded ->
+  _imagesLoaded = false
+  _count = 0
+  _interval = null
+
+  _render = ->
    render.setFills()
-   n = 0
-   int = setInterval ->
-    render.setFills()
-    n++
-    if n is 10
-     clearInterval int
-   , 1000
+   if _imagesLoaded
+    _count++
+    if _count is 10
+     clearInterval _interval
+
+
+  render.mediaLoaded ->
+   _imagesLoaded = true
+   _render()
+
+  _interval = setInterval _render, 1000
 
  renderPrint = (render) ->
   render.mediaLoaded ->
