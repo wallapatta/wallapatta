@@ -54,42 +54,42 @@
 ##Images
 
  Images can be added with ``!``.
- 
+
  >>>
   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
 
  ```
   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
-  
+
  Inline images can be added by surrounding the image URL with double square brackets (``[[`` and ``]]``).
- 
+
  ```
   This is a sentence which contains an [[https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png]] inline image.
- 
+
  >>>
   This is a sentence which contains an [[https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png]] inline image.
-  
+
 ##Side Notes
 
  Side notes can be added by ``>>>``. It is possible to have any other component inside side notes. The content belonging to the side note is specified via indentation.
- 
+
  ```
   >>>
    This is a **side note** containing text, a list and an image.
-   
+
    - One
    - Two
    - Three
-   
+
    !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
-  
+
  >>>
   This is a **side note** containing text, a list and an image.
-  
+
   - One
   - Two
   - Three
-  
+
   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
 
 ##Special Blocks
@@ -115,40 +115,40 @@
 ##Code Blocks
 
  Code blocks are identified by three backtick quotes (`). To enable syntax highlighting, specify the language after the three backtick quotes.
- 
+
  ```
   ```javascript
    function test() {
         var i = 10
    }
- 
+
  ```javascript
   function test() {
         var i = 10
   }
-  
+
 ##Tables
 
  Tables can be specified with ``|||``, and cells can be separated by ``|``. The content belonging to the table are indentified through indentation. Headers can be differentiated by following any row of cells with three equal signs (``===``).
- 
+
  ```
   |||
    Header 1 | Header 2 | 3rd Header
    ===
    Cell 1 | Cell 2 | Third Cell
    Cell 4 | Cell 5 | Sixth Cell
-   
+
  >>>
   It's possible to have empty cells, have more than one header-styled row, and have spanned columns.
-   
+
  |||
   Header 1 | Header 2 | 3rd Header
   ===
   Cell 1 | Cell 2 | Third Cell
   Cell 4 | Cell 5 | Sixth Cell
-  
+
  And here's an example of a table with spanned columns:
- 
+
  ```
   |||
    Name | | Age
@@ -156,14 +156,14 @@
    ===
    Foo | Bar | 25
    Baz | Fib | 19
-    
+
  |||
   Name | | Age
   First | Last |
   ===
   Foo | Bar | 25
   Baz | Fib | 19
-  
+
 ##HTML Blocks
 
  HTML blocks are identified by ``<<<``.
@@ -245,27 +245,28 @@
 
  ```
   * <<http://www.twitter.com/vpj(My Twitter Account)>>
-  * <<http://www.forestpin.com>>
+  * <<http://blog.varunajayasiri.com>>
 
  >>>
   * <<http://www.twitter.com/vpj(My Twitter Account)>>
-  * <<http://www.forestpin.com>>
-  
+  * <<http://blog.varunajayasiri.com>>
+
 ##Comments
 
  Comments can be specified with three forward slashes (``///``). All text typed inside a comment will be ignored, along with any other components or formatting used inside.
- 
+
  ```
   >>>
    This is a sentence.
-   
+
    ///This is a **comment** with some text, which won't appear
-   
+
    And this is yet another sentence.
- 
+
  >>>
   This is a sentence.
-  
+
   ///This is a **comment** with some text, which won't appear
-  
+
   And this is yet another sentence.
+

@@ -53,15 +53,23 @@ Mod.require ->
    * Bar charts
    * Dashboard
 
-##Media
+##Images
 
  Images can be added with ``!``.
+
+ >>>
+  !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
 
  ```
   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
 
+ Inline images can be added by surrounding the image URL with double square brackets (``[[`` and ``]]``).
+
+ ```
+  This is a sentence which contains an [[https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png]] inline image.
+
  >>>
-  !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
+  This is a sentence which contains an [[https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png]] inline image.
 
 ##Side Notes
 
@@ -123,7 +131,7 @@ Mod.require ->
 
 ##Tables
 
- Tables can be specified with three ``|``, and cells can be separated by ``|``. The content belonging to the table are indentified through indentation. Headers can be differentiated by following any row of cells with three equal signs (``===``).
+ Tables can be specified with ``|||``, and cells can be separated by ``|``. The content belonging to the table are indentified through indentation. Headers can be differentiated by following any row of cells with three equal signs (``===``).
 
  ```
   |||
@@ -133,15 +141,30 @@ Mod.require ->
    Cell 4 | Cell 5 | Sixth Cell
 
  >>>
-  Other components (images, special blocks, etc) and text styling (**bold**, --italics--, etc) cannot be used inside tables yet.
-
-  It --is-- possible to have empty cells, and columns without headers.
+  It's possible to have empty cells, have more than one header-styled row, and have spanned columns.
 
  |||
   Header 1 | Header 2 | 3rd Header
   ===
   Cell 1 | Cell 2 | Third Cell
   Cell 4 | Cell 5 | Sixth Cell
+
+ And here's an example of a table with spanned columns:
+
+ ```
+  |||
+   Name | | Age
+   First | Last |
+   ===
+   Foo | Bar | 25
+   Baz | Fib | 19
+
+ |||
+  Name | | Age
+  First | Last |
+  ===
+  Foo | Bar | 25
+  Baz | Fib | 19
 
 ##HTML Blocks
 
@@ -207,7 +230,7 @@ Mod.require ->
   * 2^^2^^ = 4
   * CO__2__
 
-##Inline code
+##Inline Code
 
  Inline code is identified by two backticks (`).
 
@@ -224,17 +247,30 @@ Mod.require ->
 
  ```
   * <<http://www.twitter.com/vpj(My Twitter Account)>>
-  * <<http://www.forestpin.com>>
+  * <<http://blog.varunajayasiri.com>>
 
  >>>
   * <<http://www.twitter.com/vpj(My Twitter Account)>>
-  * <<http://www.forestpin.com>>
- '''
+  * <<http://blog.varunajayasiri.com>>
 
- textTemp = '''
-|||
- col1|col2
- 1|2
- '''
+##Comments
 
- Mod.set 'Wallapatta.Sample', textTemp
+ Comments can be specified with three forward slashes (``///``). All text typed inside a comment will be ignored, along with any other components or formatting used inside.
+
+ ```
+  >>>
+   This is a sentence.
+
+   ///This is a **comment** with some text, which won't appear
+
+   And this is yet another sentence.
+
+ >>>
+  This is a sentence.
+
+  ///This is a **comment** with some text, which won't appear
+
+  And this is yet another sentence.
+'''
+
+ Mod.set 'Wallapatta.Sample', text
