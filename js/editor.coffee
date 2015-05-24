@@ -232,10 +232,16 @@ Mod.require 'Weya.Base',
 
     @editor.on 'change', @on.change
     height = window.innerHeight
-    console.log height
     @editor.setSize null, "#{height - 100}px"
     @elems.preview.style.maxHeight = "#{height - 50}px"
     @editor.setValue Sample
+
+    window.addEventListener 'resize', @on.resize
+
+   @listen 'resize', ->
+    height = window.innerHeight
+    @editor.setSize null, "#{height - 100}px"
+    @elems.preview.style.maxHeight = "#{height - 50}px"
 
    render: ->
     @elems.container = document.body
