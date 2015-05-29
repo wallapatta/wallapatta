@@ -49,28 +49,31 @@ Mod.require 'Weya.Base',
         @$.elems.previewMain = @div ".nine.columns", null
         @$.elems.previewSidebar = @div ".three.columns", null
 
-    @$.elems.printForm = @div ".container.print-form", style: {display: 'none'}, ->
-     @form ->
-      @button "Edit",
-       on: {click: @$.on.closePrint}
-      @div ".row", ->
-       @div ".six.columns", ->
-        @label for: "width-input", "Width (mm)"
-        @$.elems.widthInput = @input "#width-input.u-full-width",
-         type: "number"
-         value: "170"
-        @label for: "height-input", "Height (mm)"
-        @$.elems.heightInput = @input "#height-input.u-full-width",
-         type: "number"
-         value: "225"
-        @button ".button-primary", "Render",
-         on: {click: @$.on.renderPrint}
+    @$.elems.printDiv = @div ".print-container", style: {display: 'none'}, ->
+     @$.elems.printForm = @div ".container.print-form", ->
+      @form ->
+       @button "Edit",
+        on: {click: @$.on.closePrint}
+       @div ".row", ->
+        @div ".six.columns", ->
+         @label for: "width-input", "Width (mm)"
+         @$.elems.widthInput = @input "#width-input.u-full-width",
+          type: "number"
+          value: "170"
+         @label for: "height-input", "Height (mm)"
+         @$.elems.heightInput = @input "#height-input.u-full-width",
+          type: "number"
+          value: "225"
+         @button ".button-primary", "Render",
+          on: {click: @$.on.renderPrint}
+         @button ".button-primary", "Print",
+          on: {click: @$.on.printDialog}
 
 
-    @$.elems.printContainer = @div ".container.wallapatta-container.wallapatta-print", ->
-     @$.elems.printDoc = @div ".row.wallapatta", ->
-      @$.elems.printMain = @div ".nine.columns", null
-      @$.elems.printSidebar = @div ".three.columns", null
+     @$.elems.printContainer = @div ".container.wallapatta-container.wallapatta-print", ->
+      @$.elems.printDoc = @div ".row.wallapatta", ->
+       @$.elems.printMain = @div ".nine.columns", null
+       @$.elems.printSidebar = @div ".three.columns", null
 
 
 
@@ -153,8 +156,10 @@ Mod.require 'Weya.Base',
 
    @listen 'print', ->
     @elems.editorContainer.classList.add 'wallapatta-editor-print'
-    @elems.printContainer.style.display = 'block'
-    @elems.printForm.style.display = 'block'
+    @elems.printDiv.style.display = 'block'
+
+   @listen 'printDialog', (e) ->
+    window.print()
 
    @listen 'renderPrint', (e) ->
     e.preventDefault()
@@ -191,8 +196,7 @@ Mod.require 'Weya.Base',
 
    @listen 'closePrint', ->
     @elems.editorContainer.classList.remove 'wallapatta-editor-print'
-    @elems.printContainer.style.display = 'none'
-    @elems.printForm.style.display = 'none'
+    @elems.printDiv.style.display = 'none'
 
    setText: (text) ->
     @editor.setValue text

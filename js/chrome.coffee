@@ -98,7 +98,7 @@ Mod.require 'Weya.Base',
       on: {click: @$.on.saveAs}
      @$.elems.saveName = @span ".file-name", ""
 
-     ##@i ".fa.fa-lg.fa-print", on: {click: @$.on.print}
+     @i ".fa.fa-lg.fa-print", on: {click: @$.on.print}
 
     @elems.save.style.display = 'none'
 
