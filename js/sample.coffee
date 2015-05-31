@@ -58,18 +58,18 @@ Mod.require ->
  Images can be added with ``!``.
 
  >>>
-  !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
+  !/assets/icon128.png
 
  ```
-  !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
+  !/assets/icon128.png
 
  Inline images can be added by surrounding the image URL with double square brackets (``[[`` and ``]]``).
 
  ```
-  This is a sentence which contains an [[https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png]] inline image.
+  This is a sentence which contains an [[/assets/icon128.png]] inline image.
 
  >>>
-  This is a sentence which contains an [[https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png]] inline image.
+  This is a sentence which contains an [[/assets/icon128.png]] inline image.
 
 ##Side Notes
 
@@ -83,7 +83,7 @@ Mod.require ->
    - Two
    - Three
 
-   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
+   !/assets/icon128.png
 
  >>>
   This is a **side note** containing text, a list and an image.
@@ -92,7 +92,7 @@ Mod.require ->
   - Two
   - Three
 
-  !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
+  !/assets/icon128.png
 
 ##Special Blocks
 
@@ -105,14 +105,14 @@ Mod.require ->
 
    Can have all the other things like images.
 
-   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1814286/d1.png
+   !/assets/icon128.png
 
  +++
   **This is a special segment.
 
   Can have all the other things like images.
 
-  !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1814286/d1.png
+  !/assets/icon128.png
 
 ##Code Blocks
 
