@@ -4,10 +4,11 @@ Mod.require 'Weya.Base',
  (Base, Weya, Editor) ->
 
   window.wallapattaDecodeURL = (url) ->
-   if url[0] isnt '/'
-    url = "/#{url}"
-   if APP.resources[url]?
-    return APP.resources[url]
+   res = url
+   if res[0] isnt '/'
+    res= "/#{res}"
+   if APP.resources[res]?
+    return APP.resources[res]
    else
     return url
 
@@ -96,9 +97,12 @@ Mod.require 'Weya.Base',
      @i ".fa.fa-lg.fa-save",
       title: 'Save as'
       on: {click: @$.on.saveAs}
-     @$.elems.saveName = @span ".file-name", ""
 
-     @i ".fa.fa-lg.fa-print", on: {click: @$.on.print}
+     @i ".fa.fa-lg.fa-print",
+      title: 'Print'
+      on: {click: @$.on.print}
+
+     @$.elems.saveName = @span ".file-name", ""
 
     @elems.save.style.display = 'none'
 

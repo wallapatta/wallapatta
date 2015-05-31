@@ -63,7 +63,7 @@ Mod.require 'Weya.Base',
         @$.elems.heightInput = @input "#height-input.u-full-width",
          type: "number"
          value: "225"
-        @button ".button-primary", "Render",
+        @button ".button-primary", "Print",
          on: {click: @$.on.renderPrint}
 
 
