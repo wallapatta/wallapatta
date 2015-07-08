@@ -11,7 +11,7 @@ UI_JS = [
 ]
 
 template = ->
- title = @$.options.options.title
+ title = @$title
  @html ->
   @head ->
    @meta charset: "utf-8"
