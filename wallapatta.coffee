@@ -81,7 +81,9 @@ Mod.require 'jsdom',
 
   exports.book = (options, callback) ->
    data = YAML.parse "#{fs.readFileSync options.book}"
-   toc = require path.resolve __dirname, options.toc
+   cwd = path.dirname options.book
+   toc = require path.resolve __dirname,
+                 path.resolve cwd, options.toc
 
    jsdom.env '<div id="toc"></div>', (err, window) ->
     Weya.setApi document: window.document

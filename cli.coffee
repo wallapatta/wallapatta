@@ -14,9 +14,6 @@ argv = require 'optimist'
  .describe 'template', 'Template'
  .default 'template', './templates/page'
 
- .describe 'toc', 'Table of Contents Template'
- .default 'toc', './templates/toc'
-
  .describe 'blog', 'Blog YAML file'
  .describe 'book', 'Book YAML file'
 
