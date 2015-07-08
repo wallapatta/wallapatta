@@ -75,8 +75,7 @@ Mod.require 'jsdom',
     file: options.file
     template: path.resolve __dirname, options.template
     output: path.resolve options.output, "index.html"
-    options:
-     title: options.title
+    title: options.title
 
    copyStatic options, callback
 
