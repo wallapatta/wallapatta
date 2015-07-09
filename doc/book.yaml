@@ -10,6 +10,9 @@ chapters:
  - id: reference
    title: 'Wallapatta Reference'
    file: 'reference.ds'
+ - id: chrome
+   title: 'Chrome app'
+   file: 'chrome.ds'
  - id: brackets
    title: 'Wallapatta - Adobe Brackets Extension'
    file: 'brackets.ds'

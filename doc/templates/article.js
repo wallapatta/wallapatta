@@ -4,7 +4,7 @@
 
   VERSION = 9;
 
-  Weya = require('.//weya/weya');
+  Weya = require('./weya/weya');
 
   UI_JS = ['static', 'parser', 'reader', 'nodes', 'render'];
 
@@ -40,6 +40,10 @@
         });
         this.link({
           href: "lib/highlightjs/styles/default.css",
+          rel: "stylesheet"
+        });
+        this.link({
+          href: "lib/Font-Awesome/css/font-awesome.min.css",
           rel: "stylesheet"
         });
         this.link({
