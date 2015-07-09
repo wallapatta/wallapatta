@@ -11,6 +11,7 @@ Mod.set 'HLJS', require 'highlight.js'
 
 require './file'
 require './paginate'
+require './toc'
 
 require './js/parser'
 require './js/nodes'
@@ -23,8 +24,9 @@ Mod.require 'jsdom',
  'path'
  'Wallapatta.File'
  'Wallapatta.Paginate'
+ 'Wallapatta.Toc'
  'Weya'
- (jsdom, fs, YAML, path, FileRender, Paginate, Weya) ->
+ (jsdom, fs, YAML, path, FileRender, Paginate, Toc, Weya) ->
 
   exports.copyStatic = copyStatic = (options, callback) ->
    if not options.static?
@@ -58,17 +60,17 @@ Mod.require 'jsdom',
     callback e
 
 
-  renderPost = (options, opt) ->
-   FileRender
-    file: opt.file
-    template: path.resolve __dirname, options.template
-    output: path.resolve options.output, "#{opt.id}.html"
-    options: opt
+  renderChapters = (options, list) ->
+   return unless list?
+   for article in list
+    opt =
+     template: options.template
+     output: path.resolve options.output, "#{article.id}.html"
+    opt[k] = v for k, v of article
+    opt.file = path.resolve options.cwd, article.file
+    FileRender opt
 
-   if opt.content?
-    for i in opt.content
-     renderPost options, i
-
+    renderChapters options, article.content
 
   exports.file = (options, callback) ->
    FileRender
@@ -80,23 +82,29 @@ Mod.require 'jsdom',
    copyStatic options, callback
 
   exports.book = (options, callback) ->
-   data = YAML.parse "#{fs.readFileSync options.book}"
+   book = YAML.parse "#{fs.readFileSync options.book}"
    cwd = path.dirname options.book
-   toc = require path.resolve __dirname,
-                 path.resolve cwd, options.toc
+   articleTemplate =
+    path.resolve __dirname,
+                 path.resolve cwd, book.articleTemplate
 
-   jsdom.env '<div id="toc"></div>', (err, window) ->
-    Weya.setApi document: window.document
-    tocElem = window.document.getElementById 'toc'
-    toc.render data, tocElem
-    output = toc.html
-     title: data.title
-     toc: tocElem.innerHTML
+   renderChapters
+    cwd: cwd
+    output: options.output
+    template: articleTemplate
+    book.chapters
 
-    fs.writeFileSync (path.resolve options.output, "toc.html"), output
+   for toc in book.toc
+    tocTemplate = path.resolve __dirname,
+                               path.resolve cwd, toc.template
 
-    for i in data
-     renderPost options, i
+    opt =
+     chapters: book.chapters
+     output: options.output
+    opt[k] = v for k, v of toc
+    opt.template = tocTemplate
+
+    Toc opt
 
    copyStatic options, callback
 

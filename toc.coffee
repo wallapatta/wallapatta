@@ -49,9 +49,9 @@ Mod.require 'fs',
    finished = ->
     output = template.html
      articles: results
-     options: options
+     chapters: options.chapters
 
-    fs.writeFileSync "./#{options.output}/page#{options.toc}.html", output
+    fs.writeFileSync "./#{options.output}/#{options.id}.html", output
 
-  Mod.set 'Wallapatta.TOC', render
+  Mod.set 'Wallapatta.Toc', render
 
