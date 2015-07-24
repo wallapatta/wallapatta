@@ -34,25 +34,36 @@ Mod.require 'Weya.Base',
      @root = options.root
      @sidenotes = options.sidenotes
 
+    getNodeBreakCost: (node) ->
+     if BREAK_COST[node.type]?
+      BREAK_COST[node.type]
+     else if node.type is 'section'
+      25 * Math.pow 1.44, node.level
+     else
+      throw new Error 'Unknown type'
+
+
+    getBreakTopCost: (node) ->
+     cost = 0
+     if node.parent()? and node.parent().isFirstChild node
+      cost += FIRST_CHILD_COST
+
+     cost -= @getNodeBreakCost node
+
+     return cost
+
     getBreakCost: (node) ->
      if @breakCostMap[node.id]?
       return @breakCostMap[node.id]
 
      if node.parent()?
       cost = @getBreakCost node.parent(), true
-      if node.parent().isFirstChild node
-       cost += FIRST_CHILD_COST
      else
       if node.type isnt 'article'
        throw new Error 'oops'
       cost = 0
 
-     if BREAK_COST[node.type]?
-      @breakCostMap[node.id] = cost + BREAK_COST[node.type]
-     else if node.type is 'section'
-      @breakCostMap[node.id] = cost + 100 * (node.level - 3)
-     else
-      throw new Error 'Unknown type'
+     @breakCostMap[node.id] = cost + @getNodeBreakCost node
 
      return @breakCostMap[node.id]
 
@@ -144,7 +155,8 @@ Mod.require 'Weya.Base',
      @breakCost = []
 
      for i in @mainNodes
-      @breakCost.push @getBreakCost @map.nodes[i]
+      @breakCost.push (@getBreakCost @map.nodes[i]) +
+                      (@getBreakTopCost @map.nodes[i])
 
      n = @mainNodes.length - 1
      while n >= 1

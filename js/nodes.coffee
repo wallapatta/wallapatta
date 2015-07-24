@@ -346,6 +346,14 @@ Mod.require 'Weya.Base',
     @heading.setParent this
     @heading.addText options.text
 
+   isFirstChild: (node) ->
+    if (Node::isFirstChild.call this, node) is true
+     return true
+    else if @heading? and node.id is @heading.id
+     return true
+    else
+     return false
+
    template: ->
     @$.elem = @div "##{PREFIX}#{@$.id}.section", ->
      h = switch @$.level
