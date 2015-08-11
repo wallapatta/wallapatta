@@ -211,7 +211,8 @@ Mod.require 'Weya.Base',
       when TYPES.table
        nodes = @node.addText (line.line.substr @node.indentation), map: @map
        for node in nodes
-        @blocks.push node
+        if node.type is TYPES.block
+         @blocks.push node
        return
 
      switch line.type

@@ -249,9 +249,16 @@ Mod.require 'Weya.Base',
        row[row.length - 1].span++
       continue
 
-     node = new Block map: options.map, indentation: @indentation
-     node.setParent this
-     node.addText cell.trim()
+     if (cell.substr 0, 2) is '!!'
+      node = new Media
+       map: options.map
+       indentation: @indentation
+       media: {src: cell.substr 2}
+      node.setParent this
+     else
+      node = new Block map: options.map, indentation: @indentation
+      node.setParent this
+      node.addText cell.trim()
 
      row.push
       span: 1
