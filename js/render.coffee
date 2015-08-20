@@ -25,7 +25,8 @@ Mod.require 'Weya.Base',
 
    EMPTY_PAGE_COST = (filled, height) ->
     p = filled / height
-    return 1500 / p - 1500
+    p = Math.sqrt p
+    return parseInt 1500 / p - 1500
 
 
    class Render extends Base
@@ -34,20 +35,32 @@ Mod.require 'Weya.Base',
      @root = options.root
      @sidenotes = options.sidenotes
 
+    _parentPositionCost: (node) ->
+     cost = 0
+     if node.parent()?
+      p = node.parent().getChildPosition node
+      p = Math.max p, 0.01
+      p = Math.sqrt p
+      cost += (FIRST_CHILD_COST / p - FIRST_CHILD_COST) / 10
+
+     return cost
+
+
     getNodeBreakCost: (node) ->
+     cost = @_parentPositionCost node
+
      if BREAK_COST[node.type]?
-      BREAK_COST[node.type]
+      cost += BREAK_COST[node.type]
      else if node.type is 'section'
-      25 * Math.pow 1.44, node.level
+      cost += 25 * Math.pow 1.44, node.level
      else
       throw new Error 'Unknown type'
 
+     return cost
+
 
     getBreakTopCost: (node) ->
-     cost = 0
-     if node.parent()? and node.parent().isFirstChild node
-      cost += FIRST_CHILD_COST
-
+     cost = @_parentPositionCost node
      cost -= @getNodeBreakCost node
 
      return cost
@@ -108,6 +121,8 @@ Mod.require 'Weya.Base',
      H = @pageHeight
      if n is 1
       H -= @getOffsetTop elem, null
+      if H <= @pageHeight / 2
+       H = @pageHeight
 
      i = n + 1
      sidenote = 0

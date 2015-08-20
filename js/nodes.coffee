@@ -78,6 +78,15 @@ Mod.require 'Weya.Base',
     else
      return false
 
+   getChildPosition: (node) ->
+    return 1 if @children.length is 0
+    n = @children.length
+    for child, i in @children
+     if child.id is node.id
+      n = i
+
+    return n / @children.length
+
    _add: (node) ->
     node.setParent this
     @children.push node
@@ -360,6 +369,12 @@ Mod.require 'Weya.Base',
      return true
     else
      return false
+
+   getChildPosition: (node) ->
+    if @heading? and node.id is @heading.id
+     return 0
+    else
+     return Node::getChildPosition.call this, node
 
    template: ->
     @$.elem = @div "##{PREFIX}#{@$.id}.section", ->
