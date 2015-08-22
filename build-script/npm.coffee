@@ -13,6 +13,7 @@ UI_JS = [
 UI_LESS = [
  'style'
  'paginate'
+ 'fonts'
 ]
 
 FILES = [

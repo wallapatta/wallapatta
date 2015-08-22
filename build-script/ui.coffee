@@ -18,6 +18,7 @@ UI_LESS = [
  'style'
  'editor'
  'paginate'
+ 'fonts'
 ]
 
 assets = exports.assets = taskUiAssets = (callback) ->
@@ -90,8 +91,13 @@ css = exports.css = (callback) ->
       "ui-assets/less/paginate.less"
       "#{BUILD}/css/paginate.css"
       (e3) ->
-       util.watch filesToWatch, css, []
-       callback? e1 + e2 + e3
+       util.css "ui-assets/less/",
+        "ui-assets/less/fonts.less"
+        "#{BUILD}/css/fonts.css"
+        (e4) ->
+          util.watch filesToWatch, css, []
+          callback? e1 + e2 + e3 + e4
+
 
 dirList = (files) ->
  dirs = {}

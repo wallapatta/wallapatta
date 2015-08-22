@@ -2,7 +2,7 @@ Mod.require ->
  text = '''
 #Using the Chrome App
 
- Click **folder icon** on the toolbar to open the folder containing images. The images in that folder can be added to wallapatta document by giing the relative path. For example, assume the image folder is ``home/mydocs/images`` and there is a file called ``logo.png`` in that folder. Click on the folder icon and select images folder. Then the image file can be referenced in wallapatta as ``images/logo.png``.
+ Click **folder icon** on the toolbar to open the folder containing images. The images in that folder can be added to wallapatta document by giing the relative path. For example, assume the image folder is ``home/mydocs/images`` and there is a file called ``logo.png`` in that folder. Click on the folder icon and select images folder. Then the image file can be referenced in wallapatta as ``images/logo.png``. <--<span>test</span>-->
 
  >>>
   <<<

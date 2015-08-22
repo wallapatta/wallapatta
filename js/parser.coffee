@@ -22,6 +22,7 @@ Mod.require 'Weya.Base',
  'Wallapatta.Table'
  'Wallapatta.Special'
  'Wallapatta.Html'
+ 'Wallapatta.HtmlInline'
 
  'Wallapatta.Map'
 
@@ -30,7 +31,7 @@ Mod.require 'Weya.Base',
  (Base, TYPES,
   Text, Bold, Italics, SuperScript, SubScript, Code, Link, MediaInline
   Block, Section, List, ListItem, Sidenote, Article, Media,
-  CodeBlock, Table, Special, Html,
+  CodeBlock, Table, Special, Html, HtmlInline
   Map, Reader, Render) ->
 
    TOKENS =
@@ -47,6 +48,8 @@ Mod.require 'Weya.Base',
     code: '``'
     linkBegin: '<<'
     linkEnd: '>>'
+    htmlBegin: '<-'
+    htmlEnd: '->'
     mediaBegin: '[['
     mediaEnd: ']]'
 
@@ -134,14 +137,25 @@ Mod.require 'Weya.Base',
       else
        switch token.type
         when 'linkBegin'
-          add()
-          @addNode new Link map: @map
+         add()
+         @addNode new Link map: @map
 
         when 'linkEnd'
          if @node.type isnt TYPES.link
           throw new Error 'Unexpected link terminator'
          else
           @node.setLink @parseLink text.substr last, cur - last
+          @node = @node.parent()
+
+        when 'htmlBegin'
+         add()
+         @addNode new HtmlInline map: @map
+
+        when 'htmlEnd'
+         if @node.type isnt TYPES.htmlInline
+          throw new Error 'Unexpected inline html terminator'
+         else
+          @node.addText text.substr last, cur - last
           @node = @node.parent()
 
         when 'mediaBegin'

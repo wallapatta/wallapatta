@@ -34,6 +34,7 @@ Mod.require 'Weya.Base',
    subScript: 'subScript'
    code: 'code'
    link: 'link'
+   htmlInline: 'htmlInline'
    mediaInline: 'mediaInline' #TODO
 
    comment: '///'
@@ -336,6 +337,25 @@ Mod.require 'Weya.Base',
 
     @elem.innerHTML = @text
 
+  class HtmlInline extends Node
+   @extend()
+
+   type: TYPES.htmlInline
+
+   @initialize ->
+    @text = ''
+
+   addText: (text) ->
+    @text += '\n' if @text isnt ''
+    @text += text
+
+   render: (options) ->
+    Weya elem: options.elem, context: this, ->
+     @$.elem = @span "##{PREFIX}#{@$.id}.html", null
+
+    @elem.innerHTML = @text
+
+
 
   class Article extends Node
    @extend()
@@ -493,6 +513,7 @@ Mod.require 'Weya.Base',
   Mod.set 'Wallapatta.Table', Table
   Mod.set 'Wallapatta.Special', Special
   Mod.set 'Wallapatta.Html', Html
+  Mod.set 'Wallapatta.HtmlInline', HtmlInline
 
   Mod.set 'Wallapatta.Map', Map
 
