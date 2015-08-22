@@ -106,6 +106,14 @@ class Mode
    state.link = true
    return OPERATOR_INLINE
 
+  match = stream.match /^<-/
+  if match
+   return OPERATOR_INLINE
+
+  match = stream.match /^->/
+  if match
+   return OPERATOR_INLINE
+
   match = stream.match /^>>/
   if match
    state.link = false
