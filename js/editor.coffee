@@ -186,7 +186,7 @@ Mod.require 'Weya.Base',
      height = ratio * HEIGHT
      render.mediaLoaded ->
       setTimeout ->
-       render.setPages height
+       render.setPages height, width
        window.requestAnimationFrame ->
         window.print()
       , 500
