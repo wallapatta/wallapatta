@@ -209,13 +209,28 @@ Mod.require 'Weya.Base',
 
 
 
-    setPages: (H) ->
+    addPageBackground: (H, W, elem) ->
+     y = @getOffsetTop elem, document.body
+     Weya elem: @elems.pageBackgrounds, ->
+      @div ".page-background", "", style:
+       top: "#{y}px"
+       left: "0"
+       height: "#{H}px"
+       width: "#{W}px"
+
+
+    setPages: (H, W) ->
      #@setFills()
      #return
      @pageHeight = H
      @mainNodes = @getMainNodes()
      @sidenoteMap =  @getSidenoteMap()
      @calculatePageBreaks()
+     if @elems.pageBackgrounds?
+      document.body.removeChild @elems.pageBackgrounds
+
+     Weya elem: document.body, context: this, ->
+      @$.elems.pageBackgrounds = @div ".page-backgrounds", ''
 
      n = START
      pos = 0
@@ -238,6 +253,8 @@ Mod.require 'Weya.Base',
       elem = @map.nodes[@mainNodes[i - 1]].elem
       pos = @getOffsetTop elem, @elems.main
       pos += elem.offsetHeight
+      @addPageBackground H, W, @map.nodes[@mainNodes[n]].elem
+
       n = i
 
     setPageFill: (f, t, pos, emptyPages) ->
@@ -258,7 +275,7 @@ Mod.require 'Weya.Base',
       if first and margin
        for p in emptyPages
         topSidenote = @getOffsetTop elemSidenote, @elems.sidebar
-        if topSidenote < p
+        if topSidenote < p.pos
          fill = Weya {}, ->
           @div ".fill", style: {height: "#{p.pos - topSidenote}px"}
          elemSidenote.parentNode.insertBefore fill, elemSidenote
