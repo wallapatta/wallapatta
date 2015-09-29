@@ -477,6 +477,7 @@ Mod.require 'Weya.Base',
     @src = options.media.src
     @alt = options.media.alt
     @alt ?= options.media.src
+    @width = options.media.width
 
    type: TYPES.media
 
@@ -488,6 +489,8 @@ Mod.require 'Weya.Base',
      @$.elems.img = @img ".image",
       src: (decodeURL @$.src)
       alt: @$.alt
+     if @$.width?
+      @$.elems.img.style.maxWidth = "#{@$.width}%"
 
    render: (options) ->
     Weya elem: options.elem, context: this, @template
