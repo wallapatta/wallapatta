@@ -154,8 +154,9 @@ Mod.require 'Weya.Base',
       ++i
 
      if i >= @mainNodes.length
-      @broken[n] = 0
-      @nextBreak[n] = null
+      if not ielem? or pos + ielem.offsetHeight <= H
+       @broken[n] = 0
+       @nextBreak[n] = null
 
 
     calculatePageBreaks: ->
