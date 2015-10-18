@@ -23,15 +23,17 @@ argv = require 'optimist'
 
 wallapatta = require './wallapatta'
 
-if argv.file?
- wallapatta.file argv, ->
-  console.log 'Compiled'
+handle = ->
+ if argv.file?
+  wallapatta.file argv, ->
+   console.log 'Compiled'
 
-if argv.book?
- wallapatta.book argv, ->
-  console.log 'Compiled'
+ if argv.book?
+  wallapatta.book argv, ->
+   console.log 'Compiled'
 
-if argv.blog?
- wallapatta.blog argv, ->
-  console.log 'Compiled'
+ if argv.blog?
+  wallapatta.blog argv, ->
+   console.log 'Compiled'
 
+setTimeout handle, 200

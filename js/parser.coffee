@@ -22,6 +22,7 @@ Mod.require 'Weya.Base',
  'Wallapatta.Table'
  'Wallapatta.Special'
  'Wallapatta.Html'
+ 'Wallapatta.Full'
  'Wallapatta.HtmlInline'
 
  'Wallapatta.Map'
@@ -31,7 +32,7 @@ Mod.require 'Weya.Base',
  (Base, TYPES,
   Text, Bold, Italics, SuperScript, SubScript, Code, Link, MediaInline
   Block, Section, List, ListItem, Sidenote, Article, Media,
-  CodeBlock, Table, Special, Html, HtmlInline
+  CodeBlock, Table, Special, Html, Full, HtmlInline
   Map, Reader, Render) ->
 
    TOKENS =
@@ -246,6 +247,10 @@ Mod.require 'Weya.Base',
       when TYPES.html
        indent = line.indentation + 1
        @addNode new Html map: @map, indentation: line.indentation + 1
+
+      when TYPES.full
+       indent = line.indentation + 1
+       @addNode new Full map: @map, indentation: line.indentation + 1
 
       when TYPES.special
        @addNode new Special map: @map, indentation: line.indentation + 1

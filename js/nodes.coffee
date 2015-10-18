@@ -337,6 +337,15 @@ Mod.require 'Weya.Base',
 
     @elem.innerHTML = @text
 
+  class Full extends Node
+   @extend()
+
+   type: TYPES.full
+
+   template: ->
+    @$.elem = @div "##{PREFIX}#{@$.id}.full", null
+
+
   class HtmlInline extends Node
    @extend()
 
@@ -516,6 +525,7 @@ Mod.require 'Weya.Base',
   Mod.set 'Wallapatta.Table', Table
   Mod.set 'Wallapatta.Special', Special
   Mod.set 'Wallapatta.Html', Html
+  Mod.set 'Wallapatta.Full', Full
   Mod.set 'Wallapatta.HtmlInline', HtmlInline
 
   Mod.set 'Wallapatta.Map', Map
