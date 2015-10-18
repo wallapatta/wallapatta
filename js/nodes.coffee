@@ -16,6 +16,7 @@ Mod.require 'Weya.Base',
    sidenote: 'sidenote'
    codeBlock: 'codeBlock'
    special: 'special'
+   full: 'full'
    html: 'html'
    table: 'table'
 
@@ -319,6 +320,15 @@ Mod.require 'Weya.Base',
     @$.elem = @div "##{PREFIX}#{@$.id}.special", null
 
 
+  class Full extends Node
+   @extend()
+
+   type: TYPES.full
+
+   template: ->
+    @$.elem = @div "##{PREFIX}#{@$.id}.full", null
+
+
   class Html extends Node
    @extend()
 
@@ -336,14 +346,6 @@ Mod.require 'Weya.Base',
      @$.elem = @div "##{PREFIX}#{@$.id}.html", null
 
     @elem.innerHTML = @text
-
-  class Full extends Node
-   @extend()
-
-   type: TYPES.full
-
-   template: ->
-    @$.elem = @div "##{PREFIX}#{@$.id}.full", null
 
 
   class HtmlInline extends Node

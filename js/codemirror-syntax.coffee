@@ -33,6 +33,13 @@ class Mode
    stream.skipToEnd()
    return OPERATOR
 
+  match = stream.match /^<\!>/
+  if match
+   stack.push indentation: stream.indentation(), type: 'full'
+   stream.skipToEnd()
+   return OPERATOR
+
+
   match = stream.match /^>>>/
   if match
    stack.push indentation: stream.indentation(), type: 'sidenote'
@@ -199,6 +206,7 @@ class Mode
     sidenote: false
     html: false
     special: false
+    full: false
     code: false
     table: false
 
@@ -216,6 +224,7 @@ class Mode
    sidenote: false
    html: false
    special: false
+   full: false
    code: false
    table: false
 

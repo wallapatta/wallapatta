@@ -74,11 +74,11 @@ Mod.require 'Weya.Base',
      when BLOCK_TOKENS.special
       line.type = TYPES.special
 
-     when BLOCK_TOKENS.html
-      line.type = TYPES.html
-
      when BLOCK_TOKENS.full
       line.type = TYPES.full
+
+     when BLOCK_TOKENS.html
+      line.type = TYPES.html
 
      when BLOCK_TOKENS.heading
       line.type = TYPES.heading

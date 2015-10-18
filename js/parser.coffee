@@ -232,24 +232,20 @@ Mod.require 'Weya.Base',
 
      switch line.type
       when TYPES.table
-       indent = line.indentation + 1
        @addNode new Table
         map: @map
         indentation: line.indentation + 1
 
       when TYPES.codeBlock
-       indent = line.indentation + 1
        @addNode new CodeBlock
         map: @map
         indentation: line.indentation + 1
         lang: line.text
 
       when TYPES.html
-       indent = line.indentation + 1
        @addNode new Html map: @map, indentation: line.indentation + 1
 
       when TYPES.full
-       indent = line.indentation + 1
        @addNode new Full map: @map, indentation: line.indentation + 1
 
       when TYPES.special
