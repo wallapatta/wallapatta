@@ -4,12 +4,3 @@
 [submodule "lib/mod"]
 	path = lib/mod
 	url = git@github.com:vpj/mod.git
-[submodule "ui-assets/lib/CodeMirror"]
-	path = ui-assets/lib/CodeMirror
-	url = git@github.com:codemirror/CodeMirror.git
-[submodule "ui-assets/lib/skeleton"]
-	path = ui-assets/lib/skeleton
-	url = git@github.com:dhg/Skeleton.git
-[submodule "ui-assets/lib/Font-Awesome"]
-	path = ui-assets/lib/Font-Awesome
-	url = git@github.com:FortAwesome/Font-Awesome.git
