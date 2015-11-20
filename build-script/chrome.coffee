@@ -1,6 +1,7 @@
 util = require './util'
 fs = require 'fs'
 index = require '../ui-assets/index_chrome.coffee'
+sandbox = require '../ui-assets/sandbox.coffee'
 {spawn, exec} = require 'child_process'
 
 UI_JS = [
@@ -71,11 +72,22 @@ html = exports.html = ->
   htmlCode = index.html()
   fs.writeFileSync "#{BUILD}/index.html", htmlCode
   util.log " - index.html" unless options.quiet
-  return 0
  catch err
   util.log " - index.html", 'red'
   util.log "  ^ #{err}", 'red'
   return 1
+
+ try
+  htmlCode = sandbox.html()
+  fs.writeFileSync "#{BUILD}/sandbox.html", htmlCode
+  util.log " - sandbox.html" unless options.quiet
+ catch err
+  util.log " - sandbox.html", 'red'
+  util.log "  ^ #{err}", 'red'
+  return 1
+
+
+ return 0
 
 css = exports.css = (callback) ->
  filesToWatch = UI_LESS

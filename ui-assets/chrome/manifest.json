@@ -21,6 +21,9 @@
    "http://fonts.googleapis.com/",
    "https://fonts.googleapis.com/",
    {"fileSystem": ["write", "retainEntries", "directory"]}
-  ]
+  ],
+  "sandbox": {
+   "pages": ["sandbox.html"]
+  }
 }
 
