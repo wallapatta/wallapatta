@@ -1,7 +1,8 @@
 Mod.require 'Weya.Base',
  'Weya'
- 'Editor'
- (Base, Weya, Editor) ->
+ (Base, Weya) ->
+
+  Editor = {}
 
   window.wallapattaDecodeURL = (url) ->
    res = url
@@ -256,3 +257,10 @@ Mod.require 'Weya.Base',
 
   APP = new App()
 
+
+
+document.addEventListener 'DOMContentLoaded', ->
+ Mod.set 'Weya', Weya
+ Mod.set 'Weya.Base', Weya.Base
+
+ Mod.initialize()
