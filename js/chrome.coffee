@@ -2,8 +2,6 @@ Mod.require 'Weya.Base',
  'Weya'
  (Base, Weya) ->
 
-  Editor = {}
-
   class App extends Base
    @initialize ->
     @elems = {}
@@ -56,7 +54,7 @@ Mod.require 'Weya.Base',
     chrome.storage.local.get 'content', (value) =>
      console.log 'read content'
      if value?.content?
-      @send 'setText', content: value.content
+      @send 'setText', content: value.content, saved: false
 
      callback()
 
@@ -107,7 +105,10 @@ Mod.require 'Weya.Base',
 
    @listen 'save', (e) ->
     return unless @file?
+    @send 'save', {}
 
+   @listen 'saveFileContent', (data) ->
+    @contentWriting = data.content
     @file.createWriter @on.writer, @on.error
 
    @listen 'writeEnd', (e) ->
@@ -116,22 +117,11 @@ Mod.require 'Weya.Base',
      @content = @contentWriting
      @contentWriting = null
 
-   removeTrailingSpace: (text) ->
-    lines = text.split '\n'
-    for line, i in lines
-     lines[i] = line.trimRight()
-
-    lines.join '\n'
-
    @listen 'writer', (writer) ->
     writer.onerror = @on.error
     writer.onwriteend = @on.writeEnd
 
-    text = @removeTrailingSpace Editor.getText()
-    Editor.setText text
-
-    blob = new Blob [text], type: 'text/plain'
-    @contentWriting = Editor.getText()
+    blob = new Blob [@contentWriting], type: 'text/plain'
 
     writer.truncate blob.size
     @waitForIO writer, ->
@@ -180,7 +170,7 @@ Mod.require 'Weya.Base',
     @elems.save.style.display = 'inline-block'
     @elems.saveName.textContent = entry.name
     @file = entry
-    @file.createWriter @on.writer, @on.error
+    @send 'save', {}
 
    @listen 'fileChanged', (data) ->
     return unless @file?
@@ -204,7 +194,7 @@ Mod.require 'Weya.Base',
 
      reader.onerror = @on.error
      reader.onload = (e) ->
-      self.send 'setText', content: e.target.result
+      self.send 'setText', content: e.target.result, saved: true
       callback?()
 
      reader.readAsText file

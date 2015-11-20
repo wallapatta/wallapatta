@@ -32,8 +32,9 @@ Mod.require 'Weya.Base',
     PARENT.postMessage data, '*'
 
    @listen 'setText', (data) ->
-    @content = data.content
-    Editor.setText @content
+    if data.saved
+     @content = data.content
+    Editor.setText data.content
     @_changed = false
     if not @_watchInterval?
      @_watchInterval = setInterval @on.watchChanges, 500
@@ -55,6 +56,12 @@ Mod.require 'Weya.Base',
      lines[i] = line.trimRight()
 
     lines.join '\n'
+
+   @listen 'save', ->
+    text = @removeTrailingSpace Editor.getText()
+    Editor.setText text
+    @content = text
+    @send 'saveFileContent', content: text
 
    @listen 'watchChanges', ->
     if Editor.getText() isnt @content
