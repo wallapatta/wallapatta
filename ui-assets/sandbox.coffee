@@ -9,7 +9,7 @@ template = ->
    @title "Wallapatta"
    @meta name: "viewport", content: "width=device-width, initial-scale=1.0"
    @meta name: "apple-mobile-web-app-capable", content:"yes"
-   @link href: "lib/Font-Awesome/css/font-awesome.min.css", rel: "stylesheet"
+   @link href: "lib/Font-Awesome/css/font-awesome.css", rel: "stylesheet"
    @link href: "lib/skeleton/css/skeleton.css", rel: "stylesheet"
    @link href: "lib/CodeMirror/lib/codemirror.css", rel: "stylesheet"
    @link href: "lib/CodeMirror/addon/fold/foldgutter.css", rel: "stylesheet"
