@@ -1,6 +1,7 @@
 Mod.require 'Weya.Base',
  'Weya'
- (Base, Weya) ->
+ 'Editor'
+ (Base, Weya, Editor) ->
 
   Editor = {}
 
@@ -29,47 +30,15 @@ Mod.require 'Weya.Base',
          @_loading = false
 
    loadRetainedDirectory: (callback) ->
-    chrome.storage.local.get 'directory', (directory) =>
-     directory = directory?.directory
-     if directory?
-      chrome.fileSystem.isRestorable directory, (isRestorable) =>
-       if isRestorable
-        console.info "Restoring #{directory}"
-        chrome.fileSystem.restoreEntry directory, (d) =>
-         if d? and d.isDirectory
-          @on.openDirectory d
-         callback()
-       else
-        callback()
-     else
       callback()
 
    loadRetainedFile: (callback) ->
-    chrome.storage.local.get 'file', (file) =>
-     file = file?.file
-     if file?
-      chrome.fileSystem.isRestorable file, (isRestorable) =>
-       if isRestorable
-        console.info "Restoring #{file}"
-        chrome.fileSystem.restoreEntry file, (d) =>
-         if d? and d.isFile
-          @on.openFile d, callback
-       else
-        callback()
-     else
       callback()
 
    saveContent: (value, callback) ->
-    return if @_loading
-    chrome.storage.local.set content: value, ->
      callback?()
 
    loadSavedContent: (callback) ->
-    chrome.storage.local.get 'content', (value) =>
-     console.log 'read content'
-     if value?.content?
-      Editor.setText value.content
-
      callback()
 
    @listen 'error', (e) ->
@@ -79,39 +48,9 @@ Mod.require 'Weya.Base',
     @saveContent Editor.getText()
 
    render: ->
-    @elems.sandbox = document.getElementById 'sandbox'
-    @elems.toolbar = document.getElementById 'toolbar'
-    @elems.toolbar.innerHTML = ''
-    Weya elem: @elems.toolbar, context: this, ->
-     @span ->
-      @$.elems.folder = @i ".fa.fa-lg.fa-folder",
-       title: 'Select images folder'
-       on: {click: @$.on.folder}
-      @$.elems.open = @i ".fa.fa-lg.fa-upload",
-       title: 'Open file'
-       on: {click: @$.on.file}
-
-     @$.elems.save = @span ->
-      @i ".fa.fa-lg.fa-download",
-       title: 'Save file'
-       on: {click: @$.on.save}
-
-     @i ".fa.fa-lg.fa-save",
-      title: 'Save as'
-      on: {click: @$.on.saveAs}
-
-     @i ".fa.fa-lg.fa-print",
-      title: 'Print'
-      on: {click: @$.on.print}
-
-     @$.elems.saveName = @span ".file-name", ""
-
-    @elems.save.style.display = 'none'
-    @elems.sandbox.postMessage test: 'test'
 
    @listen 'print', ->
-    @elems.sandbox.postMessage test: 'test'
-    #Editor.on.print()
+    Editor.on.print()
 
    @listen 'save', (e) ->
     return unless @file?
@@ -261,10 +200,10 @@ Mod.require 'Weya.Base',
 
   APP = new App()
 
+  MESSAGE_HANDLER = (e) ->
+   console.log e.data
 
+   APP.on[data.method] data, e
 
-document.addEventListener 'DOMContentLoaded', ->
- Mod.set 'Weya', Weya
- Mod.set 'Weya.Base', Weya.Base
+  window.addEventListener 'message', MESSAGE_HANDLER
 
- Mod.initialize()

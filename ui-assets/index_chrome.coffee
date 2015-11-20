@@ -13,12 +13,12 @@ template = ->
    @link href: "lib/skeleton/css/skeleton.css", rel: "stylesheet"
    @link href: "css/fonts.css", rel: "stylesheet"
    @link href: "css/style.css", rel: "stylesheet"
+   @link href: "css/editor.css", rel: "stylesheet"
 
   @body ->
-   @div ".container", ->
-    @div "#toolbar", ''
+   @div "#toolbar.toolbar", ''
 
-   @iframe src: "sandbox.html", width: '100%', height: '500px'
+   @iframe "#sandbox", src: "sandbox.html", width: '100%', height: '500px'
 
    @script src:"lib/weya/weya.js"
    @script src:"lib/weya/base.js"

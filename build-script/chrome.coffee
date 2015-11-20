@@ -14,6 +14,7 @@ UI_JS = [
  'sample'
  'static'
  'chrome'
+ 'sandbox'
  'codemirror-syntax'
 ]
 UI_LESS = [
