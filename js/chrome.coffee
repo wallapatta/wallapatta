@@ -34,7 +34,6 @@ Mod.require 'Weya.Base',
      if directory?
       chrome.fileSystem.isRestorable directory, (isRestorable) =>
        if isRestorable
-        console.info "Restoring #{directory}"
         chrome.fileSystem.restoreEntry directory, (d) =>
          if d? and d.isDirectory
           @on.openDirectory d
@@ -72,6 +71,10 @@ Mod.require 'Weya.Base',
 
      callback()
 
+   send: (method, data) ->
+    data.method = method
+    @sandbox.postMessage data, '*'
+
    @listen 'error', (e) ->
     console.error e
 
@@ -107,10 +110,11 @@ Mod.require 'Weya.Base',
      @$.elems.saveName = @span ".file-name", ""
 
     @elems.save.style.display = 'none'
-    @elems.sandbox.postMessage test: 'test'
+
+    @sandbox = @elems.sandbox.contentWindow
 
    @listen 'print', ->
-    @elems.sandbox.postMessage test: 'test'
+    @sandbox.postMessage test: 'test', '*'
     #Editor.on.print()
 
    @listen 'save', (e) ->
@@ -230,8 +234,13 @@ Mod.require 'Weya.Base',
 
    addResource: (entry) ->
     entry.file (file) =>
-     @resources[entry.fullPath] = window.URL.createObjectURL file
-     console.log entry.fullPath
+     #@resources[entry.fullPath] = window.URL.createObjectURL file
+     reader = new FileReader()
+     reader.onload = (e) =>
+      @send 'addResource', dataURL: reader.result, path: entry.fullPath
+      reader.result = null
+
+     reader.readAsDataURL file
 
    loadDirEntry: (entry, callback) ->
     return unless entry.isDirectory

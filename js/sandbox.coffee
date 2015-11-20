@@ -20,17 +20,8 @@ Mod.require 'Weya.Base',
     @resources = {}
     @_loading = true
 
-    window.requestAnimationFrame =>
-     Editor.onChangeListener = @on.change
-     @render()
-     @loadRetainedDirectory =>
-      @loadRetainedFile =>
-       window.requestAnimationFrame =>
-        @loadSavedContent =>
-         @_loading = false
-
-   loadRetainedDirectory: (callback) ->
-      callback()
+   @listen 'addResource', (data) ->
+    @resources[data.path] = data.dataURL
 
    loadRetainedFile: (callback) ->
       callback()
@@ -201,9 +192,7 @@ Mod.require 'Weya.Base',
   APP = new App()
 
   MESSAGE_HANDLER = (e) ->
-   console.log e.data
-
-   APP.on[data.method] data, e
+   APP.on[e.data.method] e.data, e
 
   window.addEventListener 'message', MESSAGE_HANDLER
 
