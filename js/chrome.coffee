@@ -70,6 +70,8 @@ Mod.require 'Weya.Base',
 
    render: ->
     @elems.sandbox = document.getElementById 'sandbox'
+    @elems.sandbox.style.width = "#{window.innerWidth}px"
+    @elems.sandbox.style.height = "#{window.innerHeight - 25}px"
     @elems.toolbar = document.getElementById 'toolbar'
     @elems.toolbar.innerHTML = ''
     Weya elem: @elems.toolbar, context: this, ->

@@ -46,6 +46,10 @@ Mod.require 'Weya.Base',
     @send 'change', content: Editor.getText()
 
    render: ->
+    setTimeout ->
+     toolbar = document.getElementById 'toolbar'
+     toolbar.style.display = 'none'
+    , 300
 
    @listen 'print', ->
     Editor.on.print()
@@ -76,6 +80,7 @@ Mod.require 'Weya.Base',
 
 
   APP = new App()
+  APP.render()
 
   MESSAGE_HANDLER = (e) ->
    APP.on[e.data.method] e.data, e
