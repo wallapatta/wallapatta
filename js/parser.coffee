@@ -69,6 +69,7 @@ Mod.require 'Weya.Base',
      @sidenotes = []
      @prevNode = null
      @blocks = []
+     @fullNode = false
 
     getRender: ->
      return new Render
@@ -204,6 +205,11 @@ Mod.require 'Weya.Base',
 
      while line.indentation < @node.indentation
       @prevNode = @node
+      if @node.type is TYPES.full
+       if not @fullNode
+        throw new Error 'Full width node Invalid indentation'
+       @fullNode = false
+
       @node = @node.parent()
       if not @node?
        if @main
@@ -246,7 +252,15 @@ Mod.require 'Weya.Base',
        @addNode new Html map: @map, indentation: line.indentation + 1
 
       when TYPES.full
+       if not @main
+        throw new Error 'Cannot have a full width inside a sidenote'
+       if @fullNode
+        throw new Error 'Cannot have a full width inside a full width'
+       @fullNode = true
        @addNode new Full map: @map, indentation: line.indentation + 1
+       id = @node.id
+       n = new Sidenote map: @map, indentation: line.indentation + 1, link: id
+       @sidenotes.push n
 
       when TYPES.special
        @addNode new Special map: @map, indentation: line.indentation + 1
@@ -268,6 +282,8 @@ Mod.require 'Weya.Base',
       when TYPES.sidenote
        if not @main
         throw new Error 'Cannot have a sidenote inside a sidenote'
+       if @fullNode
+        throw new Error 'Cannot have a sidenote inside a full width'
 
        @main = false
        id = @node.id
