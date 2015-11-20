@@ -20,6 +20,8 @@ Mod.require 'Weya.Base',
     @resources = {}
     @_changed = false
     @content = ''
+    window.requestAnimationFrame =>
+     Editor.onChangeListener = @on.change
 
    @listen 'addResource', (data) ->
     @resources[data.path] = data.dataURL
