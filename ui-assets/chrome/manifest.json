@@ -23,7 +23,9 @@
    {"fileSystem": ["write", "retainEntries", "directory"]}
   ],
   "sandbox": {
-   "pages": ["sandbox.html"]
+   "pages": ["sandbox.html"],
+   "content_security_policy":
+    "sandbox allow-scripts allow-forms allow-modals;"
   }
 }
 
