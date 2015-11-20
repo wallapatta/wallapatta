@@ -101,6 +101,11 @@ Mod.require 'Weya.Base',
     @elems.save.style.display = 'none'
 
     @sandbox = @elems.sandbox.contentWindow
+    window.addEventListener 'resize', @on.resize
+
+   @listen 'resize', ->
+    @elems.sandbox.style.width = "#{window.innerWidth}px"
+    @elems.sandbox.style.height = "#{window.innerHeight - 25}px"
 
    @listen 'print', ->
     @send 'print', {}
