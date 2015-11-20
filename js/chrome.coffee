@@ -10,7 +10,6 @@ Mod.require 'Weya.Base',
     @_loading = true
 
     window.requestAnimationFrame =>
-     Editor.onChangeListener = @on.change
      @render()
      @loadRetainedDirectory =>
       @loadRetainedFile =>
@@ -57,7 +56,7 @@ Mod.require 'Weya.Base',
     chrome.storage.local.get 'content', (value) =>
      console.log 'read content'
      if value?.content?
-      Editor.setText value.content
+      @send 'setText', content: value.content
 
      callback()
 
@@ -68,8 +67,8 @@ Mod.require 'Weya.Base',
    @listen 'error', (e) ->
     console.error e
 
-   @listen 'change', ->
-    @saveContent Editor.getText()
+   @listen 'change', (data) ->
+    @saveContent data.content
 
    render: ->
     @elems.sandbox = document.getElementById 'sandbox'
@@ -104,8 +103,7 @@ Mod.require 'Weya.Base',
     @sandbox = @elems.sandbox.contentWindow
 
    @listen 'print', ->
-    @sandbox.postMessage test: 'test', '*'
-    #Editor.on.print()
+    @send 'print', {}
 
    @listen 'save', (e) ->
     return unless @file?
@@ -166,7 +164,6 @@ Mod.require 'Weya.Base',
    @listen 'file', (e) ->
     chrome.fileSystem.chooseEntry
      type: 'openFile'
-     #type: 'saveFile'
      @on.openFile
 
    @listen 'saveAs', (e) ->
@@ -182,14 +179,12 @@ Mod.require 'Weya.Base',
 
     @elems.save.style.display = 'inline-block'
     @elems.saveName.textContent = entry.name
-    if not @_watchInterval?
-     @_watchInterval = setInterval @on.watchChanges, 500
     @file = entry
     @file.createWriter @on.writer, @on.error
 
-   @listen 'watchChanges', ->
-    return
-    if Editor.getText() isnt @content
+   @listen 'fileChanged', (data) ->
+    return unless @file?
+    if data.changed
      @elems.saveName.textContent = "#{@file.name} *"
     else
      @elems.saveName.textContent = "#{@file.name}"
@@ -202,8 +197,6 @@ Mod.require 'Weya.Base',
 
     @elems.save.style.display = 'inline-block'
     @elems.saveName.textContent = entry.name
-    if not @_watchInterval?
-     @_watchInterval = setInterval @on.watchChanges, 500
     @file = entry
     self = this
     entry.file (file) =>
@@ -211,13 +204,10 @@ Mod.require 'Weya.Base',
 
      reader.onerror = @on.error
      reader.onload = (e) ->
-      console.log 'read file'
-      Editor.setText e.target.result
-      self.content = e.target.result
+      self.send 'setText', content: e.target.result
       callback?()
 
      reader.readAsText file
-
 
    @listen 'folder', (e) ->
     chrome.fileSystem.chooseEntry type: 'openDirectory', @on.openDirectory
@@ -259,6 +249,10 @@ Mod.require 'Weya.Base',
 
   APP = new App()
 
+  MESSAGE_HANDLER = (e) ->
+   APP.on[e.data.method] e.data, e
+
+  window.addEventListener 'message', MESSAGE_HANDLER
 
 
 document.addEventListener 'DOMContentLoaded', ->
