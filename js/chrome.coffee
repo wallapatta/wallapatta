@@ -4,19 +4,9 @@ Mod.require 'Weya.Base',
 
   Editor = {}
 
-  window.wallapattaDecodeURL = (url) ->
-   res = url
-   if res[0] isnt '/'
-    res= "/#{res}"
-   if APP.resources[res]?
-    return APP.resources[res]
-   else
-    return url
-
   class App extends Base
    @initialize ->
     @elems = {}
-    @resources = {}
     @_loading = true
 
     window.requestAnimationFrame =>
@@ -234,7 +224,6 @@ Mod.require 'Weya.Base',
 
    addResource: (entry) ->
     entry.file (file) =>
-     #@resources[entry.fullPath] = window.URL.createObjectURL file
      reader = new FileReader()
      reader.onload = (e) =>
       @send 'addResource', dataURL: reader.result, path: entry.fullPath
