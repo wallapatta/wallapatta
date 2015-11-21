@@ -245,7 +245,7 @@ Mod.require ->
   HTML blocks are identified by ``<<<coffee``.
   The code is evaluated and the html code returned is rendered.
 
-  ```
+  ```coffeescript
    <<<coffee
     "<strong>#{7 * 100}</strong>"
 
@@ -262,7 +262,7 @@ Mod.require ->
   >>>
    <<https://github.com/vpj/weya(Weya on Github)>>
 
-  ```
+  ```coffeescript
    <<<weya
     G = 1.618
     H = 13
