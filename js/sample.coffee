@@ -42,7 +42,8 @@ Mod.require ->
 
   Print Icon
 
-#Wallapatta Syntax
+#Reference
+
  ##Headings
 
   Headings have the same syntax as Markdown. ``#`` for level 1 headings, ``##`` for
@@ -101,18 +102,18 @@ Mod.require ->
   Images can be added with ``!``.
 
   >>>
-   !/assets/icon128.png
+   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
 
   ```
-   !/assets/icon128.png
+   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
 
   Inline images can be added by surrounding the image URL with double square brackets (``[[`` and ``]]``).
 
   ```
-   This is a sentence which contains an [[/assets/icon128.png]] inline image.
+   This is a sentence which contains an [[https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png]] inline image.
 
   >>>
-   This is a sentence which contains an [[/assets/icon128.png]] inline image.
+   This is a sentence which contains an [[https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png]] inline image.
 
  ##Side Notes
 
@@ -126,7 +127,7 @@ Mod.require ->
     - Two
     - Three
 
-    !/assets/icon128.png
+    !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
 
   >>>
    This is a **side note** containing text, a list and an image.
@@ -135,7 +136,7 @@ Mod.require ->
    - Two
    - Three
 
-   !/assets/icon128.png
+   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1789209/logo.png
 
  ##Special Blocks
 
@@ -148,14 +149,14 @@ Mod.require ->
 
     Can have all the other things like images.
 
-    !/assets/icon128.png
+    !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1814286/d1.png
 
   +++
    **This is a special segment.
 
    Can have all the other things like images.
 
-   !/assets/icon128.png
+   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/1814286/d1.png
 
  ##Code Blocks
 
@@ -226,6 +227,82 @@ Mod.require ->
 
   >>>
    This won't work in online editor since the twitter script will not load
+
+ ##Javascript Blocks
+
+  HTML blocks are identified by ``<<<js``.
+  The code is evaluated and the html code returned is rendered.
+
+  ```
+   <<<js
+    "<strong>" + (7 * 100) + "</strong>"
+  >>>
+   <<<js
+    "<strong>" + (7 * 100) + "</strong>"
+
+ ##CoffeeScript Blocks
+
+  HTML blocks are identified by ``<<<coffee``.
+  The code is evaluated and the html code returned is rendered.
+
+  ```
+   <<<coffee
+    "<strong>#{7 * 100}</strong>"
+
+  >>>
+   <<<coffee
+    "<strong>#{7 * 100}</strong>"
+
+
+ ##Weya Blocks
+
+  HTML blocks are identified by ``<<<weya``.
+  The code is evaluated and the html code returned is rendered.
+
+  >>>
+   <<https://github.com/vpj/weya(Weya on Github)>>
+
+  ```
+   <<<weya
+    G = 1.618
+    H = 13
+    order = [2, 4, 1, 0, 3]
+    heights = (H * Math.pow G, i for i in order)
+    @svg width: 250, height: 250, ->
+     @g transform: "translate(2, 154)", ->
+      for h, i in heights
+       @g ".bar", transform: "translate(#{i * 50}, 0)", ->
+        @rect y: -h * G, width: 46, height: h * G, fill: '#4a4a4a'
+        @rect width: 30.67, height: h,fill: '#98ff98'
+        @rect x: 30.67, width: 15.33, height: h, fill: '#8bea8b'
+
+  >>>
+   It generates the <<https://www.forestpin.com(Forestpin)>> Logo
+
+  <<<weya
+   G = 1.618
+   H = 13
+   order = [2, 4, 1, 0, 3]
+   heights = (H * Math.pow G, i for i in order)
+   @svg width: 250, height: 250, ->
+    @g transform: "translate(2, 154)", ->
+     for h, i in heights
+      @g ".bar", transform: "translate(#{i * 50}, 0)", ->
+       @rect y: -h * G, width: 46, height: h * G, fill: '#4a4a4a'
+       @rect width: 30.67, height: h,fill: '#98ff98'
+       @rect x: 30.67, width: 15.33, height: h, fill: '#8bea8b'
+
+ ##Fullwidth Blocks
+
+  Full width blocks are identified by ``<!>``. They create content spanning the full width of the document; i.e. taking up the space reserved for sidenotes.
+
+  ```
+   <!>
+    !https://static.pexels.com/photos/6547/sky-night-space-galaxy-large.jpeg
+
+  <!>
+   !https://static.pexels.com/photos/6547/sky-night-space-galaxy-large.jpeg
+
 
  ##Bold
 
@@ -301,12 +378,11 @@ Mod.require ->
   Comments can be specified with three forward slashes (``///``). All text typed inside a comment will be ignored, along with any other components or formatting used inside.
 
   ```
-   >>>
-    This is a sentence.
+   This is a sentence.
 
-    ///This is a **comment** with some text, which won't appear
+   ///This is a **comment** with some text, which won't appear
 
-    And this is yet another sentence.
+   And this is yet another sentence.
 
   >>>
    This is a sentence.
@@ -314,6 +390,7 @@ Mod.require ->
    ///This is a **comment** with some text, which won't appear
 
    And this is yet another sentence.
+
 '''
 
  Mod.set 'Wallapatta.Sample', text
