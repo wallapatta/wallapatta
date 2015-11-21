@@ -97,5 +97,6 @@ document.addEventListener 'DOMContentLoaded', ->
  Mod.set 'Weya', Weya
  Mod.set 'Weya.Base', Weya.Base
  Mod.set 'HLJS', hljs
+ Mod.set 'CoffeeScript', 'CoffeeScript'
 
  Mod.initialize()

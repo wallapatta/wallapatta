@@ -28,7 +28,7 @@ template = ->
 
    @link href: "lib/skeleton/css/skeleton.css", rel: "stylesheet"
    @link href: "lib/highlightjs/styles/default.css", rel: "stylesheet"
-   @link href: "lib/Font-Awesome/css/font-awesome.min.css", rel: "stylesheet"
+   @link href: "lib/Font-Awesome/css/font-awesome.css", rel: "stylesheet"
    @link href: "css/style.css", rel: "stylesheet"
    @script '''
      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
