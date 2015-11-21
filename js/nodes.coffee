@@ -350,9 +350,6 @@ Mod.require 'Weya.Base',
       s = f()
      catch e
       s = e.message
-     Weya elem: options.elem, context: this, ->
-      @$.elem = @div "##{PREFIX}#{@$.id}.html", null
-     @elem.innerHTML = s
     else if @lang is 'coffee'
      try
       c = CoffeeScript.compile "return (#{@text})"
@@ -360,9 +357,6 @@ Mod.require 'Weya.Base',
       s = f()
      catch e
       s = e.message
-     Weya elem: options.elem, context: this, ->
-      @$.elem = @div "##{PREFIX}#{@$.id}.html", null
-     @elem.innerHTML = s
     else if @lang is 'weya'
      try
       w = "Weya.markup {}, ->\n"
@@ -374,15 +368,13 @@ Mod.require 'Weya.Base',
       s = f()
      catch e
       s = e.message
-     Weya elem: options.elem, context: this, ->
-      @$.elem = @div "##{PREFIX}#{@$.id}.html", null
-     @elem.innerHTML = s
-
     else
-     Weya elem: options.elem, context: this, ->
-      @$.elem = @div "##{PREFIX}#{@$.id}.html", null
+     s = @text
 
-     @elem.innerHTML = @text
+    Weya elem: options.elem, context: this, ->
+     @$.elem = @div "##{PREFIX}#{@$.id}.html", null
+
+    @elem.innerHTML = s
 
 
   class HtmlInline extends Node
