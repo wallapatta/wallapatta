@@ -9,10 +9,33 @@ class Mode
 
  defineMode: (cmCfg, modeCfg) ->
   @htmlMode = @CodeMirror.getMode cmCfg, name: "xml", htmlMode: true
+  @javascriptMode = @CodeMirror.getMode cmCfg, name: "javascript", javascriptMode: true
+  @coffeescriptMode = @CodeMirror.getMode cmCfg, name: "coffeescript", coffeescriptMode: true
   @getMode()
 
  matchBlock: (stream, state) ->
   stack = state.stack
+
+  match = stream.match /^<<<weya/
+  if match
+   stack.push indentation: stream.indentation(), type: 'coffeescript'
+   stream.skipToEnd()
+   state.coffeescriptState = @CodeMirror.startState @coffeescriptMode
+   return OPERATOR
+
+  match = stream.match /^<<<coffee/
+  if match
+   stack.push indentation: stream.indentation(), type: 'coffeescript'
+   stream.skipToEnd()
+   state.coffeescriptState = @CodeMirror.startState @coffeescriptMode
+   return OPERATOR
+
+  match = stream.match /^<<<js/
+  if match
+   stack.push indentation: stream.indentation(), type: 'javascript'
+   stream.skipToEnd()
+   state.javascriptState = @CodeMirror.startState @javascriptMode
+   return OPERATOR
 
   match = stream.match /^<<</
   if match
@@ -157,6 +180,8 @@ class Mode
  startState: ->
   stack: []
   htmlState: null
+  coffeescriptState: null
+  javascriptState: null
   start: true
 
   bold: false
@@ -205,6 +230,8 @@ class Mode
    types =
     sidenote: false
     html: false
+    coffeescript: false
+    javascript: false
     special: false
     full: false
     code: false
@@ -216,13 +243,15 @@ class Mode
    if types.table
     @clearState state
 
-   if not types.code and not types.html
+   if not types.code and not types.html and not types.coffeescript and not types.javascript
     match = @matchBlock stream, state
     return match if match?
 
   types =
    sidenote: false
    html: false
+   coffeescript: false
+   javascript: false
    special: false
    full: false
    code: false
@@ -233,7 +262,13 @@ class Mode
 
   l = ""
 
-  if types.html
+  if types.coffeescript
+   l = @coffeescriptMode.token stream, state.coffeescriptState
+   l = "#{l}"
+  else if types.javascript
+   l = @javascriptMode.token stream, state.javascriptState
+   l = "#{l}"
+  else if types.html
    l = @htmlMode.token stream, state.htmlState
    l = "#{l}"
   else if types.code

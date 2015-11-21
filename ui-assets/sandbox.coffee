@@ -24,6 +24,8 @@ template = ->
    @script src:"lib/CodeMirror/lib/codemirror.js"
    @script src:"js/codemirror-syntax.js"
    @script src:"lib/CodeMirror/mode/xml/xml.js"
+   @script src:"lib/CodeMirror/mode/javascript/javascript.js"
+   @script src:"lib/CodeMirror/mode/coffeescript/coffeescript.js"
    @script src:"lib/CodeMirror/addon/fold/foldcode.js"
    @script src:"lib/CodeMirror/addon/fold/foldgutter.js"
    @script src:"lib/CodeMirror/addon/fold/indent-fold.js"
