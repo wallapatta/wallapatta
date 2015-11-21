@@ -334,18 +334,29 @@ Mod.require 'Weya.Base',
 
    type: TYPES.html
 
-   @initialize ->
+   @initialize (options) ->
     @text = ''
+    @lang = options.lang.trim()
 
    addText: (text) ->
     @text += '\n' if @text isnt ''
     @text += text
 
    render: (options) ->
-    Weya elem: options.elem, context: this, ->
-     @$.elem = @div "##{PREFIX}#{@$.id}.html", null
+    if @lang is 'js'
+     try
+      f = new Function "return (#{@text})"
+      s = f()
+     catch e
+      s = e.message
+     Weya elem: options.elem, context: this, ->
+      @$.elem = @div "##{PREFIX}#{@$.id}.html", null
+     @elem.innerHTML = s
+    else
+     Weya elem: options.elem, context: this, ->
+      @$.elem = @div "##{PREFIX}#{@$.id}.html", null
 
-    @elem.innerHTML = @text
+     @elem.innerHTML = @text
 
 
   class HtmlInline extends Node

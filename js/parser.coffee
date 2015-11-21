@@ -249,7 +249,10 @@ Mod.require 'Weya.Base',
         lang: line.text
 
       when TYPES.html
-       @addNode new Html map: @map, indentation: line.indentation + 1
+       @addNode new Html
+        map: @map
+        indentation: line.indentation + 1
+        lang: line.text
 
       when TYPES.full
        if not @main
