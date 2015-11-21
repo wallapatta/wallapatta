@@ -1,7 +1,8 @@
 Mod.require 'Weya.Base',
  'Weya'
  'HLJS'
- (Base, Weya, HLJS) ->
+ 'CoffeeScript'
+ (Base, Weya, HLJS, CoffeeScript) ->
 
   decodeURL = (url) ->
    if window?.wallapattaDecodeURL?

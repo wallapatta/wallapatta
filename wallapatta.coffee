@@ -7,6 +7,7 @@ Mod.set 'Weya.Base', require './lib/weya/base'
 Mod.set 'yamljs', require 'yamljs'
 Mod.set 'path', require 'path'
 Mod.set 'HLJS', require 'highlight.js'
+Mod.set 'CoffeeScript', require 'coffee-script'
 {exec} = require 'child_process'
 
 require './file'
@@ -17,6 +18,8 @@ require './js/parser'
 require './js/nodes'
 require './js/reader'
 require './js/render'
+
+GLOBAL.Weya = require './lib/weya/weya'
 
 Mod.require 'jsdom',
  'fs'
