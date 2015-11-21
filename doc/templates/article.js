@@ -25,10 +25,6 @@
           name: "viewport",
           content: "width=device-width, initial-scale=1.0"
         });
-        this.meta({
-          name: "apple-mobile-web-app-capable",
-          content: "yes"
-        });
         this.link({
           href: 'http://fonts.googleapis.com/css?family=Raleway:400,100,200,300,500,600,700,800,900',
           rel: 'stylesheet',
@@ -96,7 +92,7 @@
   };
 
   exports.html = function(options) {
-    var html;
+    var code, html;
     if (options == null) {
       options = {};
     }
@@ -106,9 +102,10 @@
     html = Weya.markup({
       context: options
     }, template);
+    code = options.code.replace(/</g, '&lt;').replace(/>/g, '&gt;');
     html = html.replace('###MAIN###', options.main);
     html = html.replace('###SIDEBAR###', options.sidebar);
-    html = html.replace('###CODE###', "<div class='wallapatta-code'>" + options.code + "</div>");
+    html = html.replace('###CODE###', "<div class='wallapatta-code'>" + code + "</div>");
     html = "<!DOCTYPE html>" + html;
     return html;
   };
