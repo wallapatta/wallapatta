@@ -28,6 +28,8 @@ template = ->
    @script src:"lib/CodeMirror/addon/fold/foldgutter.js"
    @script src:"lib/CodeMirror/addon/fold/indent-fold.js"
 
+   @script src:"lib/coffeescript/coffee-script.js"
+
    @script src:"lib/weya/weya.js"
    @script src:"lib/weya/base.js"
    @script src:"lib/mod/mod.js"

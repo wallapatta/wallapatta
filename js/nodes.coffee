@@ -352,6 +352,16 @@ Mod.require 'Weya.Base',
      Weya elem: options.elem, context: this, ->
       @$.elem = @div "##{PREFIX}#{@$.id}.html", null
      @elem.innerHTML = s
+    else if @lang is 'coffee'
+     try
+      c = CoffeeScript.compile "return (#{@text})"
+      f = new Function "return #{c}"
+      s = f()
+     catch e
+      s = e.message
+     Weya elem: options.elem, context: this, ->
+      @$.elem = @div "##{PREFIX}#{@$.id}.html", null
+     @elem.innerHTML = s
     else
      Weya elem: options.elem, context: this, ->
       @$.elem = @div "##{PREFIX}#{@$.id}.html", null
