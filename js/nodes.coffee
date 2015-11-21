@@ -362,6 +362,21 @@ Mod.require 'Weya.Base',
      Weya elem: options.elem, context: this, ->
       @$.elem = @div "##{PREFIX}#{@$.id}.html", null
      @elem.innerHTML = s
+    else if @lang is 'weya'
+     try
+      w = "Weya.markup {}, ->\n"
+      lines = @text.split '\n'
+      for l in lines
+       w += " #{l}\n"
+      c = CoffeeScript.compile "return (#{w})"
+      f = new Function "return #{c}"
+      s = f()
+     catch e
+      s = e.message
+     Weya elem: options.elem, context: this, ->
+      @$.elem = @div "##{PREFIX}#{@$.id}.html", null
+     @elem.innerHTML = s
+
     else
      Weya elem: options.elem, context: this, ->
       @$.elem = @div "##{PREFIX}#{@$.id}.html", null
