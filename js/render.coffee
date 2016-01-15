@@ -213,13 +213,18 @@ Mod.require 'Weya.Base',
 
     addPageBackground: (H, W, elem) ->
      y = @getOffsetTop elem, document.body
+     pg = null
      Weya elem: @elems.pageBackgrounds, ->
-      @div ".page-background", "", style:
-       top: "#{y}px"
-       left: "0"
+      pg = @div ".page-background", "", style:
+       'margin-top': "0"
        height: "#{H}px"
        width: "#{W}px"
 
+     y2 = @getOffsetTop pg, document.body
+     pg.style.marginTop = "#{y - y2}px"
+
+    setPageBackgrounds: (elem) ->
+     @elems.pageBackgrounds = elem
 
     setPages: (H, W) ->
      #@setFills()
@@ -228,15 +233,17 @@ Mod.require 'Weya.Base',
      @mainNodes = @getMainNodes()
      @sidenoteMap =  @getSidenoteMap()
      @calculatePageBreaks()
-     if @elems.pageBackgrounds?
-      document.body.removeChild @elems.pageBackgrounds
+     if not @elems.pageBackgrounds?
+      Weya elem: document.body, context: this, ->
+       @$.elems.pageBackgrounds = @div ".page-backgrounds", ''
 
-     Weya elem: document.body, context: this, ->
-      @$.elems.pageBackgrounds = @div ".page-backgrounds", ''
+     @elems.pageBackgrounds.innerHTML = ''
 
      n = START
      pos = 0
      emptyPages = []
+     @pageNumbers = []
+     pageNo = 0
      while n < @mainNodes.length
       i = @nextBreak[n]
 
@@ -247,7 +254,7 @@ Mod.require 'Weya.Base',
        elem.style.marginTop = PAGE_MARGIN
 
       i = @mainNodes.length unless i?
-      found = @setPageFill n, i, pos, emptyPages
+      found = @setPageFill n, i, pos, emptyPages, pageNo
       if not found
        emptyPages.push pos: pos, f: n
       else
@@ -258,8 +265,9 @@ Mod.require 'Weya.Base',
       @addPageBackground H, W, @map.nodes[@mainNodes[n]].elem
 
       n = i
+      pageNo++
 
-    setPageFill: (f, t, pos, emptyPages) ->
+    setPageFill: (f, t, pos, emptyPages, pageNo) ->
      margin = (f > START)
      first = true
      n = f
@@ -268,6 +276,9 @@ Mod.require 'Weya.Base',
       m = @mainNodes[n]
       s = @sidenoteMap[m]
       ++n
+      @pageNumbers.push
+       page: pageNo
+       node: @map.nodes[m]
       continue unless s?
       found = true
 
