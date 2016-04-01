@@ -1,21 +1,4 @@
 Mod.require 'Wallapatta.Parser', (Parser) ->
- RATIO = 0
- PAGE_HEIGHT = PAGE_WIDTH = 0
- PRINT_HEIGHT = PAGE_WIDTH = NaN
-
- if (window.location.href.indexOf 'print') isnt -1
-  PRINT = true
-  i = window.location.href.indexOf 'print'
-  p = window.location.href.substr i + 'print='.length
-  p = p.split 'x'
-  if p.length is 2
-   PRINT_WIDTH = parseInt p[0]
-   PRINT_HEIGHT = parseInt p[1]
-  PRINT_WIDTH = 178 if isNaN PRINT_WIDTH
-  PRINT_HEIGHT = 225 if isNaN PRINT_HEIGHT
- else
-  PRINT = false
-
  renderWeb = (render) ->
   _imagesLoaded = false
   _count = 0
@@ -34,12 +17,6 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
    _render()
 
   _interval = setInterval _render, 1000
-
- renderPrint = (render) ->
-  render.mediaLoaded ->
-   setTimeout ->
-    render.setPages PAGE_HEIGHT, PAGE_WIDTH
-   , 5000
 
  process = (n, doc) ->
   code = doc.getElementsByClassName 'wallapatta-code'
@@ -64,30 +41,14 @@ Mod.require 'Wallapatta.Parser', (Parser) ->
    main: main
    sidebar: sidebar
   window.requestAnimationFrame ->
-   if PRINT
-    renderPrint render
-   else
-    renderWeb render
+   renderWeb render
 
  processAll = ->
   docs = document.getElementsByClassName 'wallapatta'
   for doc, i in docs
    process i, doc
 
- if PRINT
-  docs = document.getElementsByClassName 'wallapatta-container'
-  for doc in docs
-   doc.classList.add 'wallapatta-print'
-   doc.style.width = "#{PRINT_WIDTH}mm"
-
-  window.requestAnimationFrame ->
-   RATIO = docs[0].offsetWidth / PRINT_WIDTH
-   PAGE_WIDTH = RATIO * PRINT_WIDTH
-   PAGE_HEIGHT = RATIO * PRINT_HEIGHT
-   processAll()
-
- else
-  processAll()
+ processAll()
 
 
 

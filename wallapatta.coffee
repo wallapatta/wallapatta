@@ -87,15 +87,15 @@ Mod.require 'jsdom',
   exports.book = (options, callback) ->
    book = YAML.parse "#{fs.readFileSync options.book}"
    cwd = path.dirname options.book
-   articleTemplate =
-    path.resolve __dirname,
-                 path.resolve cwd, book.articleTemplate
-
-   renderChapters
-    cwd: cwd
-    output: options.output
-    template: articleTemplate
-    book.chapters
+   if book.articleTemplate?
+    articleTemplate =
+     path.resolve __dirname,
+                  path.resolve cwd, book.articleTemplate
+    renderChapters
+     cwd: cwd
+     output: options.output
+     template: articleTemplate
+     book.chapters
 
    for toc in book.toc
     tocTemplate = path.resolve __dirname,
