@@ -255,6 +255,7 @@ Mod.require 'Weya.Base',
 
       i = @mainNodes.length unless i?
       found = @setPageFill n, i, pos, emptyPages, pageNo
+      @collectPageNumbers n, i, pageNo
       if not found
        emptyPages.push pos: pos, f: n
       else
@@ -267,6 +268,14 @@ Mod.require 'Weya.Base',
       n = i
       pageNo++
 
+    collectPageNumbers: (f, t, pageNo) ->
+     for n in [f...t]
+      m = @mainNodes[n]
+      continue if not m?
+      @pageNumbers.push
+       page: pageNo
+       node: @map.nodes[m]
+
     setPageFill: (f, t, pos, emptyPages, pageNo) ->
      margin = (f > START)
      first = true
@@ -274,11 +283,9 @@ Mod.require 'Weya.Base',
      found = false
      while n < t
       m = @mainNodes[n]
-      s = @sidenoteMap[m]
       ++n
-      @pageNumbers.push
-       page: pageNo
-       node: @map.nodes[m]
+      continue unless m?
+      s = @sidenoteMap[m]
       continue unless s?
       found = true
 
