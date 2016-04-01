@@ -12,7 +12,6 @@ UI_JS = [
  'reader'
  'nodes'
  'sample'
- 'static'
  'chrome'
  'sandbox'
  'codemirror-syntax'

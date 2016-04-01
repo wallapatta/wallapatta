@@ -12,6 +12,7 @@ UI_JS = [
  'nodes'
  'sample'
  'static'
+ 'print'
  'codemirror-syntax'
 ]
 UI_LESS = [
