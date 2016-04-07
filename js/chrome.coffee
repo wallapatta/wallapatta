@@ -1,6 +1,7 @@
 Mod.require 'Weya.Base',
  'Weya'
  (Base, Weya) ->
+  console.log "STARTING"
 
   class App extends Base
    @initialize ->
@@ -9,11 +10,16 @@ Mod.require 'Weya.Base',
 
     window.requestAnimationFrame =>
      @render()
-     @loadRetainedDirectory =>
-      @loadRetainedFile =>
-       window.requestAnimationFrame =>
-        @loadSavedContent =>
-         @_loading = false
+     setTimeout =>
+      @loadRetainedDirectory =>
+       setTimeout =>
+        @loadRetainedFile =>
+         setTimeout =>
+          @loadSavedContent =>
+           @_loading = false
+          , 300
+        , 500
+       , 500
 
    loadRetainedDirectory: (callback) ->
     chrome.storage.local.get 'directory', (directory) =>
@@ -187,6 +193,7 @@ Mod.require 'Weya.Base',
      @elems.saveName.textContent = "#{@file.name}"
 
    @listen 'openFile', (entry, callback) ->
+    console.log 'openFile', new Date
     return unless entry?
 
     chrome.storage.local.set

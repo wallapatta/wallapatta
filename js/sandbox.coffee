@@ -19,15 +19,13 @@ Mod.require 'Weya.Base',
     @elems = {}
     @resources = {}
     @_changed = false
+    @_editorChanged = false
     @content = ''
     window.requestAnimationFrame =>
      Editor.onChangeListener = @on.change
 
    @listen 'addResource', (data) ->
     @resources[data.path] = data.dataURL
-
-   loadRetainedFile: (callback) ->
-      callback()
 
    send: (method, data) ->
     data.method = method
@@ -45,7 +43,7 @@ Mod.require 'Weya.Base',
     console.error e
 
    @listen 'change', ->
-    @send 'change', content: Editor.getText()
+    @_editorChanged = true
 
    render: ->
     setTimeout ->
@@ -70,6 +68,9 @@ Mod.require 'Weya.Base',
     @send 'saveFileContent', content: text
 
    @listen 'watchChanges', ->
+    if @_editorChanged
+     @send 'change', content: Editor.getText()
+     @_editorChanged = false
     if Editor.getText() isnt @content
      if not @_changed
       @send 'fileChanged', changed: true
