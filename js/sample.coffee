@@ -41,7 +41,8 @@ Mod.require ->
    <i class="fa fa-4x fa-print"></i>
 
   Print Icon
-
+'''
+ s = '''
 #Reference
 
  ##Headings

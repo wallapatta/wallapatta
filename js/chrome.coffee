@@ -94,6 +94,12 @@ Mod.require 'Weya.Base',
 
      @$.elems.saveName = @span ".file-name", ""
 
+     @i ".fa.fa-lg.fa-question",
+      title: 'Help'
+      style: {float: 'right'}
+      on: {click: @$.on.help}
+
+
     @elems.save.style.display = 'none'
 
     @sandbox = @elems.sandbox.contentWindow
@@ -105,6 +111,9 @@ Mod.require 'Weya.Base',
 
    @listen 'print', ->
     @send 'print', {}
+
+   @listen 'help', ->
+    window.open 'https://vpj.github.io/wallapatta', '_blank'
 
    @listen 'save', (e) ->
     return unless @file?
