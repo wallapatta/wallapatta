@@ -239,19 +239,20 @@ Mod.require 'Weya.Base',
     @editor.setValue Sample
 
     window.addEventListener 'resize', @on.resize
+    window.requestAnimationFrame @_onRendered
 
    @listen 'resize', ->
     height = window.innerHeight
     @editor.setSize null, "#{height - 100}px"
     @elems.preview.style.maxHeight = "#{height - 50}px"
 
-   render: ->
+   render: (callback) ->
+    @_onRendered = callback
     @elems.container = document.body
     Weya elem: @elems.container, context: this, @template
 
     window.requestAnimationFrame @on.setupEditor
 
   EDITOR = new Editor
-  EDITOR.render()
-
-  Mod.set 'Editor', EDITOR
+  EDITOR.render ->
+   Mod.set 'Editor', EDITOR

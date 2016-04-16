@@ -21,17 +21,19 @@ Mod.require 'Weya.Base',
     @_changed = false
     @_editorChanged = false
     @content = ''
-    window.requestAnimationFrame =>
-     Editor.onChangeListener = @on.change
+    Editor.onChangeListener = @on.change
 
-   @listen 'addResource', (data) ->
-    @resources[data.path] = data.dataURL
+   @listen 'addResources', (data) ->
+    for d in data
+     @resources[d.path] = d.dataURL
+    @send 'resourcesAdded', {}
 
    send: (method, data) ->
     data.method = method
     PARENT.postMessage data, '*'
 
    @listen 'setText', (data) ->
+    console.log (new Date), 'setText', data.saved
     if data.saved
      @content = data.content
     Editor.setText data.content
@@ -89,4 +91,6 @@ Mod.require 'Weya.Base',
    APP.on[e.data.method] e.data, e
 
   window.addEventListener 'message', MESSAGE_HANDLER
+  APP.send 'ready', {}
+
 

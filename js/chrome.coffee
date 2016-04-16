@@ -8,6 +8,8 @@ Mod.require 'Weya.Base',
     @elems = {}
     @_loading = true
 
+   @listen 'ready', (e) ->
+    console.log 'sandbox ready'
     window.requestAnimationFrame =>
      @render()
      setTimeout =>
@@ -205,23 +207,38 @@ Mod.require 'Weya.Base',
    @listen 'folder', (e) ->
     chrome.fileSystem.chooseEntry type: 'openDirectory', @on.openDirectory
 
-   addResource: (entry) ->
-    entry.file (file) =>
-     reader = new FileReader()
-     reader.onload = (e) =>
-      @send 'addResource', dataURL: reader.result, path: entry.fullPath
-      reader.result = null
+   @listen 'resourcesAdded', (e) ->
+    @_addResourceCallback()
 
-     reader.readAsDataURL file
+   addResources: (entries, callback) ->
+    console.log 'addResources'
+    n = 0
+    content = []
+
+    read = =>
+     if n >= entries.length
+      @_addResourceCallback = callback
+      @send 'addResources', content
+      return
+     entry = entries[n]
+     ++n
+
+     entry.file (file) ->
+      reader = new FileReader()
+      reader.onload = (e) =>
+       content.push dataURL: reader.result, path: entry.fullPath
+       read()
+      reader.readAsDataURL file
 
    loadDirEntry: (entry, callback) ->
     dirs = [entry]
+    resources = []
     n = 0
 
     readEntries = =>
      while true
       if n >= dirs.length
-       return callback
+       return @addResource resources, callback
       entry = dirs[n]
       ++n
       break if entry? and entry.isDirectory
@@ -233,7 +250,7 @@ Mod.require 'Weya.Base',
        if e.isDirectory
         dirs.push e
        else
-        self.addResource e
+        resources.push e
       readEntries()
      , @on.error
 
