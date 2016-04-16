@@ -17,39 +17,27 @@ Mod.require 'Weya.Base',
          setTimeout =>
           @loadSavedContent =>
            @_loading = false
-          , 300
-        , 500
-       , 500
+          , 0
+        , 0
+       , 0
 
    loadRetainedDirectory: (callback) ->
     chrome.storage.local.get 'directory', (directory) =>
      directory = directory?.directory
-     if directory?
-      chrome.fileSystem.isRestorable directory, (isRestorable) =>
-       if isRestorable
-        chrome.fileSystem.restoreEntry directory, (d) =>
-         if d? and d.isDirectory
-          @on.openDirectory d
-         callback()
-       else
-        callback()
-     else
-      callback()
+     return callback() if not directory?
+     chrome.fileSystem.isRestorable directory, (isRestorable) =>
+      return callback() if not isRestorable
+      chrome.fileSystem.restoreEntry directory, (d) =>
+       @on.openDirectory d, callback
 
    loadRetainedFile: (callback) ->
     chrome.storage.local.get 'file', (file) =>
      file = file?.file
-     if file?
-      chrome.fileSystem.isRestorable file, (isRestorable) =>
-       if isRestorable
-        console.info "Restoring #{file}"
-        chrome.fileSystem.restoreEntry file, (d) =>
-         if d? and d.isFile
-          @on.openFile d, callback
-       else
-        callback()
-     else
-      callback()
+     return callback if not file?
+     chrome.fileSystem.isRestorable file, (isRestorable) =>
+      return callback() if not isRestorable
+      chrome.fileSystem.restoreEntry file, (d) =>
+       @on.openFile d, callback
 
    saveContent: (value, callback) ->
     return if @_loading
@@ -156,13 +144,13 @@ Mod.require 'Weya.Base',
 
     setTimeout reentrant, 100
 
-   @listen 'openDirectory', (entry) ->
+   @listen 'openDirectory', (entry, callback) ->
     return unless entry?
 
     chrome.storage.local.set
      directory: chrome.fileSystem.retainEntry entry
 
-    @loadDirEntry entry
+    @loadDirEntry entry, callback
 
    @listen 'file', (e) ->
     chrome.fileSystem.chooseEntry
@@ -195,6 +183,7 @@ Mod.require 'Weya.Base',
    @listen 'openFile', (entry, callback) ->
     console.log 'openFile', new Date
     return unless entry?
+    return if not entry.isFile
 
     chrome.storage.local.set
      file: chrome.fileSystem.retainEntry entry
@@ -226,28 +215,27 @@ Mod.require 'Weya.Base',
      reader.readAsDataURL file
 
    loadDirEntry: (entry, callback) ->
-    return unless entry.isDirectory
-    console.log entry.fullPath
-    reader = entry.createReader()
-    self = this
-    dirs = []
+    dirs = [entry]
+    n = 0
 
-    readEntries = ->
-     reader.readEntries onRead, self.on.error
+    readEntries = =>
+     while true
+      if n >= dirs.length
+       return callback
+      entry = dirs[n]
+      ++n
+      break if entry? and entry.isDirectory
 
-    onRead = (results) ->
-     if results.length is 0
-      for e in dirs
-       self.loadDirEntry e
-      dirs = []
-      return
-
-     for e in results
-      if e.isDirectory
-       dirs.push e
-      else
-       self.addResource e
+     console.log entry.fullPath
+     reader = entry.createReader()
+     reader.readEntries =>
+      for e in results
+       if e.isDirectory
+        dirs.push e
+       else
+        self.addResource e
       readEntries()
+     , @on.error
 
     readEntries()
 
