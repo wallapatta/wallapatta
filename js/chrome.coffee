@@ -161,6 +161,7 @@ Mod.require 'Weya.Base',
     chrome.storage.local.set
      directory: chrome.fileSystem.retainEntry entry
 
+    callback ?= -> null
     @loadDirEntry entry, callback
 
    @listen 'file', (e) ->
@@ -218,7 +219,7 @@ Mod.require 'Weya.Base',
 
    @listen 'resourcesAdded', (e) ->
     console.log 'add3dResources'
-    @_addResourceCallback()
+    @_addResourcesCallback()
 
    addResources: (entries, callback) ->
     console.log 'addResources'
@@ -227,7 +228,7 @@ Mod.require 'Weya.Base',
 
     read = =>
      if n >= entries.length
-      @_addResourceCallback = callback
+      @_addResourcesCallback = callback
       @send 'addResources', content
       return
      entry = entries[n]
