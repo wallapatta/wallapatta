@@ -13,7 +13,7 @@ chapters:
  - id: chrome
    title: 'Chrome app'
    file: 'chrome.ds'
- - id: brackets
-   title: 'Wallapatta - Adobe Brackets Extension'
-   file: 'brackets.ds'
+# - id: brackets
+#   title: 'Wallapatta - Adobe Brackets Extension'
+#   file: 'brackets.ds'
 

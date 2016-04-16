@@ -1,5 +1,5 @@
-Wallapatta has a syntax similar to
-<<http://en.wikipedia.org/wiki/Markdown(Markdown)>> and uses a layout
+Wallapatta is like
+<<http://en.wikipedia.org/wiki/Markdown(Markdown)>>, but has a layout
 inspired by handouts of Edward R. Tufte^^1^^.
 
  >>>
@@ -10,7 +10,7 @@ inspired by handouts of Edward R. Tufte^^1^^.
   <a class="github-button" href="https://github.com/vpj/wallapatta" data-icon="octicon-star" data-style="mega">Star</a>
   <script async defer id="github-bjs" src="https://buttons.github.io/buttons.js"></script>
 
-##Overview
+##Introduction
 
  Wallapatta uses indentation to specify the hierarchy of content.
 
@@ -48,10 +48,7 @@ inspired by handouts of Edward R. Tufte^^1^^.
 
  It also helps while working with large documents because **code folding** can be used with Wallapatta. The hierarchy of content is important for printing as well- to indentify where to break pages.
 
- >>>
-  --Page breaking for printing is not implemented yet
-
- Side notes are another key feature of Wallapatta. You can have text, lists, links, HTML content, as well as images, in side notes.
+ Side notes is another key feature of Wallapatta. You can have text, lists, links, HTML content, as well as images, in side notes.
 
  >>>
   <<<
@@ -60,57 +57,30 @@ inspired by handouts of Edward R. Tufte^^1^^.
 
   --**Tweet** button in a side note
 
- We've changed some of the syntax from Markdown; for instance, ``<<`` and ``>>`` are used for links instead of ``[]()``, because we felt that it's a little more
- intuitive due to its resemblence with HTML tags.
+ Some of the sytaxes of Wallapatta are different from Markdown; for instance, ``<<`` and ``>>`` are used for links instead of ``[]()``.
 
- <<reference.html(Read the Wallapatta reference)>> for a detailed description on each component, including examples for usage.
+ <<reference.html(Read the Wallapatta reference)>> for a details on the syntax.
 
 ##Get Started
 
- Use the <<http://vpj.github.io/wallapatta(online editor)>> to try out the Wallapatta syntax.
+ ###Chrome app
+  Download the <<https://chrome.google.com/webstore/detail/wallapatta/nleponjjojkllonfamfjhebhadibjlip(Chrome App)>> to write documents in wallapatta. It also lets you create printable documents (with smart page breaks).
 
- ###Setting Up The CLI
+  Here's the <<http://vpj.github.io/wallapatta/chrome.html(Chrome App Documentation)>>.
 
-  >>>
-   A few packages such as ``optimist`` are required.
+ ###Compile a book, blog or a page
 
-  The command line interface requires ``nodejs`` and ``coffeescript``, and needs to be cloned from Github. Follow the steps below to set up the Wallapatta CLI.
+  ####Installing CLI
 
-  ####1. Clone the repository
+   ```
+    npm install -g wallapatta
 
-   Clone the <<https://github.com/vpj/wallapatta(Wallapatta repository)>> from Github.
 
-  ####2. Initialize submodules
+  ####Compiling a book
 
-   After you clone the repository, navigate to the cloned folder (**wallapatta**), and run ``git submodule init`` followed by ``git submodule update``.
+  ```
+   wallapatta --book book.yaml --output build --static
 
-  ####3. Set up additional packages
+  Enter ``wallapatta`` to see the command line usage help.
 
-   Some additional packages are required for building Wallapatta documents successfully. Namely, **uglify-js**, **less**, and **coffee-script**.
-
-   Run ``npm install`` followed by ``npm link less``, ``npm link uglify-js`` and ``sudo npm link coffee-script``.
-
-  ####4. Final steps
-
-   Run ``cake clean`` and ``cake build``. The compiled Javascript files and other assets will be placed within a ``build`` directory. There's an ``index.html`` file inside, which contains the online editor.
-
-  That's it! You've successfully set up Wallapatta and are ready to start writing. Read on to learn how to compile documents and set up an editor.
-
- ###Compiling Wallapatta Documents
-
- ```
-  ./wallapatta.coffee -i input_file -o output_file
-
- If the default template is used, the assets in the ``build`` directory should be in the same location as the HTML file. You can specify the template using ``-h``. The default template is ``templates/page.coffee``.
-
- ###Adobe Brackets Extension
-
-  Want a good editor to write documents in? Here's the guide on how to install the <<brackets.html(Wallapatta extension for Brackets)>>, and enable syntax highlighting.
-
-##Reference
-
- <<reference.html(Read the Wallapatta reference)>> for a detailed description on each component, including examples for usage.
-
-##Roadmap
-
- We've published the roadmap of a <<https://trello.com/b/WDVpJBt2/wallapatta-roadmap(Trello Board)>>. You can vote for new features if you have a Trello account.
+  This documentation is written from Wallapatta. You can see the source and a sample ``book.yaml`` <<https://github.com/vpj/wallapatta/tree/master/doc(Github>>
