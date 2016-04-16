@@ -108,7 +108,8 @@ Mod.require 'Weya.Base',
    @listen 'italic', -> @wrapSelection '--', '--'
    @listen 'inlineCode', -> @wrapSelection '``', '``'
    @listen 'link', -> @wrapSelection '<<', '>>'
-   @listen 'inlineMedia', -> @wrapSelection '[[', ']]'
+   @listen 'inlineMedia', ->
+    @pickMediaDialog()
    @listen 'superscript', -> @wrapSelection '^^', '^^'
    @listen 'subscript', -> @wrapSelection '__', '__'
 
@@ -252,6 +253,12 @@ Mod.require 'Weya.Base',
     Weya elem: @elems.container, context: this, @template
 
     window.requestAnimationFrame @on.setupEditor
+
+   pickMediaDialog: ->
+    s = @editor.getSelection()
+    if s.trim() isnt ''
+     return @wrapSelection '[[', ']]'
+
 
   EDITOR = new Editor
   EDITOR.render ->
