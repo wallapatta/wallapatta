@@ -38,6 +38,9 @@ Mod.require 'Weya.Base',
           @i ".fa.fa-columns", on: {click: @$.on.sidenote}
 
 
+         @$.elems.pickMediaDialog = @div ".pick-media-dialog",
+          on: {click: @$.on.pickMediaClick}
+
         @$.elems.textarea = @textarea ".editor",
          autocomplete: "off"
          spellcheck: "false"
@@ -254,10 +257,40 @@ Mod.require 'Weya.Base',
 
     window.requestAnimationFrame @on.setupEditor
 
+   setResources: (resources) ->
+    @_resources = resources
+
+   @listen 'pickMediaClick', (e) ->
+    @elems.pickMediaDialog.style.display = 'none'
+    n = e.target
+    path = null
+    while n
+     if n._path?
+      path = n._path
+      break
+     n = e.parentNode
+
+    if not path?
+     return @wrapSelection '[[', ']]'
+
+    @wrapSelection "[[#{path}]]", ''
+
    pickMediaDialog: ->
     s = @editor.getSelection()
     if s.trim() isnt ''
      return @wrapSelection '[[', ']]'
+
+    @elems.pickMediaDialog.style.display = 'block'
+    @elems.pickMediaDialog.innerHTML = ''
+
+    resources = @_resources
+
+    Weya elem: @elems.pickMediaDialog, ->
+     @div 'Blank'
+     for path in resources
+      d = @div path
+      d._path = path
+
 
 
   EDITOR = new Editor

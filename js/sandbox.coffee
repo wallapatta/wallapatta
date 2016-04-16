@@ -31,6 +31,7 @@ Mod.require 'Weya.Base',
     @send 'resourcesAdded', {}
     text = @removeTrailingSpace Editor.getText()
     Editor.setText text
+    Editor.setResources (path for path of @resources)
 
    send: (method, data) ->
     data.method = method
