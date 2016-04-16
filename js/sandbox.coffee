@@ -24,6 +24,8 @@ Mod.require 'Weya.Base',
     Editor.onChangeListener = @on.change
 
    @listen 'addResources', (data) ->
+    console.log 'resources', data.length
+    @resources = {}
     for d in data
      @resources[d.path] = d.dataURL
     @send 'resourcesAdded', {}

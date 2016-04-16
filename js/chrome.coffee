@@ -208,6 +208,7 @@ Mod.require 'Weya.Base',
     chrome.fileSystem.chooseEntry type: 'openDirectory', @on.openDirectory
 
    @listen 'resourcesAdded', (e) ->
+    console.log 'add3dResources'
     @_addResourceCallback()
 
    addResources: (entries, callback) ->
@@ -230,6 +231,8 @@ Mod.require 'Weya.Base',
        read()
       reader.readAsDataURL file
 
+    read()
+
    loadDirEntry: (entry, callback) ->
     dirs = [entry]
     resources = []
@@ -238,18 +241,18 @@ Mod.require 'Weya.Base',
     readEntries = =>
      while true
       if n >= dirs.length
-       return @addResource resources, callback
+       return @addResources resources, callback
       entry = dirs[n]
       ++n
       break if entry? and entry.isDirectory
 
      console.log entry.fullPath
      reader = entry.createReader()
-     reader.readEntries =>
+     reader.readEntries (results) ->
       for e in results
        if e.isDirectory
         dirs.push e
-       else
+       else if resources.length < 1000
         resources.push e
       readEntries()
      , @on.error
