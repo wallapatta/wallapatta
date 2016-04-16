@@ -46,9 +46,9 @@ inspired by handouts of Edward R. Tufte^^1^^.
 
  Indentation is required for specifying content for components like lists, code blocks, special blocks, etc.
 
- It also helps while working with large documents because **code folding** can be used with Wallapatta. The hierarchy of content is important for printing as well- to indentify where to break pages.
+ It also helps while working with large documents because **code folding** can be used with Wallapatta. The hierarchy of content is important for **printing** as well- to indentify where to break pages.
 
- Side notes is another key feature of Wallapatta. You can have text, lists, links, HTML content, as well as images, in side notes.
+ **Side notes** is another key feature of Wallapatta. You can have text, lists, links, HTML content, as well as images, in side notes.
 
  >>>
   <<<
@@ -76,11 +76,19 @@ inspired by handouts of Edward R. Tufte^^1^^.
     npm install -g wallapatta
 
 
-  ####Compiling a book
+  ####Compiling a book (HTML book)
 
-  ```
-   wallapatta --book book.yaml --output build --static
+   ```
+    wallapatta --book book.yaml --output build --static
 
-  Enter ``wallapatta`` to see the command line usage help.
+   Enter ``wallapatta`` to see the command line usage help.
 
-  This documentation is written from Wallapatta. You can see the source and a sample ``book.yaml`` <<https://github.com/vpj/wallapatta/tree/master/doc(Github>>
+   This documentation is written from Wallapatta. You can see the source and a sample ``book.yaml`` <<https://github.com/vpj/wallapatta/tree/master/doc(Github>>
+
+  ####Generating a static blog
+
+   ```
+    wallapatta --blog blog.yaml --output blog --static
+
+   This <<http://vpj.github.io/wallapatta.html(blog post)>> shows how to create a
+   static blog with wallapatta. <<http://vpj.github.io(My blog)>> is based on wallapatta.
