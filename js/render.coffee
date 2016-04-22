@@ -19,15 +19,16 @@ Mod.require 'Weya.Base',
     media: 1000
     article: 0
     table: 1500
-   FIRST_CHILD_COST = 10000
+   FIRST_CHILD_COST = 1000
 
    PAGE_MARGIN = '1000px'
    START = 1
 
    EMPTY_PAGE_COST = (filled, height) ->
     p = filled / height
+    p = Math.max p, 0.01
     p = Math.sqrt p
-    return parseInt 1500 / p - 1500
+    return parseInt 100 * (1 / p - 1)
 
 
    class Render extends Base
@@ -42,13 +43,13 @@ Mod.require 'Weya.Base',
       p = node.parent().getChildPosition node
       p = Math.max p, 0.01
       p = Math.sqrt p
-      cost += (FIRST_CHILD_COST / p - FIRST_CHILD_COST) / 10
+      cost += FIRST_CHILD_COST * (1 / p - 1)
 
      return cost
 
 
     getNodeBreakCost: (node) ->
-     cost = @_parentPositionCost node
+     cost = 0
 
      if BREAK_COST[node.type]?
       cost += BREAK_COST[node.type]
@@ -60,26 +61,29 @@ Mod.require 'Weya.Base',
      return cost
 
 
-    getBreakTopCost: (node) ->
-     cost = @_parentPositionCost node
-     cost -= @getNodeBreakCost node
+    getBreakTopCost: (node) -> - @getNodeBreakCost node
 
-     return cost
-
-    getBreakCost: (node) ->
+    getBreakCost: (node, depth = 1) ->
      if @breakCostMap[node.id]?
-      return @breakCostMap[node.id]
+      return @breakCostMap[node.id] + @breakCostPositionMap[node.id] * depth
 
-     if node.parent()?
-      cost = @getBreakCost node.parent(), true
+     parent = node.parent()
+
+     if parent?
+      @breakCostMap[node.id] = @breakCostMap[parent.id]
+      p = Math.max 2, parent.getChildPosition node
+      p = Math.sqrt p
+      @breakCostPositionMap[node.id] = @breakCostPositionMap[parent.id] / p
      else
       if node.type isnt 'article'
        throw new Error 'oops'
-      cost = 0
+      @breakCostMap[node.id] = 0
+      @breakCostPositionMap[node.id] = 0
 
-     @breakCostMap[node.id] = cost + @getNodeBreakCost node
+     @breakCostMap[node.id] = cost + (@getNodeBreakCost node)
+     @breakCostPositionMap[node.id] += @_parentPositionCost node
 
-     return @breakCostMap[node.id]
+     return @breakCostMap[node.id] + @breakCostPositionMap[node.id] * depth
 
 
     getOffsetTop: (elem, parent) ->
@@ -169,6 +173,7 @@ Mod.require 'Weya.Base',
       @nextBreak.push null
 
      @breakCostMap = {}
+     @breakCostPositionMap = {}
      @breakCost = []
 
      for i in @mainNodes
