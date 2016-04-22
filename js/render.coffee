@@ -19,16 +19,11 @@ Mod.require 'Weya.Base',
     media: 1000
     article: 0
     table: 1500
-   FIRST_CHILD_COST = 1000
+   PARENT_POSITION_COST = 1000
+   EMPTY_PAGE_COST = 1000
 
    PAGE_MARGIN = '1000px'
    START = 1
-
-   EMPTY_PAGE_COST = (filled, height) ->
-    p = filled / height
-    p = Math.max p, 0.01
-    p = Math.sqrt p
-    return parseInt 100 * (1 / p - 1)
 
 
    class Render extends Base
@@ -37,15 +32,19 @@ Mod.require 'Weya.Base',
      @root = options.root
      @sidenotes = options.sidenotes
 
-    _parentPositionCost: (node) ->
-     cost = 0
-     if node.parent()?
-      p = node.parent().getChildPosition node
-      p = Math.max p, 0.01
-      p = Math.sqrt p
-      cost += FIRST_CHILD_COST * (1 / p - 1)
+    _emptyPageCost: (filled, height) ->
+     p = filled / height
+     p = Math.max p, 0.01
+     #p = Math.sqrt p
+     p = Math.min 1, p
+     return parseInt EMPTY_PAGE_COST * (1 / p - 1)
 
-     return cost
+    _parentPositionCost: (pos) ->
+     p = pos / @pageHeight
+     p = Math.max p, 0.01
+     p = Math.sqrt p
+     p = Math.min 1, p
+     return parseInt PARENT_POSITION_COST * (1 / p - 1)
 
 
     getNodeBreakCost: (node) ->
@@ -63,27 +62,27 @@ Mod.require 'Weya.Base',
 
     getBreakTopCost: (node) -> - @getNodeBreakCost node
 
-    getBreakCost: (node, depth = 1) ->
+    getBreakCost: (node) ->
      if @breakCostMap[node.id]?
-      return @breakCostMap[node.id] + @breakCostPositionMap[node.id] * depth
+      return @breakCostMap[node.id]
 
      parent = node.parent()
 
      if parent?
       @breakCostMap[node.id] = @breakCostMap[parent.id]
-      p = Math.max 2, parent.getChildPosition node
-      p = Math.sqrt p
-      @breakCostPositionMap[node.id] = @breakCostPositionMap[parent.id] / p
+      while parent?
+       pos = (@getOffsetTop node.elem, @elems.main) -
+             (@getOffsetTop parent.elem, @elems.main)
+       @breakCostMap[node.id] += @_parentPositionCost pos
+       parent = parent.parent()
      else
       if node.type isnt 'article'
        throw new Error 'oops'
       @breakCostMap[node.id] = 0
-      @breakCostPositionMap[node.id] = 0
 
-     @breakCostMap[node.id] = cost + (@getNodeBreakCost node)
-     @breakCostPositionMap[node.id] += @_parentPositionCost node
+     @breakCostMap[node.id] += @getNodeBreakCost node
 
-     return @breakCostMap[node.id] + @breakCostPositionMap[node.id] * depth
+     return @breakCostMap[node.id]
 
 
     getOffsetTop: (elem, parent) ->
@@ -144,7 +143,7 @@ Mod.require 'Weya.Base',
             (@getOffsetTop elem, @elems.main)
       break if pos > H
 
-      c = @broken[i] + @breakCost[i] + PAGE_COST + EMPTY_PAGE_COST pos, H
+      c = @broken[i] + @breakCost[i] + PAGE_COST + @_emptyPageCost pos, H
       if @broken[n] >= c
        @broken[n] = c
        @nextBreak[n] = i

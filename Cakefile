@@ -15,26 +15,13 @@ option '-i', '--inplace',  'Compress files in-place'
 option '-m', '--map',  'Source map'
 
 task 'clean', "Cleans up build directory", (opts) ->
- commands = []
- if fs.existsSync "#{BUILD}"
-  commands.push "rm -r #{BUILD}/"
-
- commands = commands.concat [
-  "mkdir #{BUILD}"
- ]
-
- exec commands.join('&&'), (err, stderr, stdout) ->
-  if err?
-   util.log stderr.trim(), 'red'
-   util.log stdout.trim(), 'red'
-   err = 1
-
-  util.finish err
+ CLEAN()
 
 task 'build:npm', "Build npm", (opts) ->
  GLOBAL.options = opts
- buildNPM (e) ->
-  util.finish e
+ CLEAN ->
+  buildNPM (e) ->
+   util.finish e
 
 task 'build:ui', "Build UI", (opts) ->
  GLOBAL.options = opts
@@ -61,4 +48,23 @@ buildNPM = (callback) ->
   ui.js (e2) ->
    npm.npm (e3) ->
     callback e1 + e2 + e3
+
+CLEAN = (callback) ->
+ commands = []
+ if fs.existsSync "#{BUILD}"
+  commands.push "rm -r #{BUILD}/"
+
+ commands = commands.concat [
+  "mkdir #{BUILD}"
+ ]
+
+ exec commands.join('&&'), (err, stderr, stdout) ->
+  if err?
+   util.log stderr.trim(), 'red'
+   util.log stdout.trim(), 'red'
+   err = 1
+
+  util.finish err
+  callback?()
+
 
