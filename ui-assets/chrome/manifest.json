@@ -2,7 +2,7 @@
   "name": "Wallapatta",
   "short_name": "Wallapatta",
   "description": "Document editor",
-  "version": "0.6.10.0",
+  "version": "0.6.11.0",
   "author": "Varuna Jayasiri",
   "manifest_version": 2,
   "icons": { "16": "assets/icon16.png",
