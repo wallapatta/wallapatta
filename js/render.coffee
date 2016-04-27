@@ -28,8 +28,8 @@ Mod.require 'Weya.Base',
     6: 155
 
 
-   PARENT_POSITION_COST = 1000
-   EMPTY_PAGE_COST = 1000
+   PARENT_POSITION_COST = 500
+   EMPTY_PAGE_COST = 200
 
    PAGE_MARGIN = '1000px'
    START = 1
@@ -46,48 +46,40 @@ Mod.require 'Weya.Base',
      p = Math.max p, 0.01
      #p = Math.sqrt p
      p = Math.min 1, p
-     return parseInt EMPTY_PAGE_COST * (1 / p - 1)
+     return EMPTY_PAGE_COST * (1 / p - 1)
 
     _parentPositionCost: (pos) ->
      p = pos / @pageHeight
      p = Math.max p, 0.01
-     p = Math.sqrt p
+     #p = Math.sqrt p
      p = Math.min 1, p
-     return parseInt PARENT_POSITION_COST * (1 / p - 1)
+     return PARENT_POSITION_COST * (1 / p - 1)
 
 
     getNodeBreakCost: (node) ->
      if BREAK_COST[node.type]?
       return BREAK_COST[node.type]
      else if node.type is 'section'
-      return SECTION_BREAK_COST[node.leve]
+      return SECTION_BREAK_COST[node.level]
      else
       throw new Error 'Unknown type'
 
-    getBreakTopCost: (node) -> - @getNodeBreakCost node
-
     getBreakCost: (node) ->
-     if @breakCostMap[node.id]?
-      return @breakCostMap[node.id]
-
      parent = node.parent()
+     cost = 0
 
      if parent?
-      @breakCostMap[node.id] = @breakCostMap[parent.id]
+      cost += @getNodeBreakCost parent
       while parent?
        pos = (@getOffsetTop node.elem, @elems.main) -
              (@getOffsetTop parent.elem, @elems.main)
-       @breakCostMap[node.id] += @_parentPositionCost pos
+       cost += @_parentPositionCost pos
        parent = parent.parent()
      else
       if node.type isnt 'article'
-       throw new Error 'oops'
-      @breakCostMap[node.id] = 0
+       throw new Error 'Node without a parent'
 
-     @breakCostMap[node.id] += @getNodeBreakCost node
-
-     return @breakCostMap[node.id]
-
+     return cost
 
     getOffsetTop: (elem, parent) ->
      top = 0
@@ -175,13 +167,10 @@ Mod.require 'Weya.Base',
       @broken.push INF
       @nextBreak.push null
 
-     @breakCostMap = {}
-     @breakCostPositionMap = {}
      @breakCost = []
 
      for i in @mainNodes
-      @breakCost.push (@getBreakCost @map.nodes[i]) +
-                      (@getBreakTopCost @map.nodes[i])
+      @breakCost.push @getBreakCost @map.nodes[i]
 
      n = @mainNodes.length - 1
      while n >= 1
