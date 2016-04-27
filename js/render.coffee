@@ -19,6 +19,15 @@ Mod.require 'Weya.Base',
     media: 1000
     article: 0
     table: 1500
+   SECTION_BREAK_COST =
+    1: 25
+    2: 36
+    3: 52
+    4: 75
+    5: 108
+    6: 155
+
+
    PARENT_POSITION_COST = 1000
    EMPTY_PAGE_COST = 1000
 
@@ -48,17 +57,12 @@ Mod.require 'Weya.Base',
 
 
     getNodeBreakCost: (node) ->
-     cost = 0
-
      if BREAK_COST[node.type]?
-      cost += BREAK_COST[node.type]
+      return BREAK_COST[node.type]
      else if node.type is 'section'
-      cost += 25 * Math.pow 1.44, node.level
+      return SECTION_BREAK_COST[node.leve]
      else
       throw new Error 'Unknown type'
-
-     return cost
-
 
     getBreakTopCost: (node) -> - @getNodeBreakCost node
 
