@@ -3,6 +3,7 @@ Mod.require 'Weya.Base',
  (Base, TYPES) ->
 
    PREFIX = 'wallapatta_'
+   BLOCK_LEVEL = 10
 
    INF = 1e10
 
@@ -26,6 +27,8 @@ Mod.require 'Weya.Base',
     4: 75
     5: 108
     6: 155
+    "#{BLOCK_LEVEL}": 1000
+
 
 
    PARENT_POSITION_COST = 500
@@ -68,16 +71,12 @@ Mod.require 'Weya.Base',
      parent = node.parent()
      cost = 0
 
-     if parent?
+     while parent?
       cost += @getNodeBreakCost parent
-      while parent?
-       pos = (@getOffsetTop node.elem, @elems.main) -
-             (@getOffsetTop parent.elem, @elems.main)
-       cost += @_parentPositionCost pos
-       parent = parent.parent()
-     else
-      if node.type isnt 'article'
-       throw new Error 'Node without a parent'
+      pos = (@getOffsetTop node.elem, @elems.main) -
+            (@getOffsetTop parent.elem, @elems.main)
+      cost += @_parentPositionCost pos
+      parent = parent.parent()
 
      return cost
 
