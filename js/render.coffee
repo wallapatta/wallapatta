@@ -62,10 +62,10 @@ Mod.require 'Weya.Base',
     getNodeBreakCost: (node) ->
      if BREAK_COST[node.type]?
       return BREAK_COST[node.type]
-     else if node.type is 'section'
+     else if node.type is 'section' and SECTION_BREAK_COST[node.level]?
       return SECTION_BREAK_COST[node.level]
      else
-      throw new Error 'Unknown type'
+      throw new Error "Unknown type #{node.type} - #{node.level}"
 
     getBreakCost: (node) ->
      parent = node.parent()
