@@ -167,7 +167,6 @@ Mod.require 'Weya.Base',
       @nextBreak.push null
 
      @breakCost = []
-
      for i in @mainNodes
       @breakCost.push @getBreakCost @map.nodes[i]
 
