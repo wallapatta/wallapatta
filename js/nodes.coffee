@@ -16,6 +16,7 @@ Mod.require 'Weya.Base',
 
    sidenote: 'sidenote'
    codeBlock: 'codeBlock'
+   formattedCode: 'formattedCode'
    special: 'special'
    full: 'full'
    html: 'html'
@@ -191,9 +192,7 @@ Mod.require 'Weya.Base',
     @text = ''
 
    addText: (text) ->
-    if @text isnt ''
-     @text += ' '
-
+    @text += ' ' if @text isnt ''
     @text += text
 
    template: ->
@@ -202,6 +201,20 @@ Mod.require 'Weya.Base',
     else
      @$.elem = @span "##{PREFIX}#{@$.id}.block", null
 
+  class FormattedCode extends Node
+   @extend()
+
+   type: TYPES.formattedCode
+
+   @initialize (options) ->
+    @text = ''
+
+   addText: (text) ->
+    @text += '\n' if @text isnt ''
+    @text += text
+
+   template: ->
+    @$.elem = @pre "##{PREFIX}#{@$.id}.formattedCode", null
 
   class CodeBlock extends Node
    @extend()

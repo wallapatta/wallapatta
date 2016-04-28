@@ -98,6 +98,8 @@ Mod.require 'Weya.Base',
      @node.add node
      if node.type is TYPES.block
       @blocks.push node
+     if node.type is TYPES.formattedCode
+      @blocks.push node
      @prevNode = @node = node
 
     getToken: (text, n) ->
@@ -197,7 +199,7 @@ Mod.require 'Weya.Base',
        @prevNode = @node
        @node = @node.parent()
 
-      if @node.type is TYPES.codeBlock or @node.type is TYPES.html
+      if @node.type in [TYPES.codeBlock, TYPES.html, TYPES.formattedCode]
        @node.addText line.line.substr @node.indentation
 
       return
@@ -225,7 +227,7 @@ Mod.require 'Weya.Base',
        if line.type isnt TYPES.list
         @node = @node.parent()
 
-      when  TYPES.codeBlock, TYPES.html#, TYPES.table
+      when  TYPES.codeBlock, TYPES.html, TYPES.formattedCode
        @node.addText line.line.substr @node.indentation
        return
 
@@ -247,6 +249,11 @@ Mod.require 'Weya.Base',
         map: @map
         indentation: line.indentation + 1
         lang: line.text
+
+      when TYPES.formattedCode
+       @addNode new FormattedCode
+        map: @map
+        indentation: line.indentation + 1
 
       when TYPES.html
        @addNode new Html
