@@ -566,6 +566,7 @@ Mod.require 'Weya.Base',
   Mod.set 'Wallapatta.Article', Article
   Mod.set 'Wallapatta.Media', Media
   Mod.set 'Wallapatta.CodeBlock', CodeBlock
+  Mod.set 'Wallapatta.FormattedCode', FormattedCode
   Mod.set 'Wallapatta.Table', Table
   Mod.set 'Wallapatta.Special', Special
   Mod.set 'Wallapatta.Html', Html

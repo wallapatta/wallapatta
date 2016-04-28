@@ -5,6 +5,7 @@ Mod.require 'Weya.Base',
   BLOCK_TOKENS =
    sidenote: '>>>'
    code: '```'
+   formattedCode: '<<<wallapatta'
    special: '+++'
    html: '<<<'
    full: '<!>'
@@ -67,6 +68,9 @@ Mod.require 'Weya.Base',
 
      when BLOCK_TOKENS.code
       line.type = TYPES.codeBlock
+
+     when BLOCK_TOKENS.formattedCode
+      line.type = TYPES.formattedCode
 
      when BLOCK_TOKENS.table
       line.type = TYPES.table

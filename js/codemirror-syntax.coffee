@@ -75,6 +75,12 @@ class Mode
    stream.skipToEnd()
    return OPERATOR
 
+  match = stream.match /^<<<wallapatta/
+  if match
+   stack.push indentation: stream.indentation(), type: 'code'
+   stream.skipToEnd()
+   return OPERATOR
+
   return null
 
  matchStart: (stream, state) ->

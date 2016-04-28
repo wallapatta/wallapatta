@@ -19,6 +19,7 @@ Mod.require 'Weya.Base',
  'Wallapatta.Media'
 
  'Wallapatta.CodeBlock'
+ 'Wallapatta.FormattedCode'
  'Wallapatta.Table'
  'Wallapatta.Special'
  'Wallapatta.Html'
@@ -32,7 +33,7 @@ Mod.require 'Weya.Base',
  (Base, TYPES,
   Text, Bold, Italics, SuperScript, SubScript, Code, Link, MediaInline
   Block, Section, List, ListItem, Sidenote, Article, Media,
-  CodeBlock, Table, Special, Html, Full, HtmlInline
+  CodeBlock, FormattedCode, Table, Special, Html, Full, HtmlInline
   Map, Reader, Render) ->
 
    TOKENS =
