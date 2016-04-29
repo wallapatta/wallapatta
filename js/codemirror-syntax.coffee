@@ -3,6 +3,7 @@ OPERATOR_INLINE = "tag strong"
 BREAK_WORD_CHAR = {}
 for c in ' \t\n\r$#@!%^&*()_+-=~`1234567890[]{}\\|;:\'\",.<>/?'
  BREAK_WORD_CHAR[c] = true
+window.CHECK_SPELLING = false
 
 class Mode
  constructor: (CodeMirror) ->
@@ -311,7 +312,7 @@ class Mode
    match = @matchInline stream, state
    return match if match?
 
-   if true #CHECK_SPELLING
+   if CHECK_SPELLING
     match = @checkSpelling stream, state
     if match?
      l += " #{match}"

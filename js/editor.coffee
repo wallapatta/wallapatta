@@ -36,6 +36,7 @@ Mod.require 'Weya.Base',
           @i ".fa.fa-outdent", on: {click: @$.on.outdent}
 
           @i ".fa.fa-columns", on: {click: @$.on.sidenote}
+          @i ".fa.fa-check", on: {click: @$.on.checkSpelling}
 
 
          @$.elems.pickMediaDialog = @div ".pick-media-dialog",
@@ -154,6 +155,8 @@ Mod.require 'Weya.Base',
     @editor.indentLine line, 'add'
     @editor.focus()
 
+   @listen 'checkSpelling', ->
+    window.CHECK_SPELLING = not window.CHECK_SPELLING
 
    @listen 'print', ->
     @elems.editorContainer.classList.add 'wallapatta-editor-print'
