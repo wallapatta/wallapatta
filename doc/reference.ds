@@ -127,6 +127,21 @@
         var i = 10
   }
 
+##Formatted code blocks
+
+ These are code blocks with formatting.
+ The content inside these can be formatted using normal wallapatta formatting.
+ Formatted code blocks are identified by ``<<<wallapatta``.
+
+ ```
+  <<<wallapatta
+   **for** i := 0 **to** n
+    S += A__i__ * B__i__
+
+ <<<wallapatta
+  **for** i := 0 **to** n
+   S += A__i__ * B__i__
+
 ##Tables
 
  Tables can be specified with ``|||``, and cells can be separated by ``|``. The content belonging to the table are indentified through indentation. Headers can be differentiated by following any row of cells with three equal signs (``===``).
