@@ -190,7 +190,9 @@ class Mode
   word = word.toLowerCase()
   stream.pos = i
   if not GOOGLE_10000_WORDS[word]?
-   return OPERATOR_INLINE
+   return "invalid_spelling"
+  else
+   return "word_level_#{GOOGLE_10000_WORDS[word] // 1000}"
   return null
 
  clearState: (state) ->
