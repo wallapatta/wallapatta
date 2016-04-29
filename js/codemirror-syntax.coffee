@@ -1,5 +1,8 @@
 OPERATOR = "tag strong"
 OPERATOR_INLINE = "tag strong"
+BREAK_WORD_CHAR = {}
+for c in ' \t\n\r$#@!%^&*()_+-=~`1234567890[]{}\\|;:\'\",.<>/?'
+ BREAK_WORD_CHAR[c] = true
 
 class Mode
  constructor: (CodeMirror) ->
@@ -173,6 +176,23 @@ class Mode
 
   return null
 
+ checkSpelling: (stream, state) ->
+  i = stream.pos
+  while i < stream.string.length
+   if BREAK_WORD_CHAR[stream.string[i]]
+    break
+   ++i
+
+  if i is stream.pos
+   stream.next()
+   return null
+  word = stream.string.substring stream.pos, i
+  word = word.toLowerCase()
+  stream.pos = i
+  if not GOOGLE_10000_WORDS[word]?
+   return OPERATOR_INLINE
+  return null
+
  clearState: (state) ->
   state.bold = false
   state.italics = false
@@ -289,7 +309,12 @@ class Mode
    match = @matchInline stream, state
    return match if match?
 
-   stream.next()
+   if true #CHECK_SPELLING
+    match = @checkSpelling stream, state
+    if match?
+     l += " #{match}"
+   else
+    stream.next()
 
    if state.heading
     l += " header"
