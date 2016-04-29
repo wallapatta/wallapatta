@@ -1,8 +1,8 @@
 ##Headings
 
- Headings have the same syntax as Markdown. ``#`` for level 1 headings, ``##`` for
- level 2 headings and so on. The content that belongs to the heading should be
- indented.
+ Headings have the same syntax as --Markdown--. ``#`` for level 1 headings, ``##`` for
+ level 2 headings and so on.
+ The content that belongs to the heading should be indented.
 
  ```
   #Heading
@@ -21,8 +21,8 @@
 
 ##Lists
 
- Ordered lists begin with ``-`` while unordered lists begin with ``*``.
- Since lists can be structured with indentations, it's easy to have lists
+ Ordered lists begin with ``-`` while un-ordered lists begin with ``*``.
+ Since lists can be structured with indentation, it's easy to have lists
  within lists.
 
  ```
@@ -71,7 +71,7 @@
 
 ##Side Notes
 
- Side notes can be added by ``>>>``. It is possible to have any other component inside side notes. The content belonging to the side note is specified via indentation.
+ Side notes can be added by ``>>>``. It is possible to have any other component inside side notes. The content for to the side note is identified from indentation.
 
  ```
   >>>
@@ -144,7 +144,7 @@
 
 ##Tables
 
- Tables can be specified with ``|||``, and cells can be separated by ``|``. The content belonging to the table are indentified through indentation. Headers can be differentiated by following any row of cells with three equal signs (``===``).
+ Tables can be specified with ``|||``, and cells can be separated by ``|``. The content of to the table are identified from indentation. Headers can be specified by following any row of cells with three equal signs (``===``).
 
  ```
   |||
@@ -154,7 +154,7 @@
    Cell 4 | Cell 5 | Sixth Cell
 
  >>>
-  It's possible to have empty cells, have more than one header-styled row, and have spanned columns.
+  It's possible to have empty cells, multiple header rows, and spanned columns.
 
  |||
   Header 1 | Header 2 | 3rd Header
@@ -263,7 +263,7 @@
 
 ##Fullwidth Blocks
 
- Full width blocks are identified by ``<!>``. They create content spanning the full width of the document; i.e. taking up the space reserved for sidenotes.
+ Full width blocks are identified by ``<!>``. They create content that takes up the full width of the document; i.e. taking up the space reserved for side notes.
 
  ```
   <!>
