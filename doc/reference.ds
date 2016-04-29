@@ -197,9 +197,9 @@
  >>>
   This won't work in online editor since the twitter script will not load
 
-##Javascript Blocks
+##JavaScript Blocks
 
- HTML blocks are identified by ``<<<js``.
+ JavaScript blocks are identified by ``<<<js``.
  The code is evaluated and the html code returned is rendered.
 
  ```
@@ -211,7 +211,7 @@
 
 ##CoffeeScript Blocks
 
- HTML blocks are identified by ``<<<coffee``.
+ CoffeeScript blocks are identified by ``<<<coffee``.
  The code is evaluated and the html code returned is rendered.
 
  ```coffeescript
@@ -225,7 +225,7 @@
 
 ##Weya Blocks
 
- HTML blocks are identified by ``<<<weya``.
+ Weya blocks are identified by ``<<<weya``.
  The code is evaluated and the html code returned is rendered.
 
  >>>
