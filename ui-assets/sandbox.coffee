@@ -36,6 +36,8 @@ template = ->
    @script src:"lib/weya/base.js"
    @script src:"lib/mod/mod.js"
 
+   @script src:"assets/google_10000_words.js"
+
    @script src:"js/main.js"
    @script src:"js/editor.js"
    @script src:"js/parser.js"
