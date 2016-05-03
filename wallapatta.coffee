@@ -162,7 +162,9 @@ Mod.require 'jsdom',
 
   exports.render = (content, callback) ->
    parser = new Parser text: content
-   JSDOWM.env '<div id="main"></div><div id="sidebar"></div>', (err, window) ->
+   parser.parse()
+   opt = null
+   JSDOM.env '<div id="main"></div><div id="sidebar"></div>', (err, window) ->
     Weya.setApi document: window.document
     main = window.document.getElementById 'main'
     sidebar = window.document.getElementById 'sidebar'
