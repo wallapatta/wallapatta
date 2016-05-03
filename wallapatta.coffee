@@ -160,7 +160,7 @@ Mod.require 'jsdom',
 
 #Render
 
-  exports.render = (content, callback) ->
+  _render = exports.render = (content, callback) ->
    parser = new Parser text: content
    parser.parse()
    opt = null
@@ -173,6 +173,26 @@ Mod.require 'jsdom',
     callback
      main: main.innerHTML
      sidebar: sidebar.innerHTML
+
+#Render a list of wallapatta snippets
+  exports.renderMultiple = (docs, callback) ->
+   ids = (d for d of docs)
+   n = 0
+   results =
+    main: {}
+    sidebar: {}
+   proc = ->
+    if n is ids.length
+     return callback results
+
+    id = ids[n]
+    ++n
+    _render docs[id], (res) ->
+     results.main[id] = res.main
+     results.sidebar[id] = res.sidebar
+     proc()
+
+   proc()
 
 
 
