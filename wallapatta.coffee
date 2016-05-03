@@ -28,32 +28,34 @@ Mod.require 'jsdom',
  'Wallapatta.File'
  'Wallapatta.Paginate'
  'Wallapatta.Toc'
+ 'Wallapatta.Parser'
  'Weya'
- (jsdom, fs, YAML, path, FileRender, Paginate, Toc, Weya) ->
+ (JSDOM, FS, YAML, PATH, FileRender, Paginate, Toc, Parser, Weya) ->
 
+#Copy Static files
   exports.copyStatic = copyStatic = (options, callback) ->
    if not options.static?
     callback()
     return
 
    commands = []
-   js = path.resolve options.output, 'js'
-   css = path.resolve options.output, 'css'
-   lib  = path.resolve options.output, 'lib'
-   if fs.existsSync js
+   js = PATH.resolve options.output, 'js'
+   css = PATH.resolve options.output, 'css'
+   lib  = PATH.resolve options.output, 'lib'
+   if FS.existsSync js
     commands.push "rm -r #{js}"
-   if fs.existsSync css
+   if FS.existsSync css
     commands.push "rm -r #{css}"
-   if fs.existsSync lib
+   if FS.existsSync lib
     commands.push "rm -r #{lib}"
 
    commands = commands.concat [
     "mkdir #{js}"
     "mkdir #{css}"
     "mkdir #{lib}"
-    "cp -r #{path.resolve __dirname, 'build/js/*'} #{js}"
-    "cp -r #{path.resolve __dirname, 'build/css/*'} #{css}"
-    "cp -r #{path.resolve __dirname, 'build/lib/*'} #{lib}"
+    "cp -r #{PATH.resolve __dirname, 'build/js/*'} #{js}"
+    "cp -r #{PATH.resolve __dirname, 'build/css/*'} #{css}"
+    "cp -r #{PATH.resolve __dirname, 'build/lib/*'} #{lib}"
    ]
 
    exec commands.join('&&'), (e, stderr, stdout) ->
@@ -68,29 +70,31 @@ Mod.require 'jsdom',
    for article in list
     opt =
      template: options.template
-     output: path.resolve options.output, "#{article.id}.html"
+     output: PATH.resolve options.output, "#{article.id}.html"
     opt[k] = v for k, v of article
-    opt.file = path.resolve options.cwd, article.file
+    opt.file = PATH.resolve options.cwd, article.file
     FileRender opt
 
     renderChapters options, article.content
 
+#Render file
   exports.file = (options, callback) ->
    FileRender
     file: options.file
-    template: path.resolve __dirname, options.template
-    output: path.resolve options.output, "index.html"
+    template: PATH.resolve __dirname, options.template
+    output: PATH.resolve options.output, "index.html"
     title: options.title
 
    copyStatic options, callback
 
+#Render book
   exports.book = (options, callback) ->
-   book = YAML.parse "#{fs.readFileSync options.book}"
-   cwd = path.dirname options.book
+   book = YAML.parse "#{FS.readFileSync options.book}"
+   cwd = PATH.dirname options.book
    if book.articleTemplate?
     articleTemplate =
-     path.resolve __dirname,
-                  path.resolve cwd, book.articleTemplate
+     PATH.resolve __dirname,
+                  PATH.resolve cwd, book.articleTemplate
     renderChapters
      cwd: cwd
      output: options.output
@@ -98,8 +102,8 @@ Mod.require 'jsdom',
      book.chapters
 
    for toc in book.toc
-    tocTemplate = path.resolve __dirname,
-                               path.resolve cwd, toc.template
+    tocTemplate = PATH.resolve __dirname,
+                               PATH.resolve cwd, toc.template
 
     opt =
      chapters: book.chapters
@@ -111,19 +115,19 @@ Mod.require 'jsdom',
 
    copyStatic options, callback
 
-
+#Render blog
   exports.blog = (options, callback) ->
-   blog = YAML.parse "#{fs.readFileSync options.blog}"
+   blog = YAML.parse "#{FS.readFileSync options.blog}"
    inputs = []
    pages = 0
    N = Math.ceil blog.posts.length / blog.postsPerPage
-   cwd = path.dirname options.blog
+   cwd = PATH.dirname options.blog
    paginateTemplate =
-    path.resolve __dirname,
-                 path.resolve cwd, blog.paginateTemplate
+    PATH.resolve __dirname,
+                 PATH.resolve cwd, blog.paginateTemplate
    postTemplate =
-    path.resolve __dirname,
-                 path.resolve cwd, blog.postTemplate
+    PATH.resolve __dirname,
+                 PATH.resolve cwd, blog.postTemplate
 
    paginate = ->
     Paginate
@@ -138,13 +142,13 @@ Mod.require 'jsdom',
    for post in blog.posts
     opt =
      template: postTemplate
-     output: path.resolve options.output, "#{post.id}.html"
+     output: PATH.resolve options.output, "#{post.id}.html"
     opt[k] = v for k, v of post
-    opt.file = path.resolve cwd, post.file
+    opt.file = PATH.resolve cwd, post.file
     FileRender opt
     opt = {}
     opt[k] = v for k, v of post
-    opt.file = path.resolve cwd, post.file
+    opt.file = PATH.resolve cwd, post.file
     inputs.push opt
     if inputs.length is blog.postsPerPage
      paginate()
@@ -153,6 +157,21 @@ Mod.require 'jsdom',
     paginate()
 
    copyStatic options, callback
+
+#Render
+
+  exports.render = (content, callback) ->
+   parser = new Parser text: content
+   JSDOWM.env '<div id="main"></div><div id="sidebar"></div>', (err, window) ->
+    Weya.setApi document: window.document
+    main = window.document.getElementById 'main'
+    sidebar = window.document.getElementById 'sidebar'
+    render = parser.getRender()
+    render.render main, sidebar
+    callback
+     main: main.innerHTML
+     sidebar: sidebar.innerHTML
+
 
 
 Mod.initialize()
