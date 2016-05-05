@@ -313,9 +313,7 @@
  <!>
   !https://d13yacurqjgara.cloudfront.net/users/161539/screenshots/2365282/dashboard-white.png(sample)(50)(<)
 
-   This text is wrapped around the image, in a full width section. The image is moved to right with ``>``.
-
-    * You can have any content in this section
+   This text is wrapped around the image, in a full width section. The image is moved to left with ``<``.
 
    See **Images** syntax for details on wrapping text around images.
 
