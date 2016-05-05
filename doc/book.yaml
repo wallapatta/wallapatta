@@ -1,10 +1,10 @@
 toc:
  -
   template: templates/toc
-  id: index
+  id: toc
 articleTemplate: templates/article
 chapters:
- - id: introduction
+ - id: index
    title: 'Wallapatta'
    file: 'introduction.ds'
  - id: reference
