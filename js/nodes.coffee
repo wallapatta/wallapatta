@@ -531,22 +531,24 @@ Mod.require 'Weya.Base',
     @alt = options.media.alt
     @alt ?= options.media.src
     @width = options.media.width
+    @float = options.media.float ? ''
 
    type: TYPES.media
 
-   #add: (node) ->
-   # throw new Error 'Invalid indentation'
-
    template: ->
-    @$.elem = @div "##{PREFIX}#{@$.id}.image-container", ->
+    id = "##{PREFIX}#{@$.id}.image-container"
+    switch @$.float
+     when '<'
+      id += '.wrap-image-left'
+     when '>'
+      id += '.wrap-image-right'
+
+    @$.elem = @div id, ->
      @$.elems.img = @img ".image",
       src: (decodeURL @$.src)
       alt: @$.alt
      if @$.width?
       @$.elems.img.style.maxWidth = "#{@$.width}%"
-
-   #render: (options) ->
-   # Weya elem: options.elem, context: this, @template
 
 
   Mod.set 'Wallapatta.Text', Text

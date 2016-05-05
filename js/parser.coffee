@@ -348,6 +348,8 @@ Mod.require 'Weya.Base',
      media.alt = parts[1].trim()
      return media if parts.length <= 2
      media.width = parts[2].trim()
+     return media if parts.length <= 3
+     media.float = parts[3].trim()
      return media
 
 
