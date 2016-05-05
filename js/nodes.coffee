@@ -534,8 +534,8 @@ Mod.require 'Weya.Base',
 
    type: TYPES.media
 
-   add: (node) ->
-    throw new Error 'Invalid indentation'
+   #add: (node) ->
+   # throw new Error 'Invalid indentation'
 
    template: ->
     @$.elem = @div "##{PREFIX}#{@$.id}.image-container", ->
@@ -545,8 +545,8 @@ Mod.require 'Weya.Base',
      if @$.width?
       @$.elems.img.style.maxWidth = "#{@$.width}%"
 
-   render: (options) ->
-    Weya elem: options.elem, context: this, @template
+   #render: (options) ->
+   # Weya elem: options.elem, context: this, @template
 
 
   Mod.set 'Wallapatta.Text', Text
