@@ -22,6 +22,7 @@ task 'build:npm', "Build npm", (opts) ->
  CLEAN ->
   buildNPM (e) ->
    util.finish e
+   process.exit 0
 
 task 'build:ui', "Build UI", (opts) ->
  GLOBAL.options = opts
