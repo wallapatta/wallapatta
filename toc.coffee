@@ -1,10 +1,11 @@
 Mod.require 'fs',
+ 'path'
  'jsdom'
  'Weya'
  'Wallapatta.Parser'
- (fs, jsdom, Weya, Parser) ->
+ (FS, PATH, jsdom, Weya, Parser) ->
   renderPost = (options, callback) ->
-   input = "#{fs.readFileSync options.file}"
+   input = "#{FS.readFileSync options.file}"
    parser = new Parser text: input, id: options.id
    parser.parse()
    jsdom.env '<div id="main"></div><div id="sidebar"></div>', (err, window) ->
@@ -51,7 +52,7 @@ Mod.require 'fs',
      articles: results
      chapters: options.chapters
 
-    fs.writeFileSync "./#{options.output}/#{options.id}.html", output
+    FS.writeFileSync (PATH.join options.output, "#{options.id}.html"), output
 
   Mod.set 'Wallapatta.Toc', render
 
