@@ -13,7 +13,6 @@ exports.npm = (callback) ->
  commands = []
 
  commands = commands.concat [
-  "mkdir #{BUILD}/templates"
   "mkdir #{BUILD}/build"
  ]
 
@@ -22,7 +21,6 @@ exports.npm = (callback) ->
   "cp -r #{BUILD}/css #{BUILD}/build/css"
   "cp -r #{BUILD}/js #{BUILD}/build/js"
   "cp -r #{BUILD}/lib #{BUILD}/build/lib"
-  "coffee -c -o #{BUILD}/templates templates/*.coffee"
   "coffee -c -o #{BUILD}/ *.coffee"
  ]
 
