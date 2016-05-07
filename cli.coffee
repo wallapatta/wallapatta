@@ -12,7 +12,6 @@ argv = require 'optimist'
  .default 'title', 'Created with Wallapatta'
 
  .describe 'template', 'Template'
- .default 'template', './templates/page'
 
  .describe 'blog', 'Blog YAML file'
  .describe 'book', 'Book YAML file'
