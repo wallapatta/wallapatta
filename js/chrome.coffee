@@ -119,6 +119,9 @@ Mod.require 'Weya.Base',
     return unless @file?
     @send 'save', {}
 
+   @listen 'openUrl', (data) ->
+    window.open data.url, '_blank'
+
    @listen 'saveFileContent', (data) ->
     @contentWriting = data.content
     @file.createWriter @on.writer, @on.error

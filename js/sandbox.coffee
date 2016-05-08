@@ -54,12 +54,18 @@ Mod.require 'Weya.Base',
    @listen 'change', ->
     @_editorChanged = true
 
-   render: ->
+   @listen 'openUrl', (url) ->
+    @send 'openUrl', url: url
+
+
+   render: (callback) ->
     @editor.render ->
      setTimeout ->
       toolbar = document.getElementById 'toolbar'
       toolbar.style.display = 'none'
      , 300
+
+     callback()
 
    @listen 'print', ->
     @editor.on.print()

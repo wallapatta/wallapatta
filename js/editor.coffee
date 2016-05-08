@@ -50,8 +50,10 @@ Mod.require 'Weya.Base',
        @$.elems.errors = @div ".row.error", null
 
        @div ".row.wallapatta", ->
-        @$.elems.previewMain = @div ".nine.columns", null
-        @$.elems.previewSidebar = @div ".three.columns", null
+        @$.elems.previewMain = @div ".nine.columns",
+         on: {click: @$.on.previewClick}
+        @$.elems.previewSidebar = @div ".three.columns",
+         on: {click: @$.on.previewClick}
 
     @$.elems.printForm = @div ".container.print-form", style: {display: 'none'}, ->
      @form ->
@@ -83,6 +85,17 @@ Mod.require 'Weya.Base',
     @onChangeListener = options.onChanged ? (->)
     @elems = {}
     @_isPrint = false
+
+   @listen 'previewClick', (e) ->
+    e.preventDefault()
+
+    node = e.target
+    while node?
+     href = node.getAttribute 'href'
+     if href?
+      @openUrl href
+      break
+     node = node.parentNode
 
    @listen 'change', ->
     @preview()
