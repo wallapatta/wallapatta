@@ -51,9 +51,13 @@ Mod.require 'Weya.Base',
 
        @div ".row.wallapatta", ->
         @$.elems.previewMain = @div ".nine.columns",
-         on: {click: @$.on.previewClick}
+         on:
+          click: @$.on.previewClick
+          dblclick: @$.on.previewDbClick
         @$.elems.previewSidebar = @div ".three.columns",
-         on: {click: @$.on.previewClick}
+         on:
+          click: @$.on.previewClick
+          dblclick: @$.on.previewDbClick
 
     @$.elems.printForm = @div ".container.print-form", style: {display: 'none'}, ->
      @form ->
@@ -87,20 +91,24 @@ Mod.require 'Weya.Base',
     @_isPrint = false
 
    @listen 'previewClick', (e) ->
-    e.preventDefault()
-
     node = e.target
     while node?
-     #href = node.getAttribute 'href'
-     #if href?
-     # @openUrl href
-     # break
      if @renderer?
       n = @renderer.getNodeFromElem node
       if n? and n.lineNumber
        @editor.setCursor line: n.lineNumber
-       console.log n.lineNumber
        break
+     node = node.parentNode
+
+   @listen 'previewDbClick', (e) ->
+    e.preventDefault()
+
+    node = e.target
+    while node?
+     href = node.getAttribute 'href'
+     if href?
+      @openUrl href
+      break
      node = node.parentNode
 
    @listen 'change', ->
