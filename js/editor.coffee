@@ -91,20 +91,20 @@ Mod.require 'Weya.Base',
     @_isPrint = false
 
    @listen 'previewClick', (e) ->
+    return if not @renderer?
     node = e.target
-    while node?
-     if @renderer?
-      n = @renderer.getNodeFromElem node
-      if n? and n.lineNumber
-       @editor.setCursor line: n.lineNumber
-       break
+    while node? and node isnt document.body
+     n = @renderer.getNodeFromElem node
+     if n? and n.lineNumber
+      @editor.setCursor line: n.lineNumber
+      break
      node = node.parentNode
 
    @listen 'previewDbClick', (e) ->
     e.preventDefault()
 
     node = e.target
-    while node?
+    while node? and node isnt document.body
      href = node.getAttribute 'href'
      if href?
       @openUrl href
