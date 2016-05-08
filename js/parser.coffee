@@ -96,6 +96,7 @@ Mod.require 'Weya.Base',
        throw new Error "#{e.message}: \"#{block.text}\""
 
     addNode: (node) ->
+     node.lineNumber = @_lineNumber
      @node.add node
      if node.type is TYPES.block
       @blocks.push node
@@ -194,6 +195,7 @@ Mod.require 'Weya.Base',
 
     processLine: ->
      line = @reader.get()
+     @_lineNumber = @reader.n
 
      if line.empty
       if @node.type is TYPES.block

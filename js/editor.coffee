@@ -190,16 +190,16 @@ Mod.require 'Weya.Base',
 
     @elems.printMain.innerHTML = ''
     @elems.printSidebar.innerHTML = ''
-    parser = new Parser text: text
+    @parser = new Parser text: text
 
     try
-     parser.parse()
+     @parser.parse()
     catch e
      @elems.errors.textContent = e.message
      return
 
     @elems.errors.textContent = ''
-    render = parser.getRender()
+    render = @renderer = @parser.getRender()
     render.render @elems.printMain, @elems.printSidebar
     @elems.printContainer.style.width = "#{WIDTH}mm"
     window.requestAnimationFrame =>
@@ -229,16 +229,16 @@ Mod.require 'Weya.Base',
 
     @elems.previewMain.innerHTML = ''
     @elems.previewSidebar.innerHTML = ''
-    parser = new Parser text: text
+    @parser = new Parser text: text
 
     try
-     parser.parse()
+     @parser.parse()
     catch e
      @elems.errors.textContent = e.message
      return
 
     @elems.errors.textContent = ''
-    render = parser.getRender()
+    render = @renderer = @parser.getRender()
     render.render @elems.previewMain, @elems.previewSidebar
     window.requestAnimationFrame ->
      render.mediaLoaded ->
