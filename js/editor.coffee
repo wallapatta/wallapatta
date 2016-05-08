@@ -91,10 +91,14 @@ Mod.require 'Weya.Base',
 
     node = e.target
     while node?
-     href = node.getAttribute 'href'
-     if href?
-      @openUrl href
-      break
+     #href = node.getAttribute 'href'
+     #if href?
+     # @openUrl href
+     # break
+     if @renderer?
+      n = @renderer.getNodeFromElem node
+      if n?
+       console.log n.lineNumber
      node = node.parentNode
 
    @listen 'change', ->
@@ -252,6 +256,7 @@ Mod.require 'Weya.Base',
      tabSize: 1
      indentUnit: 1
      foldGutter: true
+     styleActiveLine: true
      gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
 
     @editor.on 'change', @on.change

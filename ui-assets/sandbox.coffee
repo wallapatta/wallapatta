@@ -29,6 +29,7 @@ template = ->
    @script src:"lib/CodeMirror/addon/fold/foldcode.js"
    @script src:"lib/CodeMirror/addon/fold/foldgutter.js"
    @script src:"lib/CodeMirror/addon/fold/indent-fold.js"
+   @script src:"lib/CodeMirror/addon/selection/active-line.js"
 
    @script src:"lib/coffeescript/coffee-script.js"
 

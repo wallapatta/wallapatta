@@ -89,6 +89,16 @@ Mod.require 'Weya.Base',
 
      return top
 
+    getNodeFromElem: (elem) ->
+     #TODO
+     id = elem.id
+     return null if not id?
+     id = id.split '_'
+     return null if id.length < 1
+     id = id[id.length - 1]
+     node = @map.nodes[id]
+     return node
+
     getMainNodes: ->
      f = @map.start
      e = @map.N
