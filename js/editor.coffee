@@ -97,8 +97,10 @@ Mod.require 'Weya.Base',
      # break
      if @renderer?
       n = @renderer.getNodeFromElem node
-      if n?
+      if n? and n.lineNumber
+       @editor.setCursor line: n.lineNumber
        console.log n.lineNumber
+       break
      node = node.parentNode
 
    @listen 'change', ->

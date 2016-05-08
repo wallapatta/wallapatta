@@ -79,6 +79,7 @@ Mod.require 'Weya.Base',
       sidenotes: @sidenotes
 
     parse: ->
+     @_lineNumber = null
      while @reader.has()
       try
        @processLine()
@@ -88,6 +89,7 @@ Mod.require 'Weya.Base',
       @reader.next()
 
      @map.smallElements()
+     @_lineNumber = null
 
      for block in @blocks
       try
