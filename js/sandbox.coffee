@@ -21,7 +21,9 @@ Mod.require 'Weya.Base',
     @_changed = false
     @_editorChanged = false
     @content = ''
-    Editor.onChangeListener = @on.change
+    @editor = new Editor
+     openUrl: @on.openUrl
+     onChanged: @on.changed
 
    @listen 'addResources', (data) ->
     console.log 'resources', data.length
@@ -29,9 +31,9 @@ Mod.require 'Weya.Base',
     for d in data
      @resources[d.path] = d.dataURL
     @send 'resourcesAdded', {}
-    text = @removeTrailingSpace Editor.getText()
-    Editor.setText text
-    Editor.setResources (path for path of @resources)
+    text = @removeTrailingSpace @editor.getText()
+    @editor.setText text
+    @editor.setResources (path for path of @resources)
 
    send: (method, data) ->
     data.method = method
@@ -41,7 +43,7 @@ Mod.require 'Weya.Base',
     console.log (new Date), 'setText', data.saved
     if data.saved
      @content = data.content
-    Editor.setText data.content
+    @editor.setText data.content
     @_changed = false
     if not @_watchInterval?
      @_watchInterval = setInterval @on.watchChanges, 500
@@ -53,13 +55,14 @@ Mod.require 'Weya.Base',
     @_editorChanged = true
 
    render: ->
-    setTimeout ->
-     toolbar = document.getElementById 'toolbar'
-     toolbar.style.display = 'none'
-    , 300
+    @editor.render ->
+     setTimeout ->
+      toolbar = document.getElementById 'toolbar'
+      toolbar.style.display = 'none'
+     , 300
 
    @listen 'print', ->
-    Editor.on.print()
+    @editor.on.print()
 
    removeTrailingSpace: (text) ->
     lines = text.split '\n'
@@ -69,16 +72,16 @@ Mod.require 'Weya.Base',
     lines.join '\n'
 
    @listen 'save', ->
-    text = @removeTrailingSpace Editor.getText()
-    Editor.setText text
+    text = @removeTrailingSpace @editor.getText()
+    @editor.setText text
     @content = text
     @send 'saveFileContent', content: text
 
    @listen 'watchChanges', ->
     if @_editorChanged
-     @send 'change', content: Editor.getText()
+     @send 'change', content: @editor.getText()
      @_editorChanged = false
-    if Editor.getText() isnt @content
+    if @editor.getText() isnt @content
      if not @_changed
       @send 'fileChanged', changed: true
       @_changed = true
@@ -90,12 +93,11 @@ Mod.require 'Weya.Base',
 
 
   APP = new App()
-  APP.render()
+  APP.render ->
+   MESSAGE_HANDLER = (e) ->
+    APP.on[e.data.method] e.data, e
 
-  MESSAGE_HANDLER = (e) ->
-   APP.on[e.data.method] e.data, e
-
-  window.addEventListener 'message', MESSAGE_HANDLER
-  APP.send 'ready', {}
+   window.addEventListener 'message', MESSAGE_HANDLER
+   APP.send 'ready', {}
 
 

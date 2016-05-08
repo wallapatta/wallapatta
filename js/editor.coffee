@@ -78,13 +78,15 @@ Mod.require 'Weya.Base',
 
 
 
-   @initialize ->
+   @initialize (options) ->
+    @openUrl = options.openUrl ? (->)
+    @onChangeListener = options.onChanged ? (->)
     @elems = {}
     @_isPrint = false
 
    @listen 'change', ->
     @preview()
-    @onChangeListener?()
+    @onChangeListener()
 
    @listen 'parse', (e) ->
     e.preventDefault()
@@ -296,6 +298,4 @@ Mod.require 'Weya.Base',
 
 
 
-  EDITOR = new Editor
-  EDITOR.render ->
-   Mod.set 'Editor', EDITOR
+  Mod.set 'Editor', Editor
