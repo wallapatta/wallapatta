@@ -99,6 +99,11 @@ Mod.require 'Weya.Base',
      node = @map.nodes[id]
      return node
 
+    getNodeFromLine: (line) ->
+     id = @map.lineNumbers[line]
+     return null if not id?
+     return @map.nodes[id]
+
     getMainNodes: ->
      f = @map.start
      e = @map.N

@@ -111,6 +111,14 @@ Mod.require 'Weya.Base',
       break
      node = node.parentNode
 
+   @listen 'gutterClick', (cm, line, where, e) ->
+    node = @renderer.getNodeFromLine line
+    return if not node?
+    elem = node.elem
+    return if not elem?
+    top = @renderer.getOffsetTop elem, @elems.preview
+    @elems.preview.scrollTop = top
+
    @listen 'change', ->
     @preview()
     @onChangeListener()
@@ -274,6 +282,7 @@ Mod.require 'Weya.Base',
     @editor.setSize null, "#{height - 100}px"
     @elems.preview.style.maxHeight = "#{height - 50}px"
     @editor.setValue Sample
+    @editor.on 'gutterClick', @on.gutterClick
 
     window.addEventListener 'resize', @on.resize
     window.requestAnimationFrame @_onRendered

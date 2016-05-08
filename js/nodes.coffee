@@ -52,6 +52,7 @@ Mod.require 'Weya.Base',
     @id = options.id if options.id
     @start = @id
     @N = 0
+    @lineNumbers = {}
 
    smallElements: ->
     @N = @id
@@ -60,6 +61,24 @@ Mod.require 'Weya.Base',
     node.id = @id
     @nodes[@id] = node
     @id++
+
+   mapLineNumbers: ->
+    @lineNumbers = {}
+    max = 0
+    for id, node of @nodes
+     ln = node.lineNumber
+     continue if not ln?
+     @lineNumbers[ln] = id
+     max = Math.max max, parseInt ln
+
+    ln = 1
+    while ln <= max
+     @lineNumbers[ln] ?= @lineNumbers[ln - 1]
+     ++ln
+
+
+
+
 
 
   class Node extends Base

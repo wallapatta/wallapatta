@@ -97,6 +97,8 @@ Mod.require 'Weya.Base',
       catch e
        throw new Error "#{e.message}: \"#{block.text}\""
 
+     @map.mapLineNumbers()
+
     addNode: (node) ->
      node.lineNumber = @_lineNumber
      @node.add node
