@@ -148,10 +148,12 @@ class Mode
 
   match = stream.match /^<-/
   if match
+   state.inlineHtml = true
    return OPERATOR_INLINE
 
   match = stream.match /^->/
   if match
+   state.inlineHtml = false
    return OPERATOR_INLINE
 
   match = stream.match /^>>/
@@ -204,6 +206,7 @@ class Mode
   state.code = false
   state.link = false
   state.inlineMedia = false
+  state.inlineHtml = false
   state.comment = false
 
  startState: ->
@@ -233,7 +236,7 @@ class Mode
   if state.media
    stream.skipToEnd()
    state.media = false
-   return "link"
+   return "media"
 
   if stream.sol()
    state.start = true
@@ -330,7 +333,9 @@ class Mode
    if state.link
     l += " link"
    if state.inlineMedia
-    l += " link"
+    l += " media"
+   if state.inlineHtml
+    l += " inline-html"
    if state.code
     l += " meta"
 
