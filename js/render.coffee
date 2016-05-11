@@ -67,6 +67,18 @@ Mod.require 'Weya.Base',
      else
       throw new Error "Unknown type #{node.type} - #{node.level}"
 
+    _sidebarAligned: ->
+     sidebar = @getOffsetTop @elems.sidebar, document.body
+     main = @getOffsetTop @elems.main, document.body
+
+     mainHeight = @elems.main.offsetHeight
+
+     diff = Math.abs main - sidebar
+     if diff < mainHeight / 4
+      return true
+     else
+      return false
+
     getBreakCost: (node) ->
      parent = node.parent()
      cost = 0
@@ -237,8 +249,7 @@ Mod.require 'Weya.Base',
      @elems.pageBackgrounds = elem
 
     setPages: (H, W) ->
-     #@setFills()
-     #return
+     return if not @_sidebarAligned()
      @pageHeight = H
      @mainNodes = @getMainNodes()
      @sidenoteMap =  @getSidenoteMap()
@@ -338,6 +349,7 @@ Mod.require 'Weya.Base',
 
 
     setFills: ->
+     return if not @_sidebarAligned()
      for sidenote in @sidenotes
       elemSidenote = sidenote.elem
       elemContent = @map.nodes[sidenote.link].elem
