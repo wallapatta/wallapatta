@@ -1,0 +1,11 @@
+{
+  "build": {
+    "app-bundle-id": "vpj",
+    "app-category-type": "vpj",
+    "iconUrl": "https://github.com/vpj/vpj.github.com/blob/master/images/forestpin.ico?raw=true"
+  },
+  "devDependencies": {
+    "electron-builder": "next",
+    "electron-prebuilt": "0.37.8"
+  }
+}
