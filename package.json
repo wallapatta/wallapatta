@@ -4,7 +4,8 @@
   "description": "Wallapatta has a syntax similar to Markdown and uses a layout inspired by handouts of Edward R. Tufte.",
   "main": "wallapatta.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "electron": "electron"
   },
   "repository": {
     "type": "git",
@@ -20,7 +21,8 @@
   "license": "MIT",
   "devDependencies": {
     "coffee-script": ">=1.10.0",
-    "uglify-js": ">=2.4.0"
+    "uglify-js": ">=2.4.0",
+    "electron-prebuilt": ">=0.37.8"
   },
   "dependencies": {
     "highlight.js": ">=8.4.0",

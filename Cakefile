@@ -4,68 +4,40 @@ GLOBAL.BUILD = 'build'
 util = require './build-script/util'
 ui = require './build-script/ui'
 npm = require './build-script/npm'
-chrome = require './build-script/chrome'
+electron = require './build-script/electron'
 fs = require 'fs'
 {spawn, exec} = require 'child_process'
 
 option '-q', '--quiet',    'Only diplay errors'
 option '-w', '--watch',    'Watch files for change and automatically recompile'
 option '-c', '--compress', 'Compress files via YUIC'
-option '-i', '--inplace',  'Compress files in-place'
-option '-m', '--map',  'Source map'
 
 task 'clean', "Cleans up build directory", (opts) ->
- CLEAN()
+ util.finish CLEAN()
 
 task 'build:npm', "Build npm", (opts) ->
  GLOBAL.options = opts
- CLEAN ->
-  buildNPM (e) ->
-   util.finish e
-   process.exit 0
-
-task 'build:ui', "Build UI", (opts) ->
- GLOBAL.options = opts
- buildUi (e) ->
-  util.finish e
-
-task "build:chrome", "Build Chrome", (opts) ->
- GLOBAL.options = opts
- buildChrome (e) ->
-  util.finish e
-
-buildChrome = (callback) ->
- chrome.assets (e1) ->
-  chrome.js (e2) ->
-   callback e1 + e2
-
-buildUi = (callback) ->
- ui.assets (e1) ->
-  ui.js (e2) ->
-   callback e1 + e2
-
-buildNPM = (callback) ->
+ CLEAN()
  ui.assets (e1) ->
   ui.js (e2) ->
    npm.npm (e3) ->
-    callback e1 + e2 + e3
+   util.finish e1 + e2 + e3
 
-CLEAN = (callback) ->
- commands = []
- if fs.existsSync "#{BUILD}"
-  commands.push "rm -r #{BUILD}/"
+task "build:electron", "Build Electron", (opts) ->
+ GLOBAL.options = opts
+ ui.assets (e1) ->
+  ui.js (e2) ->
+   util.finish e1 + e2
 
- commands = commands.concat [
-  "mkdir #{BUILD}"
- ]
+CLEAN = ->
+ try
+  if FS_UTIL.exists BUILD
+   FS_UTIL.rm_r BUILD
+  FS_UTIL.mkdir "#{BUILD}"
+ catch e
+  util.log stderr.trim(), 'red'
+  util.log stdout.trim(), 'red'
+  return 1
 
- exec commands.join('&&'), (err, stderr, stdout) ->
-  if err?
-   util.log stderr.trim(), 'red'
-   util.log stdout.trim(), 'red'
-   err = 1
-
-  util.finish err
-  callback?()
-
+ return 0
 

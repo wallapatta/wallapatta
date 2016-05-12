@@ -3,46 +3,7 @@ path = require 'path'
 less = require 'less'
 fs = require 'fs'
 uglify = require "uglify-js"
-
-COLORS =
- reset: ''
- bold: ';1'
- red: ';31'
- green: ';32'
-
-log = exports.log = (message, color = 'reset', explanation = '') ->
- if Array.isArray color
-  c = ''
-  for i in color
-   c += COLORS[i] ? ''
-  color = c
- else
-  color = COLORS[color] ? COLORS.reset
- color = "\x1B[0#{color}m"
- reset = "\x1B[0#{COLORS.reset}m"
- color = '' if process.env.NODE_DISABLE_COLORS
- reset = '' if process.env.NODE_DISABLE_COLORS
-
- console.log color + message + reset + ' ' + (explanation or '')
-
-exports.finish = ->
- n = 0
- errors = []
- for e in arguments
-  if e?
-   if (typeof e) isnt 'number'
-    errors.push e
-    n++
-   else
-    n += e
-
- if n is 0
-  log '(0) error(s)', ['green', 'bold']
- else
-  for e in errors
-   log "#{e}", 'red'
-  log "(#{n}) error(s)", ['red', 'bold']
-
+LOG = (require './log').log
 
 watch = exports.watch = (files, callback, args)->
  return unless options.watch
@@ -51,11 +12,11 @@ watch = exports.watch = (files, callback, args)->
    fs.watchFile file, persistent:true, interval:1500 , (curr, prev) ->
     for f in files
      fs.unwatchFile f
-    log "* #{file}"
+    LOG "* #{file}"
     try
      callback.apply null, args
     catch err
-     log "Error watching: #{src}"
+     LOG "Error watching: #{src}"
 
 recurse = exports.recurse = (src, dest, extension = 'coffee') ->
  exists = fs.existsSync src
@@ -96,9 +57,9 @@ css = exports.css = (path, src, dest, callback) ->
 
   less.render code, opt, (e, cssCode) ->
    if e?
-    log " - #{src}", 'red'
-    log "  ^ #{e.message} (col #{e.column})", 'red'
-    log "    Near: #{e.extract}", 'red'
+    LOG " - #{src}", 'red'
+    LOG "  ^ #{e.message} (col #{e.column})", 'red'
+    LOG "    Near: #{e.extract}", 'red'
     callback 1
     return
 
@@ -109,12 +70,12 @@ css = exports.css = (path, src, dest, callback) ->
     cssCode = "#{cssCode}\n/*# sourceMappingURL=#{url}*/\n"
 
    fs.writeFileSync dest, cssCode
-   log " - #{src}" unless options.quiet
+   LOG " - #{src}" unless options.quiet
    callback 0
  catch err
-  log " - #{src}", 'red'
-  log "  ^ #{err.message} (col #{err.column})", 'red'
-  log "    Near: #{err.extract}", 'red'
+  LOG " - #{src}", 'red'
+  LOG "  ^ #{err.message} (col #{err.column})", 'red'
+  LOG "    Near: #{err.extract}", 'red'
   callback 1
 
 js = exports.js = (src, dest) ->
@@ -140,12 +101,12 @@ js = exports.js = (src, dest) ->
    jsCode = "#{jsCode.js}\n//# sourceMappingURL=#{url}\n"
    fs.writeFileSync map, smap
   fs.writeFileSync dest, jsCode
-  log " - #{src}" unless options.quiet
+  LOG " - #{src}" unless options.quiet
   watch [src], js, [src, dest]
   return 0
  catch err
-  log " - #{src}", 'red'
-  log "   ^ #{err}", 'red'
+  LOG " - #{src}", 'red'
+  LOG "   ^ #{err}", 'red'
   watch [src], js, [src, dest]
   return 1
 
@@ -166,11 +127,11 @@ compress = exports.compress = (files, dest) ->
     literate: literate
     sourceMap: sourceMap
     sourceFiles: sourceFiles
-   log " - #{src}" unless options.quiet
+   LOG " - #{src}" unless options.quiet
    all += jsCode
   catch err
-   log " - #{src}", 'red'
-   log "   ^ #{err}", 'red'
+   LOG " - #{src}", 'red'
+   LOG "   ^ #{err}", 'red'
    e++
 
  if e is 0
@@ -178,8 +139,8 @@ compress = exports.compress = (files, dest) ->
    final = uglify.minify all, fromString: true
    fs.writeFileSync dest, final.code
   catch err
-   log " - #{dest}", 'red'
-   log "   ^ #{err}", 'red'
+   LOG " - #{dest}", 'red'
+   LOG "   ^ #{err}", 'red'
    e++
 
 

@@ -1,148 +1,68 @@
-util = require './util'
-fs = require 'fs'
-index = require '../ui-assets/index.coffee'
-{spawn, exec} = require 'child_process'
+FS_UTIL = require './fs_util'
+LOG = (require '../log').log
+PATH = require 'path'
+COMPILE_COFFEE_DIR = (require './util').jsDir
+COMPILE_CSS = (require '../util').css
+COMPILE_CSS_FILE = (file, callback) ->
+ COMPILE_CSS "ui-assets/less/",
+  "ui-assets/less/#{file}.less"
+  "#{BUILD}/css/#{file}.css"
+  callback
 
-UI_JS = [
- 'main'
- 'editor'
- 'parser'
- 'render'
- 'reader'
- 'nodes'
- 'sample'
- 'static'
- 'print'
- 'codemirror-syntax'
-]
 UI_LESS = [
  'style'
- 'editor'
  'paginate'
  'fonts'
 ]
 
-assets = exports.assets = taskUiAssets = (callback) ->
- commands = []
- if fs.existsSync "#{BUILD}/lib"
-  commands.push "rm -r #{BUILD}/lib"
- if fs.existsSync "#{BUILD}/css"
-  commands.push "rm -r #{BUILD}/css"
- if fs.existsSync "#{BUILD}/assets"
-  commands.push "rm -r #{BUILD}/assets"
-
- commands = commands.concat [
-  "mkdir #{BUILD}/css"
-  "mkdir #{BUILD}/assets"
-  "mkdir #{BUILD}/lib"
-  "mkdir #{BUILD}/lib/weya"
-  "mkdir #{BUILD}/lib/mod"
- ]
-
- commands = commands.concat [
-  "cp -r ui-assets/lib/* #{BUILD}/lib/"
-  "cp -r ui-assets/assets/* #{BUILD}/assets/"
- ]
-
-
- exec commands.join('&&'), (e, stderr, stdout) ->
-  if e?
-   util.log stderr.trim(), 'red'
-   util.log stdout.trim(), 'red'
-   e = 1
-   callback e
-   return
-
-  e = 0
-  e += html()
-
-  css (e1) ->
-   e += e1
-   e += util.jsDir "lib/weya/", "#{BUILD}/lib/weya"
-   e += util.jsDir "lib/IO/", "#{BUILD}/lib/IO"
-   e += util.jsDir "lib/mod/", "#{BUILD}/lib/mod"
-
-   callback e
-
-html = exports.html = ->
+exports.assets = ->
  try
-  htmlCode = index.html()
-  fs.writeFileSync "#{BUILD}/index.html", htmlCode
-  util.log " - index.html" unless options.quiet
-  return 0
- catch err
-  util.log " - index.html", 'red'
-  util.log "  ^ #{err}", 'red'
+  if FS_UTIL.exists "#{BUILD}/lib"
+   FS_UTIL.rm_r "#{BUILD}/lib"
+  if FS_UTIL.exists "#{BUILD}/css"
+   FS_UTIL.rm_r "#{BUILD}/css"
+  if FS_UTIL.exists "#{BUILD}/assets"
+   FS_UTIL.rm_r "#{BUILD}/assets"
+
+  FS_UTIL.mkdir "#{BUILD}/css"
+  FS_UTIL.mkdir "#{BUILD}/assets"
+  FS_UTIL.mkdir "#{BUILD}/lib"
+  FS_UTIL.mkdir "#{BUILD}/lib/weya"
+  FS_UTIL.mkdir "#{BUILD}/lib/mod"
+
+  FS_UTIL.cp_r "ui-assets/lib", "#{BUILD}/lib"
+  FS_UTIL.cp_r "ui-assets/assets", "#{BUILD}/assets"
+ catch e
+  LOG e, 'red'
   return 1
 
-css = exports.css = (callback) ->
+ err = 0
+
+ err += COMPILE_COFFEE_DIR "lib/weya/", "#{BUILD}/lib/weya"
+ err += COMPILE_COFFEE_DIR "lib/mod/", "#{BUILD}/lib/mod"
+
+ return err
+
+_css = exports.css = (callback) ->
  filesToWatch = UI_LESS
 
  filesToWatch = ("ui-assets/less/#{f}.less" for f in filesToWatch)
 
- util.css "ui-assets/less/",
-  "ui-assets/less/style.less"
-  "#{BUILD}/css/style.css"
-  (e1) ->
-   util.css "ui-assets/less/",
-    "ui-assets/less/editor.less"
-    "#{BUILD}/css/editor.css"
-    (e2) ->
-     util.css "ui-assets/less/",
-      "ui-assets/less/paginate.less"
-      "#{BUILD}/css/paginate.css"
-      (e3) ->
-       util.css "ui-assets/less/",
-        "ui-assets/less/fonts.less"
-        "#{BUILD}/css/fonts.css"
-        (e4) ->
-          util.watch filesToWatch, css, []
-          callback? e1 + e2 + e3 + e4
+ COMPILE_CSS_FILE 'style', (e1) ->
+  COMPILE_CSS_FILE 'paginate', (e2) ->
+   COMPILE_CSS_FILE 'fonts', (e3) ->
+    util.watch filesToWatch, _css, []
+    callback? e1 + e2 + e3
 
 
-dirList = (files) ->
- dirs = {}
- for file in files
-  parts = file.split '/'
-  d = dirs
-  for i in [0...parts.length - 1]
-   d[parts[i]] ?= {}
-   d = d[parts[i]]
+exports.js = ->
+ try
+  if FS_UTIL.exists "#{BUILD}/js"
+   FS_UTIL.rm_r "#{BUILD}/js"
+  FS_UTIL.mkdir "#{BUILD}/js"
+ catch e
+  LOG e, 'red'
+  return 1
 
- list = []
- getDirs = (prefix, d) ->
-  for k of d
-   list.push "#{prefix}#{k}"
-   getDirs "#{prefix}#{k}/", d[k]
-
- getDirs '', dirs
-
- return list
-
-
-exports.js = (callback) ->
- mkdir = dirList UI_JS
- if fs.existsSync "#{BUILD}/js"
-  commands = ["rm -r #{BUILD}/js"]
- else
-  commands = []
-
- commands.push "mkdir #{BUILD}/js"
- for d in mkdir
-  commands.push "mkdir #{BUILD}/js/#{d}"
-
- exec commands.join('&&'), (e, stderr, stdout) ->
-  if e?
-   util.log stderr.trim(), 'red'
-   util.log stdout.trim(), 'red'
-   e = 1
-  else
-   e = 0
-   for file in UI_JS
-    if fs.existsSync "js/#{file}.coffee"
-     e += util.js "js/#{file}.coffee", "#{BUILD}/js/#{file}.js"
-    else
-     e += util.js "js/#{file}.litcoffee", "#{BUILD}/js/#{file}.js"
-
-  callback e
+ COMPILE_COFFEE_DIR "js", "#{BUILD}/js"
 
