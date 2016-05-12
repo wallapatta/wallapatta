@@ -1,0 +1,4 @@
+*.coffee
+build
+/electron
+/ui-assets
