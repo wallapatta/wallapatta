@@ -6,7 +6,7 @@ COMPILE_CSS = (require '../util').css
 COMPILE_CSS_FILE = (file, callback) ->
  COMPILE_CSS "electron/less/",
   "electron/less/#{file}.less"
-  "#{BUILD}/css/#{file}.css"
+  "#{BUILD}/app/css/#{file}.css"
   callback
 
 UI_LESS = [
@@ -15,8 +15,8 @@ UI_LESS = [
 
 exports.assets = ->
  try
-  FS_UTIL.cp_r "electron/lib", "#{BUILD}/lib"
-  FS_UTIL.cp_r "electron/ui-assets", "#{BUILD}/assets"
+  FS_UTIL.cp_r "electron/lib", "#{BUILD}/app/lib"
+  FS_UTIL.cp_r "electron/ui-assets", "#{BUILD}/app/assets"
  catch e
   LOG e, 'red'
   return 1
@@ -25,7 +25,7 @@ exports.assets = ->
 exports.html = ->
  try
   htmlCode = (require '../electron/html/index').html()
-  fs.writeFileSync "#{BUILD}/index.html", htmlCode
+  fs.writeFileSync "#{BUILD}/app/index.html", htmlCode
   LOG " - index.html" unless options.quiet
  catch err
   LOG " - index.html", 'red'
@@ -46,20 +46,9 @@ _css = exports.css = (callback) ->
 
 exports.app = ->
  err = 0
- err += COMPILE_COFFEE_DIR "electron/js", "#{BUILD}"
- err +=  COMPILE_COFFEE_DIR "electron/ui", "#{BUILD}/js"
+ err += COMPILE_COFFEE_DIR "electron/js", "#{BUILD}/app/"
+ err +=  COMPILE_COFFEE_DIR "electron/ui", "#{BUILD}/app/js"
  return err if err > 0
-
- #Move app folder
- try
-  FS_UTIL.mv "#{BUILD}", "temp"
-  FS_UTIL.mkdir "#{BUILD}"
-  FS_UTIL.mv "temp", "#{BUILD}/app"
- catch e
-  LOG e, 'red'
-  return 1
-
- return 0
 
  try
   FS_UTIL.cp "electron/app.json", "#{BUILD}/app/package.json"
