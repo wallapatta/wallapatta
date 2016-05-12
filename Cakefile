@@ -32,6 +32,7 @@ task "electron", "Build Electron", (opts) ->
  UI.css (e1) ->
   console.log 'ui'
   e += ELECTRON.assets()
+  e += ELECTRON.html()
   e += ELECTRON.app()
   ELECTRON.css (e2) ->
    LOG.finish e + e1 + e2

@@ -1,4 +1,5 @@
 FS_UTIL = require './fs_util'
+FS = require 'fs'
 LOG = (require './log').log
 PATH = require 'path'
 COMPILE_COFFEE_DIR = (require './util').jsDir
@@ -26,7 +27,7 @@ exports.assets = ->
 exports.html = ->
  try
   htmlCode = (require '../electron/html/index').html()
-  fs.writeFileSync "#{APP}/index.html", htmlCode
+  FS.writeFileSync "#{APP}/index.html", htmlCode
   LOG " - index.html" unless options.quiet
  catch err
   LOG " - index.html", 'red'

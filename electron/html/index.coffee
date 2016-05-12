@@ -1,6 +1,4 @@
-VERSION = 9
-
-Weya = require '../lib//weya/weya'
+Weya = (require 'weya').Weya
 
 template = ->
  @html ->
