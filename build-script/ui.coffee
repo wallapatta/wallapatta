@@ -7,7 +7,7 @@ WATCH = (require './util').watch
 COMPILE_CSS_FILE = (file, callback) ->
  COMPILE_CSS "ui-assets/less/",
   "ui-assets/less/#{file}.less"
-  "#{BUILD}/app/css/#{file}.css"
+  "#{APP}/css/#{file}.css"
   callback
 
 UI_LESS = [
@@ -18,29 +18,29 @@ UI_LESS = [
 
 exports.assets = ->
  try
-  if FS_UTIL.exists "#{BUILD}/app/lib"
-   FS_UTIL.rm_r "#{BUILD}/app/lib"
-  if FS_UTIL.exists "#{BUILD}/app/css"
-   FS_UTIL.rm_r "#{BUILD}/app/css"
-  if FS_UTIL.exists "#{BUILD}/app/assets"
-   FS_UTIL.rm_r "#{BUILD}/app/assets"
+  if FS_UTIL.exists "#{APP}/lib"
+   FS_UTIL.rm_r "#{APP}/lib"
+  if FS_UTIL.exists "#{APP}/css"
+   FS_UTIL.rm_r "#{APP}/css"
+  if FS_UTIL.exists "#{APP}/assets"
+   FS_UTIL.rm_r "#{APP}/assets"
 
-  FS_UTIL.mkdir "#{BUILD}/app/css"
-  FS_UTIL.mkdir "#{BUILD}/app/assets"
-  FS_UTIL.mkdir "#{BUILD}/app/lib"
-  FS_UTIL.mkdir "#{BUILD}/app/lib/weya"
-  FS_UTIL.mkdir "#{BUILD}/app/lib/mod"
+  FS_UTIL.mkdir "#{APP}/css"
+  FS_UTIL.mkdir "#{APP}/assets"
+  FS_UTIL.mkdir "#{APP}/lib"
+  FS_UTIL.mkdir "#{APP}/lib/weya"
+  FS_UTIL.mkdir "#{APP}/lib/mod"
 
-  FS_UTIL.cp_r "ui-assets/lib", "#{BUILD}/app/lib"
-  FS_UTIL.cp_r "ui-assets/assets", "#{BUILD}/app/assets"
+  FS_UTIL.cp_r "ui-assets/lib", "#{APP}/lib"
+  FS_UTIL.cp_r "ui-assets/assets", "#{APP}/assets"
  catch e
   LOG e, 'red'
   return 1
 
  err = 0
 
- err += COMPILE_COFFEE_DIR "lib/weya/", "#{BUILD}/app/lib/weya"
- err += COMPILE_COFFEE_DIR "lib/mod/", "#{BUILD}/app/lib/mod"
+ err += COMPILE_COFFEE_DIR "lib/weya/", "#{APP}/lib/weya"
+ err += COMPILE_COFFEE_DIR "lib/mod/", "#{APP}/lib/mod"
 
  return err
 
@@ -58,12 +58,12 @@ _css = exports.css = (callback) ->
 
 exports.js = ->
  try
-  if FS_UTIL.exists "#{BUILD}/app/js"
-   FS_UTIL.rm_r "#{BUILD}/app/js"
-  FS_UTIL.mkdir "#{BUILD}/app/js"
+  if FS_UTIL.exists "#{APP}/js"
+   FS_UTIL.rm_r "#{APP}/js"
+  FS_UTIL.mkdir "#{APP}/js"
  catch e
   LOG e, 'red'
   return 1
 
- COMPILE_COFFEE_DIR "js", "#{BUILD}/app/js"
+ COMPILE_COFFEE_DIR "js", "#{APP}/js"
 

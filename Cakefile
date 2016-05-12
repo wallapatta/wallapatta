@@ -1,5 +1,7 @@
 require 'coffee-script/register'
+GLOBAL.APP = 'app'
 GLOBAL.BUILD = 'build'
+
 
 LOG = require './build-script/log'
 UI = require './build-script/ui'
@@ -14,7 +16,7 @@ option '-c', '--compress', 'Compress files via YUIC'
 task 'clean', "Cleans up build directory", (opts) ->
  LOG.finish CLEAN()
 
-task 'build:npm', "Build npm", (opts) ->
+task 'npm', "Build npm", (opts) ->
  GLOBAL.options = opts
  CLEAN()
  ui.assets (e1) ->
@@ -22,7 +24,7 @@ task 'build:npm', "Build npm", (opts) ->
    npm.npm (e3) ->
    LOG.finish e1 + e2 + e3
 
-task "build:electron", "Build Electron", (opts) ->
+task "electron", "Build Electron", (opts) ->
  GLOBAL.options = opts
  e = 0
  e += UI.assets()
@@ -39,7 +41,9 @@ CLEAN = ->
   if FS_UTIL.exists BUILD
    FS_UTIL.rm_r BUILD
   FS_UTIL.mkdir "#{BUILD}"
-  FS_UTIL.mkdir "#{BUILD}/app"
+  if FS_UTIL.exists APP
+   FS_UTIL.rm_r APP
+  FS_UTIL.mkdir "#{APP}"
  catch e
   LOG.log e.message, 'red'
   return 1

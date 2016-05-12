@@ -7,7 +7,7 @@ WATCH = (require './util').watch
 COMPILE_CSS_FILE = (file, callback) ->
  COMPILE_CSS "electron/less/",
   "electron/less/#{file}.less"
-  "#{BUILD}/app/css/#{file}.css"
+  "#{APP}/css/#{file}.css"
   callback
 
 UI_LESS = [
@@ -16,8 +16,8 @@ UI_LESS = [
 
 exports.assets = ->
  try
-  FS_UTIL.cp_r "electron/lib", "#{BUILD}/app/lib"
-  FS_UTIL.cp_r "electron/ui-assets", "#{BUILD}/app/assets"
+  FS_UTIL.cp_r "electron/lib", "#{APP}/lib"
+  FS_UTIL.cp_r "electron/ui-assets", "#{APP}/assets"
  catch e
   LOG e, 'red'
   return 1
@@ -26,7 +26,7 @@ exports.assets = ->
 exports.html = ->
  try
   htmlCode = (require '../electron/html/index').html()
-  fs.writeFileSync "#{BUILD}/app/index.html", htmlCode
+  fs.writeFileSync "#{APP}/index.html", htmlCode
   LOG " - index.html" unless options.quiet
  catch err
   LOG " - index.html", 'red'
@@ -47,15 +47,15 @@ _css = exports.css = (callback) ->
 
 exports.app = ->
  err = 0
- err += COMPILE_COFFEE_DIR "electron/js", "#{BUILD}/app/"
- err +=  COMPILE_COFFEE_DIR "electron/ui", "#{BUILD}/app/js"
+ err += COMPILE_COFFEE_DIR "electron/js", "#{APP}"
+ err +=  COMPILE_COFFEE_DIR "electron/ui", "#{APP}/js"
  return err if err > 0
 
  try
-  FS_UTIL.cp "electron/app.json", "#{BUILD}/app/package.json"
-  FS_UTIL.cp "electron/build.json", "#{BUILD}/package.json"
-  FS_UTIL.mkdir "#{BUILD}/build"
-  FS_UTIL.cp_r "electron//assets", "#{BUILD}/build"
+  FS_UTIL.cp "electron/package.json", "#{APP}/package.json"
+  if not FS_UTIL.exists "#{APP}/build"
+   FS_UTIL.mkdir "#{APP}/build"
+  FS_UTIL.cp_r "electron//assets", "#{APP}/build"
  catch e
   LOG e, 'red'
   return 1
