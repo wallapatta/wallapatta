@@ -1,8 +1,9 @@
 FS_UTIL = require './fs_util'
-LOG = (require '../log').log
+LOG = (require './log').log
 PATH = require 'path'
 COMPILE_COFFEE_DIR = (require './util').jsDir
-COMPILE_CSS = (require '../util').css
+COMPILE_CSS = (require './util').css
+WATCH = (require './util').watch
 COMPILE_CSS_FILE = (file, callback) ->
  COMPILE_CSS "electron/less/",
   "electron/less/#{file}.less"
@@ -40,7 +41,7 @@ _css = exports.css = (callback) ->
  filesToWatch = ("electron/less/#{f}.less" for f in filesToWatch)
 
  COMPILE_CSS_FILE 'editor', (e1) ->
-  util.watch filesToWatch, _css, []
+  WATCH filesToWatch, _css, []
   callback? e1
 
 
@@ -56,7 +57,7 @@ exports.app = ->
   FS_UTIL.mkdir "#{BUILD}/build"
   FS_UTIL.cp_r "electron//assets", "#{BUILD}/build"
  catch e
-  LGO e, 'red'
+  LOG e, 'red'
   return 1
 
  return 0

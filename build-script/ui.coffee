@@ -1,8 +1,9 @@
 FS_UTIL = require './fs_util'
-LOG = (require '../log').log
+LOG = (require './log').log
 PATH = require 'path'
 COMPILE_COFFEE_DIR = (require './util').jsDir
-COMPILE_CSS = (require '../util').css
+COMPILE_CSS = (require './util').css
+WATCH = (require './util').watch
 COMPILE_CSS_FILE = (file, callback) ->
  COMPILE_CSS "ui-assets/less/",
   "ui-assets/less/#{file}.less"
@@ -51,7 +52,7 @@ _css = exports.css = (callback) ->
  COMPILE_CSS_FILE 'style', (e1) ->
   COMPILE_CSS_FILE 'paginate', (e2) ->
    COMPILE_CSS_FILE 'fonts', (e3) ->
-    util.watch filesToWatch, _css, []
+    WATCH filesToWatch, _css, []
     callback? e1 + e2 + e3
 
 

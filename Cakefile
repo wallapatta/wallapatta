@@ -3,10 +3,9 @@ GLOBAL.BUILD = 'build'
 
 LOG = require './build-script/log'
 UI = require './build-script/ui'
-npm = require './build-script/npm'
+FS_UTIL = require './build-script/fs_util'
+#npm = require './build-script/npm'
 ELECTRON = require './build-script/electron'
-fs = require 'fs'
-{spawn, exec} = require 'child_process'
 
 option '-q', '--quiet',    'Only diplay errors'
 option '-w', '--watch',    'Watch files for change and automatically recompile'
@@ -29,8 +28,8 @@ task "build:electron", "Build Electron", (opts) ->
  e += UI.assets()
  e += UI.js()
  UI.css (e1) ->
+  console.log 'ui'
   e += ELECTRON.assets()
-  e += ELECTRON.js()
   e += ELECTRON.app()
   ELECTRON.css (e2) ->
    LOG.finish e + e1 + e2
