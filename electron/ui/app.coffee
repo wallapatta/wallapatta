@@ -32,6 +32,13 @@ Mod.require 'Weya.Base',
      openUrl: @on.openUrl
      onChanged: @on.editorChanged
 
+   load: (callback) ->
+    IPC.on 'userDataPath', (e, path) =>
+     @_userDataPath = path
+     console.log path
+     callback()
+    IPC.send 'getUserDataPath'
+
    @listen 'addResources', (data) ->
     console.log 'resources', data.length
     @resources = {}
@@ -156,5 +163,6 @@ Mod.require 'Weya.Base',
 
   APP = new App()
   IPC.on 'fileOpened', APP.on.fileOpened
-  APP.render ->
+  APP.load ->
+   APP.render ->
 
