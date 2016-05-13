@@ -113,7 +113,8 @@ Mod.require 'Weya.Base',
     @file =
      name: PATH.basename file, '.ds'
      path: file
-    @editor.setText "#{FS.readFileSync file}"
+    @content = "#{FS.readFileSync file}"
+    @editor.setText @content
     @_editorChanged = false
     @_changed = false
     @elems.save.style.display = 'inline-block'
@@ -138,7 +139,6 @@ Mod.require 'Weya.Base',
    @listen 'saveTemporary', ->
     return if not @file?
     return if not @_editorChanged
-    @saveContent()
     @_editorChanged = false
 
    @listen 'watchChanges', ->

@@ -37,8 +37,7 @@ Mod.require 'Weya.Base',
      btn.call this, 'indent', 'indent', 'italic'
      btn.call this, 'outdent', 'outdent', 'italic'
 
-    @div ".btn-group", ->
-     btn.call this, 'check', 'checkSpelling', 'italic'
+    btn.call this, 'check', 'checkSpelling', 'italic'
 
 
     #@$.elems.pickMediaDialog = @div ".pick-media-dialog",
