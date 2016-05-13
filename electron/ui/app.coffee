@@ -5,6 +5,7 @@ Mod.require 'Weya.Base',
   ELECTRON = require 'electron'
   IPC = ELECTRON.ipcRenderer
   FS = require 'fs'
+  PATH = require 'path'
 
   PROTOCOLS = [
    'https://'
@@ -29,7 +30,7 @@ Mod.require 'Weya.Base',
     @content = ''
     @editor = new Editor
      openUrl: @on.openUrl
-     onChanged: @on.changed
+     onChanged: @on.editorChanged
 
    @listen 'addResources', (data) ->
     console.log 'resources', data.length
@@ -40,19 +41,11 @@ Mod.require 'Weya.Base',
     text = @removeTrailingSpace @editor.getText()
     @editor.setText text
 
-   @listen 'setText', (data) ->
-    console.log (new Date), 'setText', data.saved
-    if data.saved
-     @content = data.content
-    @editor.setText data.content
-    @_changed = false
-    if not @_watchInterval?
-     @_watchInterval = setInterval @on.watchChanges, 500
 
    @listen 'error', (e) ->
     console.error e
 
-   @listen 'change', ->
+   @listen 'editorChanged', ->
     @_editorChanged = true
 
    @listen 'openUrl', (url) ->
@@ -78,10 +71,12 @@ Mod.require 'Weya.Base',
            @span ".icon.icon-upload", null
          @$.elems.save = @button ".btn.btn-default",
           title: "Save file"
+          style: {display: 'none'}
           on: {click: @$.on.save}
           ->
-           @span ".icon.icon-download", null
-         @$.elems.save = @button ".btn.btn-default",
+           @span ".icon.icon-download.icon-text", null
+           @$.elems.saveName = @span ""
+         @button ".btn.btn-default",
           title: "Save file"
           on: {click: @$.on.saveAs}
           "SaveAs"
@@ -104,7 +99,9 @@ Mod.require 'Weya.Base',
 
     #window.addEventListener 'resize', @on.resize
 
-    @editor.render @elems.editor, @elems.editorToolbar, ->
+    @editor.render @elems.editor, @elems.editorToolbar, =>
+     @_watchInterval = setInterval @on.watchChanges, 500
+     @_saveTemInterval = setInterval @on.saveTemporary, 1000
      callback()
 
    @listen 'folder', ->
@@ -113,9 +110,20 @@ Mod.require 'Weya.Base',
     return if not files?
     return if files.length <= 0
     file = files[0]
-    console.log "#{FS.readFileSync file}"
+    @file =
+     name: PATH.basename file, '.ds'
+     path: file
+    @editor.setText "#{FS.readFileSync file}"
+    @_editorChanged = false
+    @_changed = false
+    @elems.save.style.display = 'inline-block'
+    @elems.saveName.textContent = "#{@file.name}"
 
    @listen 'save', ->
+    text = @removeTrailingSpace @editor.getText()
+    @editor.setText text
+    @content = text
+    @send 'saveFileContent', content: text
    @listen 'saveAs', ->
    @listen 'print', ->
     @editor.on.print()
@@ -127,23 +135,21 @@ Mod.require 'Weya.Base',
 
     lines.join '\n'
 
-   @listen 'save', ->
-    text = @removeTrailingSpace @editor.getText()
-    @editor.setText text
-    @content = text
-    @send 'saveFileContent', content: text
+   @listen 'saveTemporary', ->
+    return if not @file?
+    return if not @_editorChanged
+    @saveContent()
+    @_editorChanged = false
 
    @listen 'watchChanges', ->
-    if @_editorChanged
-     @send 'change', content: @editor.getText()
-     @_editorChanged = false
+    return if not @file?
     if @editor.getText() isnt @content
      if not @_changed
-      @send 'fileChanged', changed: true
+      @elems.saveName.textContent = "#{@file.name} *"
       @_changed = true
     else
      if @_changed
-      @send 'fileChanged', changed: false
+      @elems.saveName.textContent = "#{@file.name}"
       @_changed = false
 
 
