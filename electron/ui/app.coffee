@@ -36,11 +36,6 @@ Mod.require 'Weya.Base',
     @send 'resourcesAdded', {}
     text = @removeTrailingSpace @editor.getText()
     @editor.setText text
-    @editor.setResources (path for path of @resources)
-
-   send: (method, data) ->
-    data.method = method
-    PARENT.postMessage data, '*'
 
    @listen 'setText', (data) ->
     console.log (new Date), 'setText', data.saved
@@ -62,11 +57,47 @@ Mod.require 'Weya.Base',
 
 
    render: (callback) ->
-    @editor.render ->
-     setTimeout ->
-      toolbar = document.getElementById 'toolbar'
-      toolbar.style.display = 'none'
-     , 300
+    @elems.container = document.body
+    Weya elem: @elems.container, context: this, ->
+     @div ".toolbar", ->
+      @span ->
+       @$.elems.folder = @i ".fa.fa-lg.fa-folder",
+        title: 'Select images folder'
+        on: {click: @$.on.folder}
+       @$.elems.open = @i ".fa.fa-lg.fa-upload",
+        title: 'Open file'
+        on: {click: @$.on.file}
+
+      @$.elems.save = @span ->
+       @i ".fa.fa-lg.fa-download",
+        title: 'Save file'
+        on: {click: @$.on.save}
+        style: {display: 'none'}
+
+      @i ".fa.fa-lg.fa-save",
+       title: 'Save as'
+       on: {click: @$.on.saveAs}
+
+      @i ".fa.fa-lg.fa-print",
+       title: 'Print'
+       on: {click: @$.on.print}
+
+      @$.elems.saveName = @span ".file-name", ""
+
+      @i ".fa.fa-lg.fa-question",
+       title: 'Help'
+       style: {float: 'right'}
+       on: {click: @$.on.help}
+
+     @$.elems.editor = @div ".editor", ''
+
+    #window.addEventListener 'resize', @on.resize
+
+    @editor.render @elems.editor, ->
+     #setTimeout ->
+     # toolbar = document.getElementById 'toolbar'
+     # toolbar.style.display = 'none'
+     #, 300
 
      callback()
 

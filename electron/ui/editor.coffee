@@ -292,15 +292,12 @@ Mod.require 'Weya.Base',
     @editor.setSize null, "#{height - 100}px"
     @elems.preview.style.maxHeight = "#{height - 50}px"
 
-   render: (callback) ->
+   render: (elem, callback) ->
     @_onRendered = callback
-    @elems.container = document.body
+    @elems.container = elem
     Weya elem: @elems.container, context: this, @template
 
     window.requestAnimationFrame @on.setupEditor
-
-   setResources: (resources) ->
-    @_resources = resources
 
    @listen 'pickMediaClick', (e) ->
     @elems.pickMediaDialog.style.display = 'none'

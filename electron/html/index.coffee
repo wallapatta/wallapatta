@@ -44,7 +44,7 @@ template = ->
    @script src:"js/nodes.js"
    @script src:"js/sample.js"
    @script src:"js/render.js"
-   @script src:"js/sandbox.js"
+   @script src:"js/app.js"
 
 
 exports.html = (options) ->
