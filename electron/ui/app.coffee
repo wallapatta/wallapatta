@@ -20,8 +20,9 @@ Mod.require 'Weya.Base',
     if (url.substr 0, protocol.length) is protocol
      return url
 
+   return url if not APP.folder?
    url = "/#{url}" if url[0] isnt '/'
-   return "#{APP.resourcesPath}#{url}"
+   return "#{APP.folder.url}#{url}"
 
   class App extends Base
    @initialize ->
@@ -42,16 +43,6 @@ Mod.require 'Weya.Base',
      #TODO load options, temporary
      callback()
     IPC.send 'getUserDataPath'
-
-   @listen 'addResources', (data) ->
-    console.log 'resources', data.length
-    @resources = {}
-    for d in data
-     @resources[d.path] = d.dataURL
-    @send 'resourcesAdded', {}
-    text = @removeTrailingSpace @editor.getText()
-    @editor.setText text
-
 
    @listen 'error', (e) ->
     console.error e
@@ -115,7 +106,23 @@ Mod.require 'Weya.Base',
      @_saveTemInterval = setInterval @on.saveTemporary, 60 * 1000
      callback()
 
-   @listen 'folder', ->
+   @listen 'folder', -> IPC.send 'openFolder'
+   @listen 'folderOpened', (e, folders) ->
+    console.log folders
+    return if not folders?
+    return if folders.length <= 0
+    folder = folders[0]
+    url = folder.split PATH.sep
+    url.shift() while url.length > 0 and url[0] is ''
+    return if not url.length > 1
+    url = ['file://'].concat folder.split PATH.sep
+    url = url.slice 0, url.length - 1
+    @folder =
+     path: folder
+     url: url.join '/'
+    @content = @removeTrailingSpace @editor.getText()
+    @editor.setText @content
+
    @listen 'file', -> IPC.send 'openFile'
    @listen 'fileOpened', (e, files) ->
     return if not files?
@@ -184,6 +191,7 @@ Mod.require 'Weya.Base',
 
   APP = new App()
   IPC.on 'fileOpened', APP.on.fileOpened
+  IPC.on 'folderOpened', APP.on.folderOpened
   APP.load ->
    APP.render ->
 
