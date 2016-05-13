@@ -143,10 +143,14 @@ Mod.require 'Weya.Base',
     @elems.saveName.textContent = "#{@file.name}"
 
    @listen 'save', ->
-    text = @removeTrailingSpace @editor.getText()
-    @editor.setText text
-    @content = text
-    @send 'saveFileContent', content: text
+    @content = @removeTrailingSpace @editor.getText()
+    @editor.setText @content
+    FS.writeFile @file.path, @content, (err) ->
+     if err?
+      console.error err
+     else
+      console.log 'file saved'
+
    @listen 'saveAs', ->
    @listen 'print', ->
     @editor.on.print()
