@@ -13,9 +13,6 @@ Mod.require 'Weya.Base',
      @div ".row", ->
       @div ".five.columns", ->
         @div ".toolbar", ->
-         @div "#toolbar", ->
-          @i ".fa.fa-print", on: {click: @$.on.print}
-
          @div ->
           @i ".fa.fa-header", on: {click: @$.on.header}
 
