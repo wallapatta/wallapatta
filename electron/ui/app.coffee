@@ -2,6 +2,9 @@ Mod.require 'Weya.Base',
  'Weya'
  'Editor'
  (Base, Weya, Editor) ->
+  ELECTRON = require 'electron'
+  IPC = ELECTRON.ipcRenderer
+  FS = require 'fs'
 
   PROTOCOLS = [
    'https://'
@@ -102,13 +105,18 @@ Mod.require 'Weya.Base',
     #window.addEventListener 'resize', @on.resize
 
     @editor.render @elems.editor, @elems.editorToolbar, ->
-     #setTimeout ->
-     # toolbar = document.getElementById 'toolbar'
-     # toolbar.style.display = 'none'
-     #, 300
-
      callback()
 
+   @listen 'folder', ->
+   @listen 'file', -> IPC.send 'openFile'
+   @listen 'fileOpened', (e, files) ->
+    return if not files?
+    return if files.length <= 0
+    file = files[0]
+    console.log "#{FS.readFileSync file}"
+
+   @listen 'save', ->
+   @listen 'saveAs', ->
    @listen 'print', ->
     @editor.on.print()
 
@@ -141,5 +149,6 @@ Mod.require 'Weya.Base',
 
 
   APP = new App()
+  IPC.on 'fileOpened', APP.on.fileOpened
   APP.render ->
 

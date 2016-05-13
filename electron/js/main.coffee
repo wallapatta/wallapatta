@@ -5,6 +5,8 @@ PATH = require 'path'
 mainWindow = null
 console.log electron
 
+require './app'
+
 
 handleSquirrelEvent = ->
  return false if process.argv.length <= 1
