@@ -59,37 +59,45 @@ Mod.require 'Weya.Base',
    render: (callback) ->
     @elems.container = document.body
     Weya elem: @elems.container, context: this, ->
-     @div ".toolbar", ->
-      @span ->
-       @$.elems.folder = @i ".fa.fa-lg.fa-folder",
-        title: 'Select images folder'
-        on: {click: @$.on.folder}
-       @$.elems.open = @i ".fa.fa-lg.fa-upload",
-        title: 'Open file'
-        on: {click: @$.on.file}
+     @div ".window", ->
+      @header ".toolbar.toolbar-header", ->
+       @h1 ".title", "Wallaptta"
 
-      @$.elems.save = @span ->
-       @i ".fa.fa-lg.fa-download",
-        title: 'Save file'
-        on: {click: @$.on.save}
-        style: {display: 'none'}
+       @div ".toolbar-actions", ->
+        @div ".btn-group", ->
+         @button ".btn.btn-default",
+          title: "Select images folder"
+          on: {click: @$.on.folder}
+          ->
+           @span ".icon.icon-folder", null
+         @button ".btn.btn-default",
+          title: "Open file"
+          on: {click: @$.on.file}
+          ->
+           @span ".icon.icon-upload", null
+         @$.elems.save = @button ".btn.btn-default",
+          title: "Save file"
+          on: {click: @$.on.save}
+          ->
+           @span ".icon.icon-download", null
+         @$.elems.save = @button ".btn.btn-default",
+          title: "Save file"
+          on: {click: @$.on.saveAs}
+          "SaveAs"
+         @button ".btn.btn-default",
+          title: "Print"
+          on: {click: @$.on.print}
+          ->
+           @span ".icon.icon-print", null
 
-      @i ".fa.fa-lg.fa-save",
-       title: 'Save as'
-       on: {click: @$.on.saveAs}
+        @button ".btn.btn-default.pull-right",
+         title: "Help"
+         on: {click: @$.on.help}
+         ->
+          @span ".icon.icon-help", null
 
-      @i ".fa.fa-lg.fa-print",
-       title: 'Print'
-       on: {click: @$.on.print}
-
-      @$.elems.saveName = @span ".file-name", ""
-
-      @i ".fa.fa-lg.fa-question",
-       title: 'Help'
-       style: {float: 'right'}
-       on: {click: @$.on.help}
-
-     @$.elems.editor = @div ".editor", ''
+      @div ".window-content", ->
+       @$.elems.editor = @div ".editor", ''
 
     #window.addEventListener 'resize', @on.resize
 
