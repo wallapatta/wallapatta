@@ -46,27 +46,26 @@ Mod.require 'Weya.Base',
 
 
    template: ->
-    @$.elems.editorContainer = @div ".container.wallapatta-editor", ->
-     @div ".row", ->
-      @div ".five.columns", ->
-        @$.elems.textarea = @textarea ".editor",
-         autocomplete: "off"
-         spellcheck: "false"
+    @$.elems.editorContainer = @div ".pane-group.wallapatta-editor", ->
+     @div ".pane.editor-pane", ->
+       @$.elems.textarea = @textarea ".editor",
+        autocomplete: "off"
+        spellcheck: "false"
 
-      @$.elems.preview = @div ".preview.seven.columns", ->
-       @$.elems.errors = @div ".row.error", null
+     @$.elems.preview = @div ".pane.preview-pane", ->
+      @$.elems.errors = @div ".error", null
 
-       @div ".row.wallapatta", ->
-        @$.elems.previewMain = @div ".nine.columns",
-         on:
-          click: @$.on.previewClick
-          dblclick: @$.on.previewDbClick
-        @$.elems.previewSidebar = @div ".three.columns",
-         on:
-          click: @$.on.previewClick
-          dblclick: @$.on.previewDbClick
+      @div ".wallapatta", ->
+       @$.elems.previewMain = @div ".wallapatta-main",
+        on:
+         click: @$.on.previewClick
+         dblclick: @$.on.previewDbClick
+       @$.elems.previewSidebar = @div ".wallapatta-sidebar",
+        on:
+         click: @$.on.previewClick
+         dblclick: @$.on.previewDbClick
 
-    @$.elems.printForm = @div ".container.print-form", style: {display: 'none'}, ->
+    @$.elems.printForm = @div ".print-form", style: {display: 'none'}, ->
      @form ->
       @button "Edit",
        on: {click: @$.on.closePrint}
@@ -84,7 +83,7 @@ Mod.require 'Weya.Base',
          on: {click: @$.on.renderPrint}
 
 
-    @$.elems.printContainer = @div ".container.wallapatta-container.wallapatta-print", ->
+    @$.elems.printContainer = @div ".wallapatta-container.wallapatta-print", ->
      @$.elems.printDoc = @div ".row.wallapatta", ->
       @$.elems.printMain = @div ".nine.columns", null
       @$.elems.printSidebar = @div ".three.columns", null

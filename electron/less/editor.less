@@ -30,19 +30,6 @@
  span {
   display: inline-block;
  }
-
- #toolbar {
-  i {
-   color: #aaa;
-   width: 30px;
-  }
-  .fa-print {
-   //float: right;
-  }
-  border-bottom: 1px solid #eee;
-  padding-bottom: 3px;
-  margin-bottom: 3px;
- }
 }
 
 .CodeMirror {
@@ -84,8 +71,13 @@
  color: #ff4444;
 }
 
-.preview {
- overflow-y: scroll;
+.preview-pane {
+ flex-grow: 7;
+ border: none;
+ padding-left: 25px;
+}
+.editor-pane {
+ flex-grow: 5;
 }
 
 .wallapatta-editor {
