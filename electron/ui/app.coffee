@@ -7,6 +7,7 @@ Mod.require 'Weya.Base',
   FS = require 'fs'
   PATH = require 'path'
 
+  TEMPORARY_FILE = 'temporary.swp.ds'
   PROTOCOLS = [
    'https://'
    'http://'
@@ -25,7 +26,6 @@ Mod.require 'Weya.Base',
    @initialize ->
     @elems = {}
     @resources = {}
-    @_changed = false
     @_editorChanged = false
     @content = ''
     @editor = new Editor
@@ -123,7 +123,6 @@ Mod.require 'Weya.Base',
     @content = "#{FS.readFileSync file}"
     @editor.setText @content
     @_editorChanged = false
-    @_changed = false
     @elems.save.style.display = 'inline-block'
     @elems.saveName.textContent = "#{@file.name}"
 
@@ -146,18 +145,24 @@ Mod.require 'Weya.Base',
    @listen 'saveTemporary', ->
     return if not @file?
     return if not @_editorChanged
+    FS.writeFile (PATH.join @_userDataPath, TEMPORARY_FILE),
+     @editor.getText()
+     (err) ->
+      if err?
+       console.error err
+      else
+       console.log 'temporary file saved'
     @_editorChanged = false
+    @elems.saveName.style.color = '#333'
 
    @listen 'watchChanges', ->
     return if not @file?
     if @editor.getText() isnt @content
-     if not @_changed
-      @elems.saveName.textContent = "#{@file.name} *"
-      @_changed = true
+     @elems.saveName.textContent = "#{@file.name} *"
+     if @_editorChanged
+      @elems.saveName.style.color = '#c00'
     else
-     if @_changed
-      @elems.saveName.textContent = "#{@file.name}"
-      @_changed = false
+     @elems.saveName.textContent = "#{@file.name}"
 
 
 
