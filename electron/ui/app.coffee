@@ -9,6 +9,9 @@ Mod.require 'Weya.Base',
 
   TEMPORARY_FILE = 'temporary.swp.ds'
   OPTIONS_FILE = 'options.json'
+  TEMPORARY_SAVE_INTERVAL = 30 * 1000
+  CHANGED_WATCH_INTERVAL = 500
+
   PROTOCOLS = [
    'https://'
    'http://'
@@ -102,8 +105,8 @@ Mod.require 'Weya.Base',
     #window.addEventListener 'resize', @on.resize
 
     @editor.render @elems.editor, @elems.editorToolbar, =>
-     @_watchInterval = setInterval @on.watchChanges, 500
-     @_saveTemInterval = setInterval @on.saveTemporary, 60 * 1000
+     @_watchInterval = setInterval @on.watchChanges, CHANGED_WATCH_INTERVAL
+     @_saveTemInterval = setInterval @on.saveTemporary, TEMPORARY_SAVE_INTERVAL
      callback()
 
    @listen 'folder', -> IPC.send 'openFolder'
