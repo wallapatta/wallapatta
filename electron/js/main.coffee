@@ -59,8 +59,8 @@ handleSquirrelEvent = ->
 
 createWindow = ->
  #console.log electron
- autoUpdater = electron.autoUpdater
- autoUpdater.setFeedURL "http://localhost:3000/update"
+ #autoUpdater = electron.autoUpdater
+ #autoUpdater.setFeedURL "http://localhost:3000/update"
  mainWindow = new BrowserWindow width: 800, height: 600
  mainWindow.setMenu null
  mainWindow.loadURL "file://#{__dirname}/index.html"
@@ -72,8 +72,8 @@ createWindow = ->
   # when you should delete the corresponding element.
   mainWindow = null
 
- autoUpdater.addListener 'error', (e) ->
-  throw 'error'
+ #autoUpdater.addListener 'error', (e) ->
+ # throw 'error'
 
  mainWindow.webContents.once "did-frame-finish-load", (e) ->
   console.log 'frame load'
@@ -81,7 +81,7 @@ createWindow = ->
   #autoUpdater.checkForUpdates()
 
 
-return if handleSquirrelEvent()
+#return if handleSquirrelEvent()
 
 app.on 'ready', createWindow
 
