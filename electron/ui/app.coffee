@@ -125,8 +125,7 @@ Mod.require 'Weya.Base',
      url: url.join '/'
     @options.folder = @folder.path
     @saveOptions()
-    @content = @removeTrailingSpace @editor.getText()
-    @editor.setText @content
+    @editor.setText @removeTrailingSpace @editor.getText()
 
    @listen 'file', -> IPC.send 'openFile'
    @listen 'fileOpened', (e, files) ->
@@ -154,7 +153,21 @@ Mod.require 'Weya.Base',
      else
       console.log 'file saved'
 
-   @listen 'saveAs', ->
+   @listen 'saveAs', -> IPC.send 'saveFile'
+   @listen 'saveFile', (e, file) ->
+    return if not file?
+    @file =
+     name: PATH.basename file, '.ds'
+     path: file
+    @content = @removeTrailingSpace @editor.getText()
+    @editor.setText @content
+    @_editorChanged = true
+    @on.saveTemporary()
+    @options.file = @file.path
+    @saveOptions()
+    @elems.save.style.display = 'inline-block'
+    @elems.saveName.textContent = "#{@file.name}"
+
    @listen 'print', ->
     @editor.on.print()
 
@@ -201,6 +214,7 @@ Mod.require 'Weya.Base',
   APP = new App()
   IPC.on 'fileOpened', APP.on.fileOpened
   IPC.on 'folderOpened', APP.on.folderOpened
+  IPC.on 'saveFile', APP.on.saveFile
   APP.load ->
    APP.render ->
 
