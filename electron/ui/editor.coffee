@@ -8,37 +8,47 @@ Mod.require 'Weya.Base',
   class Editor  extends Base
    @extend()
 
+   toolbarTemplate: ->
+    btn = (icon, event, title) ->
+     @button ".btn.btn-default",
+      title: title
+      on: {click: @$.on[event]}
+      ->
+       @i ".fa.fa-#{icon}", null
+
+    @div ".btn-group", ->
+     btn.call this, 'header', 'header', 'Heading'
+
+     btn.call this, 'bold', 'bold', 'bold'
+     btn.call this, 'italic', 'italic', 'Italic'
+     btn.call this, 'link', 'link', 'italic'
+     btn.call this, 'code', 'inlineCode', 'ital'
+     btn.call this, 'camera', 'inlineMedia', 'italic'
+     btn.call this, 'superscript', 'superscript', 'italic'
+     btn.call this, 'subscript', 'subscript', 'italic'
+
+    @div ".btn-group", ->
+     btn.call this, 'table', 'table', 'italic'
+     btn.call this, 'list-ol', 'listOl', 'italic'
+     btn.call this, 'list-ul', 'listUl', 'italic'
+     btn.call this, 'columns', 'sidenote', 'italic'
+
+    @div ".btn-group", ->
+     btn.call this, 'indent', 'indent', 'italic'
+     btn.call this, 'outdent', 'outdent', 'italic'
+
+    @div ".btn-group", ->
+     btn.call this, 'check', 'checkSpelling', 'italic'
+
+
+    #@$.elems.pickMediaDialog = @div ".pick-media-dialog",
+    # on: {click: @$.on.pickMediaClick}
+
+
    template: ->
     @$.elems.editorContainer = @div ".container.wallapatta-editor", ->
      @div ".row", ->
       @div ".five.columns", ->
-        @div ".toolbar", ->
-         @div ->
-          @i ".fa.fa-header", on: {click: @$.on.header}
-
-          @i ".fa.fa-bold", on: {click: @$.on.bold}
-          @i ".fa.fa-italic", on: {click: @$.on.italic}
-          @i ".fa.fa-link", on: {click: @$.on.link}
-          @i ".fa.fa-code", on: {click: @$.on.inlineCode}
-          @i ".fa.fa-camera", on: {click: @$.on.inlineMedia}
-          @i ".fa.fa-superscript", on: {click: @$.on.superscript}
-          @i ".fa.fa-subscript", on: {click: @$.on.subscript}
-
-          @i ".fa.fa-table", on: {click: @$.on.table}
-
-          @i ".fa.fa-list-ol", on: {click: @$.on.listOl}
-          @i ".fa.fa-list-ul", on: {click: @$.on.listUl}
-
-          @i ".fa.fa-indent", on: {click: @$.on.indent}
-          @i ".fa.fa-outdent", on: {click: @$.on.outdent}
-
-          @i ".fa.fa-columns", on: {click: @$.on.sidenote}
-          @i ".fa.fa-check", on: {click: @$.on.checkSpelling}
-
-
-         @$.elems.pickMediaDialog = @div ".pick-media-dialog",
-          on: {click: @$.on.pickMediaClick}
-
         @$.elems.textarea = @textarea ".editor",
          autocomplete: "off"
          spellcheck: "false"
@@ -289,10 +299,12 @@ Mod.require 'Weya.Base',
     @editor.setSize null, "#{height - 100}px"
     @elems.preview.style.maxHeight = "#{height - 50}px"
 
-   render: (elem, callback) ->
+   render: (elem, toolbar, callback) ->
     @_onRendered = callback
     @elems.container = elem
+    @elems.toolbar = toolbar
     Weya elem: @elems.container, context: this, @template
+    Weya elem: @elems.toolbar, context: this, @toolbarTemplate
 
     window.requestAnimationFrame @on.setupEditor
 

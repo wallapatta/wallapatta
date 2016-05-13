@@ -90,6 +90,8 @@ Mod.require 'Weya.Base',
           ->
            @span ".icon.icon-print", null
 
+        @$.elems.editorToolbar = @span ""
+
         @button ".btn.btn-default.pull-right",
          title: "Help"
          on: {click: @$.on.help}
@@ -101,7 +103,7 @@ Mod.require 'Weya.Base',
 
     #window.addEventListener 'resize', @on.resize
 
-    @editor.render @elems.editor, ->
+    @editor.render @elems.editor, @elems.editorToolbar, ->
      #setTimeout ->
      # toolbar = document.getElementById 'toolbar'
      # toolbar.style.display = 'none'
