@@ -142,10 +142,4 @@ Mod.require 'Weya.Base',
 
   APP = new App()
   APP.render ->
-   MESSAGE_HANDLER = (e) ->
-    APP.on[e.data.method] e.data, e
-
-   window.addEventListener 'message', MESSAGE_HANDLER
-   APP.send 'ready', {}
-
 
