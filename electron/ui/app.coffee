@@ -61,8 +61,6 @@ Mod.require 'Weya.Base',
     Weya elem: @elems.container, context: this, ->
      @div ".window", ->
       @header ".toolbar.toolbar-header", ->
-       @h1 ".title", "Wallaptta"
-
        @div ".toolbar-actions", ->
         @div ".btn-group", ->
          @button ".btn.btn-default",

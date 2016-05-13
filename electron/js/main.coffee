@@ -56,10 +56,11 @@ handleSquirrelEvent = ->
    return true
 
 createWindow = ->
- console.log electron
+ #console.log electron
  autoUpdater = electron.autoUpdater
  autoUpdater.setFeedURL "http://localhost:3000/update"
  mainWindow = new BrowserWindow width: 800, height: 600
+ mainWindow.setMenu null
  mainWindow.loadURL "file://#{__dirname}/index.html"
  mainWindow.webContents.openDevTools()
 
