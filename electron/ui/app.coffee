@@ -108,7 +108,7 @@ Mod.require 'Weya.Base',
 
     @editor.render @elems.editor, @elems.editorToolbar, =>
      @_watchInterval = setInterval @on.watchChanges, 500
-     @_saveTemInterval = setInterval @on.saveTemporary, 1000
+     @_saveTemInterval = setInterval @on.saveTemporary, 60 * 1000
      callback()
 
    @listen 'folder', ->
