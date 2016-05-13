@@ -120,6 +120,8 @@ Mod.require 'Weya.Base',
     @folder =
      path: folder
      url: url.join '/'
+    @options.folder = @folder.path
+    @saveOptions()
     @content = @removeTrailingSpace @editor.getText()
     @editor.setText @content
 
