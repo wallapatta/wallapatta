@@ -8,6 +8,7 @@ Mod.require 'Weya.Base',
   PATH = require 'path'
 
   TEMPORARY_FILE = 'temporary.swp.ds'
+  OPTIONS_FILE = 'options.json'
   PROTOCOLS = [
    'https://'
    'http://'
@@ -28,6 +29,9 @@ Mod.require 'Weya.Base',
     @resources = {}
     @_editorChanged = false
     @content = ''
+    @options =
+     file: ''
+     folder: ''
     @editor = new Editor
      openUrl: @on.openUrl
      onChanged: @on.editorChanged
@@ -35,7 +39,7 @@ Mod.require 'Weya.Base',
    load: (callback) ->
     IPC.on 'userDataPath', (e, path) =>
      @_userDataPath = path
-     console.log path
+     #TODO load options, temporary
      callback()
     IPC.send 'getUserDataPath'
 
@@ -122,7 +126,10 @@ Mod.require 'Weya.Base',
      path: file
     @content = "#{FS.readFileSync file}"
     @editor.setText @content
-    @_editorChanged = false
+    @_editorChanged = true
+    @on.saveTemporary()
+    @options.file = @file.path
+    @saveOptions()
     @elems.save.style.display = 'inline-block'
     @elems.saveName.textContent = "#{@file.name}"
 
@@ -141,6 +148,15 @@ Mod.require 'Weya.Base',
      lines[i] = line.trimRight()
 
     lines.join '\n'
+
+   saveOptions: ->
+    FS.writeFile (PATH.join @_userDataPath, OPTIONS_FILE),
+     (JSON.stringify @options)
+     (err) ->
+      if err?
+       console.error err
+      else
+       console.log 'options file saved'
 
    @listen 'saveTemporary', ->
     return if not @file?
