@@ -3,16 +3,19 @@ Mod.require 'Weya.Base',
  'Editor'
  (Base, Weya, Editor) ->
 
-  window.wallapattaDecodeURL = (url) ->
-   res = url
-   if res[0] isnt '/'
-    res= "/#{res}"
-   if APP.resources[res]?
-    return APP.resources[res]
-   else
-    return url
+  PROTOCOLS = [
+   'https://'
+   'http://'
+   'file://'
+  ]
 
-  PARENT = parent
+  window.wallapattaDecodeURL = (url) ->
+   for protocol in PROTOCOLS
+    if (url.substr 0, protocol.length) is protocol
+     return url
+
+   url = "/#{url}" if url[0] isnt '/'
+   return "#{APP.resourcesPath}#{url}"
 
   class App extends Base
    @initialize ->
