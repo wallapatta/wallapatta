@@ -81,10 +81,12 @@ Mod.require 'Weya.Base',
          on: {click: @$.on.renderPrint}
 
 
-    @$.elems.printContainer = @div ".wallapatta-container.wallapatta-print", ->
-     @$.elems.printDoc = @div ".row.wallapatta", ->
-      @$.elems.printMain = @div ".nine.columns", null
-      @$.elems.printSidebar = @div ".three.columns", null
+    @$.elems.printContainer =
+     @div ".wallapatta-container.wallapatta-print",
+      style: {display: 'none'}, ->
+       @$.elems.printDoc = @div ".wallapatta", ->
+        @$.elems.printMain = @div ".wallapatta-main", null
+        @$.elems.printSidebar = @div ".wallapatta-sidebar", null
 
 
 
@@ -199,8 +201,8 @@ Mod.require 'Weya.Base',
    @listen 'checkSpelling', ->
     window.CHECK_SPELLING = not window.CHECK_SPELLING
 
-   @listen 'print', ->
-    @elems.editorContainer.classList.add 'wallapatta-editor-print'
+   print: ->
+    @elems.editorContainer.style.display = 'none'
     @elems.printContainer.style.display = 'block'
     @elems.printForm.style.display = 'block'
 
@@ -239,8 +241,8 @@ Mod.require 'Weya.Base',
         window.print()
       , 500
 
-   @listen 'closePrint', ->
-    @elems.editorContainer.classList.remove 'wallapatta-editor-print'
+   edit: ->
+    @elems.editorContainer.style.display = 'block'
     @elems.printContainer.style.display = 'none'
     @elems.printForm.style.display = 'none'
 
@@ -294,6 +296,7 @@ Mod.require 'Weya.Base',
     height = window.innerHeight
     @editor.setSize null, "#{height - 100}px"
     @elems.preview.style.maxHeight = "#{height - 50}px"
+    @preview()
 
    render: (elem, toolbar, callback) ->
     @_onRendered = callback

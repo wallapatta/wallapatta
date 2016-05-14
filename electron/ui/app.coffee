@@ -109,11 +109,17 @@ Mod.require 'Weya.Base',
           title: "Save file"
           on: {click: @$.on.saveAs}
           "SaveAs"
-         @button ".btn.btn-default",
-          title: "Print"
-          on: {click: @$.on.print}
-          ->
-           @span ".icon.icon-print", null
+         @$.elems.printBtn = @button ".btn.btn-default",
+           title: "Print"
+           on: {click: @$.on.print}
+           ->
+            @span ".icon.icon-print", null
+         @$.elems.editBtn = @button ".btn.btn-positive",
+           title: "Edit"
+           on: {click: @$.on.edit}
+           style: {display: 'none'}
+           ->
+            @span ".icon.icon-pencil", null
 
         @$.elems.editorToolbar = @span ""
 
@@ -125,8 +131,6 @@ Mod.require 'Weya.Base',
 
       @div ".window-content", ->
        @$.elems.editor = @div ".editor", ''
-
-    #window.addEventListener 'resize', @on.resize
 
     @editor.render @elems.editor, @elems.editorToolbar, =>
      @_watchInterval = setInterval @on.watchChanges, CHANGED_WATCH_INTERVAL
@@ -193,7 +197,14 @@ Mod.require 'Weya.Base',
 
 
    @listen 'print', ->
-    @editor.on.print()
+    @elems.printBtn.style.display = 'none'
+    @elems.editBtn.style.display = 'inline-block'
+    @editor.print()
+
+   @listen 'edit', ->
+    @elems.editBtn.style.display = 'none'
+    @elems.printBtn.style.display = 'inline-block'
+    @editor.edit()
 
    removeTrailingSpace: (text) ->
     lines = text.split '\n'
