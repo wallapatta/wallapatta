@@ -1,9 +1,8 @@
 Mod.require 'Weya.Base',
  'CodeMirror'
  'Wallapatta.Parser'
- 'Wallapatta.Sample'
  'HLJS'
- (Base, CodeMirror, Parser, Sample, HLJS) ->
+ (Base, CodeMirror, Parser, HLJS) ->
 
   class Editor  extends Base
    @extend()
@@ -286,7 +285,6 @@ Mod.require 'Weya.Base',
     height = window.innerHeight
     @editor.setSize null, "#{height - 100}px"
     @elems.preview.style.maxHeight = "#{height - 50}px"
-    @editor.setValue Sample
     @editor.on 'gutterClick', @on.gutterClick
 
     window.addEventListener 'resize', @on.resize

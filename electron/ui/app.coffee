@@ -1,7 +1,8 @@
 Mod.require 'Weya.Base',
  'Weya'
  'Editor'
- (Base, Weya, Editor) ->
+ 'Help'
+ (Base, Weya, Editor, Help) ->
   ELECTRON = require 'electron'
   IPC = ELECTRON.ipcRenderer
   FS = require 'fs'
@@ -44,6 +45,7 @@ Mod.require 'Weya.Base',
     IPC.on 'userDataPath', (e, path) =>
      @_userDataPath = path
      #TODO load options, temporary
+     @content = Help
      callback()
     IPC.send 'getUserDataPath'
 
@@ -107,6 +109,7 @@ Mod.require 'Weya.Base',
     @editor.render @elems.editor, @elems.editorToolbar, =>
      @_watchInterval = setInterval @on.watchChanges, CHANGED_WATCH_INTERVAL
      @_saveTemInterval = setInterval @on.saveTemporary, TEMPORARY_SAVE_INTERVAL
+     @editor.setText @content
      callback()
 
    @listen 'folder', -> IPC.send 'openFolder'
@@ -218,3 +221,11 @@ Mod.require 'Weya.Base',
   APP.load ->
    APP.render ->
 
+document.addEventListener 'DOMContentLoaded', ->
+ Mod.set 'Weya', Weya
+ Mod.set 'Weya.Base', Weya.Base
+ Mod.set 'CodeMirror', CodeMirror
+ Mod.set 'CoffeeScript', CoffeeScript
+ Mod.set 'HLJS', hljs
+
+ Mod.initialize()

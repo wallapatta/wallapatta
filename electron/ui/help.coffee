@@ -43,4 +43,4 @@ Mod.require ->
   Print Icon
 '''
 
- Mod.set 'Wallapatta.Sample', text
+ Mod.set 'Help', text
