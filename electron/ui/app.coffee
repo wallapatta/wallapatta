@@ -10,7 +10,7 @@ Mod.require 'Weya.Base',
 
   TEMPORARY_FILE = 'temporary.swp.ds'
   OPTIONS_FILE = 'options.json'
-  TEMPORARY_SAVE_INTERVAL = 30 * 1000
+  TEMPORARY_SAVE_INTERVAL = 10 * 1000
   CHANGED_WATCH_INTERVAL = 500
 
   PROTOCOLS = [
@@ -44,8 +44,30 @@ Mod.require 'Weya.Base',
    load: (callback) ->
     IPC.on 'userDataPath', (e, path) =>
      @_userDataPath = path
-     #TODO load options, temporary
-     @content = Help
+     try
+      options = "#{FS.readFileSync PATH.join @_userDataPath, OPTIONS_FILE}"
+      @options = JSON.parse options
+     catch e
+      @options =
+       file: ''
+       folder: ''
+     @setFolder()
+     @setFile()
+     if @file?
+      try
+       @content = "#{FS.readFileSync @file.path}"
+      catch e
+       @content = '=====Error reading file====='
+     else
+      @content = null
+
+     try
+      @_tempContent = "#{FS.readFileSync PATH.join @_userDataPath, TEMPORARY_FILE}"
+     catch e
+      if @content?
+       @_tempContent = @content
+      else
+       @_tempContent = @content = Help
      callback()
     IPC.send 'getUserDataPath'
 
@@ -109,7 +131,11 @@ Mod.require 'Weya.Base',
     @editor.render @elems.editor, @elems.editorToolbar, =>
      @_watchInterval = setInterval @on.watchChanges, CHANGED_WATCH_INTERVAL
      @_saveTemInterval = setInterval @on.saveTemporary, TEMPORARY_SAVE_INTERVAL
-     @editor.setText @content
+     @editor.setText @_tempContent
+     delete @_tempContent
+     if @file?
+      @elems.save.style.display = 'inline-block'
+     @on.watchChanges()
      callback()
 
    @listen 'folder', -> IPC.send 'openFolder'
@@ -117,16 +143,8 @@ Mod.require 'Weya.Base',
     console.log folders
     return if not folders?
     return if folders.length <= 0
-    folder = folders[0]
-    url = folder.split PATH.sep
-    url.shift() while url.length > 0 and url[0] is ''
-    return if not url.length > 1
-    url = ['file://'].concat folder.split PATH.sep
-    url = url.slice 0, url.length - 1
-    @folder =
-     path: folder
-     url: url.join '/'
-    @options.folder = @folder.path
+    @options.folder = folders[0]
+    @setFolder()
     @saveOptions()
     @editor.setText @removeTrailingSpace @editor.getText()
 
@@ -134,15 +152,13 @@ Mod.require 'Weya.Base',
    @listen 'fileOpened', (e, files) ->
     return if not files?
     return if files.length <= 0
-    file = files[0]
-    @file =
-     name: PATH.basename file, '.ds'
-     path: file
-    @content = "#{FS.readFileSync file}"
+    @options.file = files[0]
+    @setFile()
+
+    @content = "#{FS.readFileSync @file.path}"
     @editor.setText @content
     @_editorChanged = true
     @on.saveTemporary()
-    @options.file = @file.path
     @saveOptions()
     @elems.save.style.display = 'inline-block'
     @elems.saveName.textContent = "#{@file.name}"
@@ -159,17 +175,22 @@ Mod.require 'Weya.Base',
    @listen 'saveAs', -> IPC.send 'saveFile'
    @listen 'saveFile', (e, file) ->
     return if not file?
-    @file =
-     name: PATH.basename file, '.ds'
-     path: file
+    @options.file = file
+    @setFile()
+
     @content = @removeTrailingSpace @editor.getText()
     @editor.setText @content
     @_editorChanged = true
     @on.saveTemporary()
-    @options.file = @file.path
     @saveOptions()
     @elems.save.style.display = 'inline-block'
     @elems.saveName.textContent = "#{@file.name}"
+    FS.writeFile @file.path, @content, (err) ->
+     if err?
+      console.error err
+     else
+      console.log 'file saved'
+
 
    @listen 'print', ->
     @editor.on.print()
@@ -211,6 +232,27 @@ Mod.require 'Weya.Base',
       @elems.saveName.style.color = '#c00'
     else
      @elems.saveName.textContent = "#{@file.name}"
+
+   setFolder: ->
+    @folder = null
+    folder = @options.folder
+    return if folder is ''
+    url = folder.split PATH.sep
+    url.shift() while url.length > 0 and url[0] is ''
+    return if not url.length > 1
+    url = ['file://'].concat folder.split PATH.sep
+    url = url.slice 0, url.length - 1
+    @folder =
+     path: folder
+     url: url.join '/'
+
+   setFile: ->
+    @file = null
+    file = @options.file
+    return if file is ''
+    @file =
+     name: PATH.basename file, '.ds'
+     path: file
 
 
 
