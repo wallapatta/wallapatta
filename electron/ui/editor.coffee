@@ -75,10 +75,11 @@ Mod.require 'Weya.Base',
        @$.elems.heightInput = @input "#height-input.form-control",
         type: "number"
         value: "225"
-      @button ".btn.btn-primary", "Preview",
-       on: {click: @$.on.renderPrintPreview}
-      @button ".btn.btn-default", "Print",
-       on: {click: @$.on.renderPrint}
+      @div ".btn-group", ->
+       @button ".btn.btn-primary", "Preview",
+        on: {click: @$.on.renderPrintPreview}
+       @button ".btn.btn-default", "Print",
+        on: {click: @$.on.renderPrint}
 
 
     @$.elems.printContainer =
@@ -241,8 +242,9 @@ Mod.require 'Weya.Base',
       setTimeout ->
        render.setPages height, width
        if print
-        window.requestAnimationFrame ->
+        setTimeout ->
          window.print()
+        , 500
       , 500
 
    edit: ->
