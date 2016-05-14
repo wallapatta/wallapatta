@@ -65,20 +65,20 @@ Mod.require 'Weya.Base',
 
     @$.elems.printForm = @div ".print-form", style: {display: 'none'}, ->
      @form ->
-      @button "Edit",
-       on: {click: @$.on.closePrint}
-      @div ".row", ->
-       @div ".six.columns", ->
-        @label for: "width-input", "Width (mm)"
-        @$.elems.widthInput = @input "#width-input.u-full-width",
-         type: "number"
-         value: "170"
-        @label for: "height-input", "Height (mm)"
-        @$.elems.heightInput = @input "#height-input.u-full-width",
-         type: "number"
-         value: "225"
-        @button ".button-primary", "Print",
-         on: {click: @$.on.renderPrint}
+      @div ".form-group", ->
+       @label for: "width-input", "Width (mm)"
+       @$.elems.widthInput = @input "#width-input.form-control",
+        type: "number"
+        value: "170"
+      @div ".form-group", ->
+       @label for: "height-input", "Height (mm)"
+       @$.elems.heightInput = @input "#height-input.form-control",
+        type: "number"
+        value: "225"
+      @button ".btn.btn-primary", "Preview",
+       on: {click: @$.on.renderPrintPreview}
+      @button ".btn.btn-default", "Print",
+       on: {click: @$.on.renderPrint}
 
 
     @$.elems.printContainer =
@@ -207,6 +207,9 @@ Mod.require 'Weya.Base',
     @elems.printForm.style.display = 'block'
 
    @listen 'renderPrint', (e) ->
+    @on.renderPrintPreview e, true
+
+   @listen 'renderPrintPreview', (e, print = false) ->
     e.preventDefault()
     WIDTH = parseInt @elems.widthInput.value
     if isNaN WIDTH
@@ -237,8 +240,9 @@ Mod.require 'Weya.Base',
      render.mediaLoaded ->
       setTimeout ->
        render.setPages height, width
-       window.requestAnimationFrame ->
-        window.print()
+       if print
+        window.requestAnimationFrame ->
+         window.print()
       , 500
 
    edit: ->
