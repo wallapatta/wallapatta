@@ -242,7 +242,7 @@ Mod.require 'Weya.Base',
       , 500
 
    edit: ->
-    @elems.editorContainer.style.display = 'block'
+    @elems.editorContainer.style.display = 'flex'
     @elems.printContainer.style.display = 'none'
     @elems.printForm.style.display = 'none'
 
