@@ -85,31 +85,36 @@ Mod.require 'Weya.Base',
    render: (callback) ->
     @elems.container = document.body
     Weya elem: @elems.container, context: this, ->
+     btn = (icon, event, title) ->
+      @button ".btn.btn-default",
+       title: title
+       on: {click: @$.on[event]}
+       ->
+        @i ".fa.fa-#{icon}", null
+
+
      @div ".window", ->
       @header ".toolbar.toolbar-header", ->
        @div ".toolbar-actions", ->
         @div ".btn-group", ->
-         @button ".btn.btn-default",
-          title: "Select images folder"
-          on: {click: @$.on.folder}
-          ->
-           @span ".icon.icon-folder", null
-         @button ".btn.btn-default",
-          title: "Open file"
-          on: {click: @$.on.file}
-          ->
-           @span ".icon.icon-upload", null
+         btn.call this, 'folder', 'folder', 'Select images folder'
+         btn.call this, 'upload', 'file', 'Open file'
+         #@$.elems.save = btn.call this, 'download', 'save', 'Save file'
          @$.elems.save = @button ".btn.btn-default",
           title: "Save file"
           style: {display: 'none'}
           on: {click: @$.on.save}
           ->
-           @span ".icon.icon-download.icon-text", null
+           @i ".fa.fa-download.icon-text", null
+           #@span ".icon.icon-download.icon-text", null
            @$.elems.saveName = @span ""
+
          @button ".btn.btn-default",
           title: "Save file"
           on: {click: @$.on.saveAs}
-          "SaveAs"
+          "Save As"
+
+         @$.elems.print = btn.call this, 'print', 'print', 'Print'
          @$.elems.printBtn = @button ".btn.btn-default",
            title: "Print"
            on: {click: @$.on.print}
@@ -120,7 +125,7 @@ Mod.require 'Weya.Base',
            on: {click: @$.on.edit}
            style: {display: 'none'}
            ->
-            @span ".icon.icon-pencil", null
+            @i ".fa.fa-pencil", null
 
         @$.elems.editorToolbar = @span ""
 
@@ -139,7 +144,7 @@ Mod.require 'Weya.Base',
      @editor.setText @_tempContent
      delete @_tempContent
      if @file?
-      @elems.save.style.display = 'inline-block'
+      @elems.saveBtn.style.display = 'inline-block'
      @on.watchChanges()
      callback()
 
@@ -165,7 +170,7 @@ Mod.require 'Weya.Base',
     @_editorChanged = true
     @on.saveTemporary()
     @saveOptions()
-    @elems.save.style.display = 'inline-block'
+    @elems.saveBtn.style.display = 'inline-block'
     @elems.saveName.textContent = "#{@file.name}"
 
    @listen 'save', ->
@@ -188,7 +193,7 @@ Mod.require 'Weya.Base',
     @_editorChanged = true
     @on.saveTemporary()
     @saveOptions()
-    @elems.save.style.display = 'inline-block'
+    @elems.saveBtn.style.display = 'inline-block'
     @elems.saveName.textContent = "#{@file.name}"
     FS.writeFile @file.path, @content, (err) ->
      if err?
