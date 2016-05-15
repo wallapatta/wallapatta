@@ -19,6 +19,7 @@ exports.assets = ->
  try
   FS_UTIL.cp_r "electron/lib", "#{APP}/lib"
   FS_UTIL.cp_r "electron/ui-assets", "#{APP}/assets"
+  FS_UTIL.cp_r "electron/assets", "#{BUILD}"
  catch e
   LOG e, 'red'
   return 1

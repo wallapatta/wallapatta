@@ -2,3 +2,4 @@
 build
 /electron
 /ui-assets
+/dist

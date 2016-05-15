@@ -4,6 +4,7 @@
   "description": "Wallapatta has a syntax similar to Markdown and uses a layout inspired by handouts of Edward R. Tufte.",
   "main": "wallapatta.js",
   "scripts": {
+    "build": "build",
     "electron": "electron app/main.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },

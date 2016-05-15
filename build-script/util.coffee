@@ -48,7 +48,6 @@ css = exports.css = (path, src, dest, callback) ->
    map = "#{dest}.map"
    opt.sourceMap = on
    opt.sourceMapRootpath = "/"
-   #opt.sourceMapURL = map.substr BUILD.length
    opt.filename = "#{LESS}/#{LESS_FILE}.less"
    opt.writeSourceMap = (smap) ->
     fs.writeFileSync map, smap
@@ -66,7 +65,7 @@ css = exports.css = (path, src, dest, callback) ->
    cssCode = cssCode.css
 
    if options.map
-    url = "#{map.substr BUILD.length}"
+    url = "#{map.substr APP.length}"
     cssCode = "#{cssCode}\n/*# sourceMappingURL=#{url}*/\n"
 
    fs.writeFileSync dest, cssCode
@@ -96,7 +95,7 @@ js = exports.js = (src, dest) ->
    sourceFiles: sourceFiles
 
   if sourceMap
-   url = "#{map.substr BUILD.length}"
+   url = "#{map.substr APP.length}"
    smap = jsCode.v3SourceMap
    jsCode = "#{jsCode.js}\n//# sourceMappingURL=#{url}\n"
    fs.writeFileSync map, smap
