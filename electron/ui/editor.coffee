@@ -93,12 +93,14 @@ Mod.require 'Weya.Base',
         on: {click: @$.on.renderPrint}
 
 
-    @$.elems.printContainer =
-     @div ".wallapatta-container.wallapatta-print",
+    @$.elems.printContainer = @div ".editor-print",
       style: {display: 'none'}, ->
-       @$.elems.printDoc = @div ".wallapatta", ->
-        @$.elems.printMain = @div ".wallapatta-main", null
-        @$.elems.printSidebar = @div ".wallapatta-sidebar", null
+       @$.elems.pagePackgrounds = @div ".page-backgrounds", null
+       @$.elems.wallapattaPrint =
+        @div ".wallapatta-container.wallapatta-print", ->
+         @$.elems.printDoc = @div ".wallapatta", ->
+          @$.elems.printMain = @div ".wallapatta-main", null
+          @$.elems.printSidebar = @div ".wallapatta-sidebar", null
 
 
 
@@ -246,7 +248,8 @@ Mod.require 'Weya.Base',
     @elems.errors.textContent = ''
     render = @renderer = @parser.getRender()
     render.render @elems.printMain, @elems.printSidebar
-    @elems.printContainer.style.width = "#{WIDTH}mm"
+    render.setPageBackgrounds @elems.pagePackgrounds
+    @elems.wallapattaPrint.style.width = "#{WIDTH}mm"
     window.requestAnimationFrame =>
      ratio = @elems.printDoc.offsetWidth / WIDTH
      width = ratio * WIDTH

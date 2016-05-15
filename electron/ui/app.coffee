@@ -93,7 +93,7 @@ Mod.require 'Weya.Base',
         @i ".fa.fa-#{icon}", null
 
 
-     @div ".window", ->
+     @$.elems.window = @div ".window", ->
       @header ".toolbar.toolbar-header", ->
        @div ".toolbar-actions", ->
         @div ".btn-group", ->
@@ -205,11 +205,13 @@ Mod.require 'Weya.Base',
    @listen 'print', ->
     @elems.printBtn.style.display = 'none'
     @elems.editBtn.style.display = 'inline-block'
+    @elems.window.classList.add 'print-window'
     @editor.print()
 
    @listen 'edit', ->
     @elems.editBtn.style.display = 'none'
     @elems.printBtn.style.display = 'inline-block'
+    @elems.window.classList.remove 'print-window'
     @editor.edit()
 
    removeTrailingSpace: (text) ->
