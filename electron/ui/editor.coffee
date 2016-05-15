@@ -22,7 +22,6 @@ Mod.require 'Weya.Base',
      btn.call this, 'italic', 'italic', 'Italic'
      btn.call this, 'link', 'link', 'italic'
      btn.call this, 'code', 'inlineCode', 'ital'
-     btn.call this, 'camera', 'inlineMedia', 'italic'
      btn.call this, 'superscript', 'superscript', 'italic'
      btn.call this, 'subscript', 'subscript', 'italic'
 
@@ -31,6 +30,7 @@ Mod.require 'Weya.Base',
      btn.call this, 'list-ol', 'listOl', 'italic'
      btn.call this, 'list-ul', 'listUl', 'italic'
      btn.call this, 'columns', 'sidenote', 'italic'
+     btn.call this, 'camera', 'media', 'italic'
 
     @div ".btn-group", ->
      btn.call this, 'indent', 'indent', 'italic'
@@ -38,9 +38,6 @@ Mod.require 'Weya.Base',
 
     btn.call this, 'check', 'checkSpelling', 'italic'
 
-
-    #@$.elems.pickMediaDialog = @div ".pick-media-dialog",
-    # on: {click: @$.on.pickMediaClick}
 
 
    template: ->
@@ -62,6 +59,13 @@ Mod.require 'Weya.Base',
         on:
          click: @$.on.previewClick
          dblclick: @$.on.previewDbClick
+
+     @$.elems.pickMedia = @div ".pane.pick-media",
+      style: {display: 'none'}, ->
+       @$.elems.pickMediaList = @ul ".list-group",
+        on: {click: @$.on.pickMediaClick}
+       @button ".btn.btn-default", "Cancel", on: {click: @$.on.pickMediaCancel}
+
 
     @$.elems.printForm = @div ".print-form", style: {display: 'none'}, ->
      @form ->
@@ -139,9 +143,9 @@ Mod.require 'Weya.Base',
     @editor.replaceSelection "#{b}#{s}#{e}"
     @editor.focus()
 
-   addSegment: (b) ->
+   addSegment: (b, e = '') ->
     s = @editor.getSelection()
-    @editor.replaceSelection "\n#{b}#{s}\n"
+    @editor.replaceSelection "\n#{b}#{s}#{e}\n"
     {line} = @editor.getCursor()
     @editor.indentLine line - 1, 'prev'
     @editor.indentLine line, 'prev'
@@ -156,8 +160,6 @@ Mod.require 'Weya.Base',
    @listen 'italic', -> @wrapSelection '--', '--'
    @listen 'inlineCode', -> @wrapSelection '``', '``'
    @listen 'link', -> @wrapSelection '<<', '>>'
-   @listen 'inlineMedia', ->
-    @pickMediaDialog()
    @listen 'superscript', -> @wrapSelection '^^', '^^'
    @listen 'subscript', -> @wrapSelection '__', '__'
 
@@ -189,6 +191,9 @@ Mod.require 'Weya.Base',
 
    @listen 'listOl', -> @addSegment '- '
    @listen 'listUl', -> @addSegment '* '
+
+   @listen 'media', ->
+    @pickMediaDialog()
 
    @listen 'sidenote', ->
     s = @editor.getSelection()
@@ -328,18 +333,18 @@ Mod.require 'Weya.Base',
 
     @wrapSelection "[[#{path}]]", ''
 
+   @listen 'pickMediaCancel', (e) ->
+    @elems.pickMedia.style.display = 'none'
+    @elems.preview.style.display = 'block'
+    @editor.focus()
+
    pickMediaDialog: ->
-    s = @editor.getSelection()
-    if s.trim() isnt ''
-     return @wrapSelection '[[', ']]'
+    @elems.pickMedia.style.display = 'block'
+    @elems.preview.style.display = 'none'
+    @elems.pickMediaList.innerHTML = ''
 
-    @elems.pickMediaDialog.style.display = 'block'
-    @elems.pickMediaDialog.innerHTML = ''
-
-    resources = @_resources
-
-    Weya elem: @elems.pickMediaDialog, ->
-     @div 'Blank'
+    return
+    Weya elem: @elems.pickMediaList, ->
      for path in resources
       d = @div path
       d._path = path
