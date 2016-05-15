@@ -114,12 +114,7 @@ Mod.require 'Weya.Base',
           on: {click: @$.on.saveAs}
           "Save As"
 
-         @$.elems.print = btn.call this, 'print', 'print', 'Print'
-         @$.elems.printBtn = @button ".btn.btn-default",
-           title: "Print"
-           on: {click: @$.on.print}
-           ->
-            @span ".icon.icon-print", null
+         @$.elems.printBtn = btn.call this, 'print', 'print', 'Print'
          @$.elems.editBtn = @button ".btn.btn-positive",
            title: "Edit"
            on: {click: @$.on.edit}
