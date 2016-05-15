@@ -79,8 +79,7 @@ Mod.require 'Weya.Base',
     @_editorChanged = true
 
    @listen 'openUrl', (url) ->
-    @send 'openUrl', url: url
-
+    ELECTRON.shell.openExternal url
 
    render: (callback) ->
     @elems.container = document.body

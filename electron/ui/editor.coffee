@@ -112,6 +112,7 @@ Mod.require 'Weya.Base',
     @_isPrint = false
 
    @listen 'previewClick', (e) ->
+    e.preventDefault()
     return if not @renderer?
     node = e.target
     while node? and node isnt document.body
