@@ -40,6 +40,7 @@ Mod.require 'Weya.Base',
     @editor = new Editor
      openUrl: @on.openUrl
      onChanged: @on.editorChanged
+     app: this
 
    load: (callback) ->
     IPC.on 'userDataPath', (e, path) =>
@@ -264,6 +265,47 @@ Mod.require 'Weya.Base',
     @file =
      name: PATH.basename file, '.ds'
      path: file
+
+   getResources: ->
+    return null if not @folder
+
+    results = []
+
+    add = (path) ->
+     return if path[0] is '.'
+     return if path[path.length - 1] is '~'
+     try
+      stats = FS.statSync path
+     catch e
+      console.error e
+      return
+
+     if stats.isDirectory()
+      try
+       files = FS.readdirSync path
+      catch e
+       console.log error e
+       return
+
+      for file in files
+       add PATH.join path, file
+     else if stats.isFile()
+      results.push path
+
+    add @folder.path
+    p = @folder.path.split PATH.sep
+    last = p[p.length - 1]
+    console.log last
+    for p, i in results
+     relative = PATH.relative @folder.path, p
+     relative = relative.split PATH.sep
+     relative.unshift last
+     results[i] = relative.join '/'
+
+    console.log results
+    return results
+
+
 
 
 

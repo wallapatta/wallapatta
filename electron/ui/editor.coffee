@@ -98,6 +98,7 @@ Mod.require 'Weya.Base',
    @initialize (options) ->
     @openUrl = options.openUrl ? (->)
     @onChangeListener = options.onChanged ? (->)
+    @app = options.app
     @elems = {}
     @_isPrint = false
 
@@ -193,7 +194,7 @@ Mod.require 'Weya.Base',
    @listen 'listUl', -> @addSegment '* '
 
    @listen 'media', ->
-    @pickMediaDialog()
+    @pickMediaPane()
 
    @listen 'sidenote', ->
     s = @editor.getSelection()
@@ -319,7 +320,8 @@ Mod.require 'Weya.Base',
     window.requestAnimationFrame @on.setupEditor
 
    @listen 'pickMediaClick', (e) ->
-    @elems.pickMediaDialog.style.display = 'none'
+    @elems.pickMedia.style.display = 'none'
+    @elems.preview.style.display = 'block'
     n = e.target
     path = null
     while n
@@ -338,7 +340,13 @@ Mod.require 'Weya.Base',
     @elems.preview.style.display = 'block'
     @editor.focus()
 
-   pickMediaDialog: ->
+   pickMediaPane: ->
+    if not @app?
+     return @addSegment '!'
+    resources = @app.getResources()
+    if not resources?
+     return @addSegment '!'
+
     @elems.pickMedia.style.display = 'block'
     @elems.preview.style.display = 'none'
     @elems.pickMediaList.innerHTML = ''
@@ -348,6 +356,8 @@ Mod.require 'Weya.Base',
      for path in resources
       d = @div path
       d._path = path
+
+
 
 
 
