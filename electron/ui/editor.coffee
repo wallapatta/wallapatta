@@ -4,6 +4,13 @@ Mod.require 'Weya.Base',
  'HLJS'
  (Base, CodeMirror, Parser, HLJS) ->
 
+  decodeURL = (url) ->
+   if window?.wallapattaDecodeURL?
+    return window.wallapattaDecodeURL url
+   else
+    return url
+
+
   class Editor  extends Base
    @extend()
 
@@ -328,12 +335,13 @@ Mod.require 'Weya.Base',
      if n._path?
       path = n._path
       break
-     n = e.parentNode
+     n = n.parentNode
 
     if not path?
-     return @wrapSelection '[[', ']]'
+     return @addSegment '!image_url'
 
-    @wrapSelection "[[#{path}]]", ''
+    #@wrapSelection "[[#{path}]]", ''
+    return @addSegment "!#{path}(", ")"
 
    @listen 'pickMediaCancel', (e) ->
     @elems.pickMedia.style.display = 'none'
@@ -342,21 +350,23 @@ Mod.require 'Weya.Base',
 
    pickMediaPane: ->
     if not @app?
-     return @addSegment '!'
+     return @addSegment '!image_url'
     resources = @app.getResources()
     if not resources?
-     return @addSegment '!'
+     return @addSegment '!image_url'
 
     @elems.pickMedia.style.display = 'block'
     @elems.preview.style.display = 'none'
     @elems.pickMediaList.innerHTML = ''
 
-    return
     Weya elem: @elems.pickMediaList, ->
      for path in resources
-      d = @div path
-      d._path = path
-
+      @li ".list-group-item", data: {_path: path}, ->
+       @img ".media-object.pull-left",
+        src: (decodeURL path)
+        width: 64
+       @div ".media-body", ->
+        @strong path
 
 
 
