@@ -100,7 +100,7 @@ Mod.require 'Weya.Base',
          btn.call this, 'folder', 'folder', 'Select images folder'
          btn.call this, 'upload', 'file', 'Open file'
          #@$.elems.save = btn.call this, 'download', 'save', 'Save file'
-         @$.elems.save = @button ".btn.btn-default",
+         @$.elems.saveBtn = @button ".btn.btn-default",
           title: "Save file"
           style: {display: 'none'}
           on: {click: @$.on.save}
