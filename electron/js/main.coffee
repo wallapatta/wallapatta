@@ -59,8 +59,11 @@ handleSquirrelEvent = ->
 
 createWindow = ->
  #console.log electron
- #autoUpdater = electron.autoUpdater
- #autoUpdater.setFeedURL "http://localhost:3000/update"
+ autoUpdater = electron.autoUpdater
+ try
+  autoUpdater.setFeedURL "http://localhost:3000/update"
+ catch e
+  console.log e
  mainWindow = new BrowserWindow width: 1200, height: 900
  mainWindow.setMenu null
  mainWindow.loadURL "file://#{__dirname}/index.html"
@@ -72,13 +75,17 @@ createWindow = ->
   # when you should delete the corresponding element.
   mainWindow = null
 
- #autoUpdater.addListener 'error', (e) ->
- # throw 'error'
+ autoUpdater.addListener 'error', (e) ->
+  console.log e
+  #throw 'error'
 
  mainWindow.webContents.once "did-frame-finish-load", (e) ->
   console.log 'frame load'
   #/update/RELEASES?id=analytics&localVersion=4.0.0&arch=amd64
-  #autoUpdater.checkForUpdates()
+  try
+   autoUpdater.checkForUpdates()
+  catch e
+   console.error e
 
 
 #return if handleSquirrelEvent()
@@ -95,4 +102,7 @@ app.on 'activate', ->
  # On OS X it's common to re-create a window in the app when the
  # dock icon is clicked and there are no other windows open.
  if not mainWindow?
-  createWindow()
+  try
+   createWindow()
+  catch e
+   console.log e
