@@ -1,6 +1,7 @@
 require 'coffee-script/register'
-GLOBAL.APP = 'app'
-GLOBAL.BUILD = 'build'
+global.APP = 'app'
+global.BUILD = 'build'
+global.DIST = 'dist'
 
 
 LOG = require './build-script/log'
@@ -45,6 +46,8 @@ CLEAN = ->
   if FS_UTIL.exists APP
    FS_UTIL.rm_r APP
   FS_UTIL.mkdir "#{APP}"
+  if FS_UTIL.exists DIST
+   FS_UTIL.rm_r DIST
  catch e
   LOG.log e.message, 'red'
   return 1

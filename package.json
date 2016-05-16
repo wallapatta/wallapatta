@@ -44,5 +44,5 @@
   "bin": {
     "wallapatta": "./cli.js"
   },
-  "homepage": "http://vpj.github.io/docscript/introduction.html"
+  "homepage": "http://wallapatta.github.io"
 }
