@@ -57,15 +57,7 @@ Mod.require 'Weya.Base',
      @$.elems.preview = @div ".pane.preview-pane", ->
       @$.elems.errors = @div ".error", null
 
-      @div ".wallapatta", ->
-       @$.elems.previewMain = @div ".wallapatta-main",
-        on:
-         click: @$.on.previewClick
-         dblclick: @$.on.previewDbClick
-       @$.elems.previewSidebar = @div ".wallapatta-sidebar",
-        on:
-         click: @$.on.previewClick
-         dblclick: @$.on.previewDbClick
+      @$.elems.previewIframe = @iframe ".preview-iframe", null
 
      @$.elems.pickMedia = @div ".pane.pick-media",
       style: {display: 'none'}, ->
@@ -310,6 +302,7 @@ Mod.require 'Weya.Base',
     height = window.innerHeight
     @editor.setSize null, "#{height - 100}px"
     @elems.preview.style.maxHeight = "#{height - 50}px"
+    @elems.previewIframe.style.height = "#{height - 50}px"
     @editor.on 'gutterClick', @on.gutterClick
 
     window.addEventListener 'resize', @on.resize
@@ -319,6 +312,7 @@ Mod.require 'Weya.Base',
     height = window.innerHeight
     @editor.setSize null, "#{height - 100}px"
     @elems.preview.style.maxHeight = "#{height - 50}px"
+    @elems.previewIframe.style.height = "#{height - 50}px"
     @preview()
 
    render: (elem, toolbar, callback) ->
@@ -327,6 +321,19 @@ Mod.require 'Weya.Base',
     @elems.toolbar = toolbar
     Weya elem: @elems.container, context: this, @template
     Weya elem: @elems.toolbar, context: this, @toolbarTemplate
+
+    Weya elem: @elems.previewIframe.contentWindow.document.body, context: this, ->
+     @link href: "css/style.css", rel: "stylesheet"
+     @link href: "css/fonts.css", rel: "stylesheet"
+     @div ".wallapatta", ->
+      @$.elems.previewMain = @div ".wallapatta-main",
+       on:
+        click: @$.on.previewClick
+        dblclick: @$.on.previewDbClick
+      @$.elems.previewSidebar = @div ".wallapatta-sidebar",
+       on:
+        click: @$.on.previewClick
+        dblclick: @$.on.previewDbClick
 
     window.requestAnimationFrame @on.setupEditor
 
