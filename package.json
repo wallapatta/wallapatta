@@ -9,7 +9,7 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "build": {
-    "app-bundle-id": "vpj",
+    "appId": "vpj",
     "app-category-type": "vpj",
     "iconUrl": "https://github.com/vpj/vpj.github.com/blob/master/images/forestpin.ico?raw=true"
   },
