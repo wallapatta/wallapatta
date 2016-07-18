@@ -11,7 +11,11 @@
   "build": {
     "appId": "vpj",
     "app-category-type": "vpj",
-    "iconUrl": "https://github.com/vpj/vpj.github.com/blob/master/images/forestpin.ico?raw=true"
+    "productName": "Wallapatta",
+    "win": {
+     "iconUrl": "https://github.com/vpj/vpj.github.com/blob/master/images/forestpin.ico?raw=true",
+     "signWithParams": "/t http://timestamp.digicert.com /n \"Forestpin (Pvt) Ltd\""
+    }
   },
   "repository": {
     "type": "git",
@@ -36,7 +40,9 @@
     "highlight.js": ">=8.4.0",
     "jsdom": ">=1.3.0",
     "optimist": ">=0.6.0",
-    "yamljs": ">=0.2.1"
+    "yamljs": ">=0.2.1",
+    "electron-builder": "next",
+    "electron-prebuilt": "1.2.7"
   },
   "bugs": {
     "url": "https://github.com/vpj/wallapatta/issues"
