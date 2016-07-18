@@ -14,6 +14,7 @@
     "productName": "Wallapatta",
     "win": {
      "iconUrl": "https://github.com/vpj/vpj.github.com/blob/master/images/forestpin.ico?raw=true",
+     "remoteReleases": "http://localhost:8070/downloads/wallapatta/update/win32/",
      "signWithParams": "/t http://timestamp.digicert.com /n \"Forestpin (Pvt) Ltd\""
     }
   },
