@@ -19,7 +19,7 @@ require './js/nodes'
 require './js/reader'
 require './js/render'
 
-GLOBAL.Weya = require './lib/weya/weya'
+global.Weya = require './lib/weya/weya'
 
 Mod.require 'jsdom',
  'fs'

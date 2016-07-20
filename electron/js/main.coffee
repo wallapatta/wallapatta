@@ -2,6 +2,7 @@ electron = require 'electron'
 app = electron.app
 BrowserWindow = electron.BrowserWindow
 PATH = require 'path'
+HTTPS = require 'https'
 mainWindow = null
 
 require './app'
@@ -105,7 +106,16 @@ handleSquirrelEvent = ->
 
 createWindow = ->
  autoUpdater = electron.autoUpdater
- autoUpdater.setFeedURL UPDATE_URL
+ try
+  autoUpdater.setFeedURL UPDATE_URL
+ catch e
+  autoUpdater = null
+  REPORT
+   type: 'Wallapatta'
+   name: 'AutoUpdateError'
+   message: e.message
+   platform: process.platform
+
  mainWindow = new BrowserWindow width: 1200, height: 900
  #mainWindow.setMenu null
  mainWindow.loadURL "file://#{__dirname}/index.html"
@@ -117,16 +127,18 @@ createWindow = ->
   # when you should delete the corresponding element.
   mainWindow = null
 
- autoUpdater.addListener 'error', (e) ->
-  REPORT
-   type: 'Wallapatta'
-   name: 'AutoUpdateError'
-   message: e.message
-   platform: process.platform
+ if autoUpdater?
+  autoUpdater.addListener 'error', (e) ->
+   REPORT
+    type: 'Wallapatta'
+    name: 'AutoUpdateError'
+    message: e.message
+    platform: process.platform
 
  mainWindow.webContents.once "did-frame-finish-load", (e) ->
   #/update/RELEASES?id=analytics&localVersion=4.0.0&arch=amd64
-  autoUpdater.checkForUpdates()
+  if autoUpdater?
+   autoUpdater.checkForUpdates()
 
 
 return if handleSquirrelEvent()

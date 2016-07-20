@@ -18,7 +18,7 @@ task 'clean', "Cleans up build directory", (opts) ->
  LOG.finish CLEAN()
 
 task 'npm', "Build npm", (opts) ->
- GLOBAL.options = opts
+ global.options = opts
  CLEAN()
  ui.assets (e1) ->
   ui.js (e2) ->
@@ -26,7 +26,7 @@ task 'npm', "Build npm", (opts) ->
    LOG.finish e1 + e2 + e3
 
 task "electron", "Build Electron", (opts) ->
- GLOBAL.options = opts
+ global.options = opts
  e = 0
  e += UI.assets()
  e += UI.js()
