@@ -14,6 +14,7 @@ UI_LESS = [
  'style'
  'paginate'
  'fonts'
+ 'theme'
 ]
 
 exports.assets = ->
@@ -52,8 +53,9 @@ _css = exports.css = (callback) ->
  COMPILE_CSS_FILE 'style', (e1) ->
   COMPILE_CSS_FILE 'paginate', (e2) ->
    COMPILE_CSS_FILE 'fonts', (e3) ->
-    WATCH filesToWatch, _css, []
-    callback? e1 + e2 + e3
+    COMPILE_CSS_FILE 'theme', (e4) ->
+     WATCH filesToWatch, _css, []
+     callback? e1 + e2 + e3
 
 
 exports.js = ->

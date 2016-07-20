@@ -142,6 +142,8 @@ Mod.require 'Weya.Base',
      @on.watchChanges()
      callback()
 
+   @listen 'help', ->
+    console.log ELECTRON
    @listen 'folder', -> IPC.send 'openFolder'
    @listen 'folderOpened', (e, folders) ->
     console.log folders

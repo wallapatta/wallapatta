@@ -325,6 +325,7 @@ Mod.require 'Weya.Base',
     Weya elem: @elems.previewIframe.contentWindow.document.body, context: this, ->
      @link href: "css/style.css", rel: "stylesheet"
      @link href: "css/fonts.css", rel: "stylesheet"
+     @link href: "css/theme.css", rel: "stylesheet"
      @div ".wallapatta", ->
       @$.elems.previewMain = @div ".wallapatta-main",
        on:
