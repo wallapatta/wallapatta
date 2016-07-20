@@ -3,7 +3,6 @@ app = electron.app
 BrowserWindow = electron.BrowserWindow
 PATH = require 'path'
 mainWindow = null
-console.log electron
 
 require './app'
 SLACK_OPTIONS = require './slack'
