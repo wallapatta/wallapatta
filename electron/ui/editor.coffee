@@ -326,6 +326,7 @@ Mod.require 'Weya.Base',
      @link href: "css/style.css", rel: "stylesheet"
      @link href: "css/fonts.css", rel: "stylesheet"
      @link href: "css/theme.css", rel: "stylesheet"
+     @link href: "lib/Font-Awesome/css/font-awesome.css", rel: "stylesheet"
      @div ".wallapatta", ->
       @$.elems.previewMain = @div ".wallapatta-main",
        on:
