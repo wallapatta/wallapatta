@@ -6,6 +6,47 @@ mainWindow = null
 console.log electron
 
 require './app'
+SLACK_OPTIONS = require './slack'
+UPDATE_URL = switch process.platform
+ when 'win32' then "/downloads/analytics/update/win32/"
+ else "/downloads/analytics/update/win32/"
+UPDATE_URL = "https://www.forestpin.com#{UPDATE_URL}"
+
+REPORT = (options) ->
+ attachment =
+  fallback: "#{options.type}_#{options.name}: #{options.message}"
+  pretext: "#{options.name}: #{options.message}"
+  color: 'danger'
+  fields: []
+
+ for k, v of options
+  continue if k is 'name'
+  continue if k is 'message'
+  v = "#{v}"
+  attachment.fields.push
+   title: k
+   value: v
+   short: v.length < 10
+
+ data = JSON.stringify
+  attachments: [attachment]
+ opt = SLACK_OPTIONS()
+ opt.headers['Content-Length'] = Buffer.byteLength data
+
+ req = HTTPS.request opt, (res) ->
+  status = parseInt res.statusCode
+  if status isnt 200
+   console.log "Error reporting: #{res.statusCode}"
+   console.log res.headers
+   req.on 'data', (data) ->
+    console.log data
+   req.on 'end', ->
+    console.log 'End'
+
+ req.on 'error', (e) ->
+  console.log "Error reporting: #{e.message}"
+ req.write data
+ req.end()
 
 
 handleSquirrelEvent = ->
@@ -22,7 +63,13 @@ handleSquirrelEvent = ->
    try
     spawnedProcess = ChildProcess.spawn command, args, detached: true
    catch e
-    console.log e
+    REPORT
+     type: 'Wallapatta'
+     name: 'SpawnError'
+     message: e.message
+     platform: process.platform
+     command: command
+    spawnedProcess = null
 
    return spawnedProcess
 
@@ -58,16 +105,12 @@ handleSquirrelEvent = ->
    return true
 
 createWindow = ->
- #console.log electron
  autoUpdater = electron.autoUpdater
- try
-  autoUpdater.setFeedURL "http://localhost:3000/update"
- catch e
-  console.log e
+ autoUpdater.setFeedURL UPDATE_URL
  mainWindow = new BrowserWindow width: 1200, height: 900
- mainWindow.setMenu null
+ #mainWindow.setMenu null
  mainWindow.loadURL "file://#{__dirname}/index.html"
- mainWindow.webContents.openDevTools()
+ #mainWindow.webContents.openDevTools()
 
  mainWindow.on 'closed', ->
   # Dereference the window object, usually you would store windows
@@ -76,19 +119,18 @@ createWindow = ->
   mainWindow = null
 
  autoUpdater.addListener 'error', (e) ->
-  console.log e
-  #throw 'error'
+  REPORT
+   type: 'Wallapatta'
+   name: 'AutoUpdateError'
+   message: e.message
+   platform: process.platform
 
  mainWindow.webContents.once "did-frame-finish-load", (e) ->
-  console.log 'frame load'
   #/update/RELEASES?id=analytics&localVersion=4.0.0&arch=amd64
-  try
-   autoUpdater.checkForUpdates()
-  catch e
-   console.error e
+  autoUpdater.checkForUpdates()
 
 
-#return if handleSquirrelEvent()
+return if handleSquirrelEvent()
 
 app.on 'ready', createWindow
 
@@ -102,7 +144,4 @@ app.on 'activate', ->
  # On OS X it's common to re-create a window in the app when the
  # dock icon is clicked and there are no other windows open.
  if not mainWindow?
-  try
-   createWindow()
-  catch e
-   console.log e
+  createWindow()

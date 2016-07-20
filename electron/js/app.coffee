@@ -1,8 +1,6 @@
 ELECTRON = require 'electron'
 IPC = ELECTRON.ipcMain
 
-console.log ELECTRON.app.getPath 'userData'
-
 FILTERS = [
  name: 'Wallapatta', extensions: ['ds']
 ]
