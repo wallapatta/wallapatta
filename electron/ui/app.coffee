@@ -143,7 +143,8 @@ Mod.require 'Weya.Base',
      callback()
 
    @listen 'help', ->
-    console.log ELECTRON
+    ELECTRON.shell.openExternal "http://wallapatta.github.io/"
+
    @listen 'folder', -> IPC.send 'openFolder'
    @listen 'folderOpened', (e, folders) ->
     console.log folders
