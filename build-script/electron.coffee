@@ -57,7 +57,7 @@ exports.app = ->
   FS_UTIL.cp "electron/package.json", "#{APP}/package.json"
   if not FS_UTIL.exists "#{APP}/build"
    FS_UTIL.mkdir "#{APP}/build"
-  FS_UTIL.cp_r "electron//assets", "#{APP}/build"
+  FS_UTIL.cp_r "electron/assets", "#{APP}/build"
  catch e
   LOG e, 'red'
   return 1
