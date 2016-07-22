@@ -8,8 +8,8 @@ mainWindow = null
 require './app'
 SLACK_OPTIONS = require './slack'
 UPDATE_URL = switch process.platform
- when 'win32' then "/downloads/analytics/update/win32/"
- else "/downloads/analytics/update/win32/"
+ when 'win32' then "/downloads/wallapatta/update/win32/"
+ else "/downloads/wallapatta/update/win32/"
 UPDATE_URL = "https://www.forestpin.com#{UPDATE_URL}"
 
 REPORT = (options) ->
