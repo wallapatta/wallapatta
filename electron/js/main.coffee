@@ -1,5 +1,6 @@
 electron = require 'electron'
 app = electron.app
+Menu = electron.Menu
 BrowserWindow = electron.BrowserWindow
 PATH = require 'path'
 HTTPS = require 'https'
@@ -119,6 +120,26 @@ createWindow = ->
 
  mainWindow = new BrowserWindow width: 1200, height: 900
  #mainWindow.setMenu null
+ menuTemplate = []
+ menuTemplate.push
+  label: "Application"
+  submenu: [
+   { label: "About Application", selector: "orderFrontStandardAboutPanel:" }
+   { type: "separator" }
+   { label: "Quit", accelerator: "Command+Q", click: -> app.quit()}
+  ]
+ menuTemplate.push
+   label: "Edit"
+   submenu: [
+       { label: "Undo", accelerator: "CmdOrCtrl+Z", selector: "undo:" }
+       { label: "Redo", accelerator: "Shift+CmdOrCtrl+Z", selector: "redo:" }
+       { type: "separator" }
+       { label: "Cut", accelerator: "CmdOrCtrl+X", selector: "cut:" }
+       { label: "Copy", accelerator: "CmdOrCtrl+C", selector: "copy:" }
+       { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" }
+       { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
+   ]
+ Menu.setApplicationMenu Menu.buildFromTemplate menuTemplate
  mainWindow.loadURL "file://#{__dirname}/index.html"
  #mainWindow.webContents.openDevTools()
 
