@@ -142,6 +142,14 @@ createWindow = ->
        { label: "Paste", accelerator: "CmdOrCtrl+V", selector: "paste:" }
        { label: "Select All", accelerator: "CmdOrCtrl+A", selector: "selectAll:" }
    ]
+ menuTemplate.push
+  label: 'Help'
+  submenu: [
+   {
+    label: 'Learn More'
+    click: -> electron.shell.openExternal 'http://wallapatta.github.io'
+   }
+  ]
  Menu.setApplicationMenu Menu.buildFromTemplate menuTemplate
  mainWindow.loadURL "file://#{__dirname}/index.html"
  #mainWindow.webContents.openDevTools()
