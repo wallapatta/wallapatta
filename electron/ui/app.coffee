@@ -145,6 +145,13 @@ Mod.require 'Weya.Base',
    @listen 'help', ->
     ELECTRON.shell.openExternal "http://wallapatta.github.io/"
 
+#    REMOTE.dialog.showOpenDialog
+#     properties: ['openDirectory']
+#     (files) =>
+#      alert 'folder'
+#      @on.folderOpened null, files
+
+
    @listen 'folder', -> IPC.send 'openFolder'
    @listen 'folderOpened', (e, folders) ->
     console.log folders
