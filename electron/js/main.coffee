@@ -9,6 +9,7 @@ require './app'
 SLACK_OPTIONS = require './slack'
 UPDATE_URL = switch process.platform
  when 'win32' then "/downloads/wallapatta/update/win32/"
+ when 'darwin' then "/downloads/wallapatta/update/darwin/?version=#{app.getVersion()}"
  else "/downloads/wallapatta/update/win32/"
 UPDATE_URL = "https://www.forestpin.com#{UPDATE_URL}"
 
@@ -136,7 +137,6 @@ createWindow = ->
     platform: process.platform
 
  mainWindow.webContents.once "did-frame-finish-load", (e) ->
-  #/update/RELEASES?id=analytics&localVersion=4.0.0&arch=amd64
   if autoUpdater?
    autoUpdater.checkForUpdates()
 
