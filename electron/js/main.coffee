@@ -6,7 +6,6 @@ PATH = require 'path'
 HTTPS = require 'https'
 mainWindow = null
 
-require './app'
 SLACK_OPTIONS = require './slack'
 UPDATE_URL = switch process.platform
  when 'win32' then "/downloads/wallapatta/update/win32/"

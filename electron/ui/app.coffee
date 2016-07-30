@@ -4,7 +4,6 @@ Mod.require 'Weya.Base',
  'Help'
  (Base, Weya, Editor, Help) ->
   ELECTRON = require 'electron'
-  IPC = ELECTRON.ipcRenderer
   REMOTE = ELECTRON.remote
   FS = require 'fs'
   PATH = require 'path'
@@ -49,34 +48,32 @@ Mod.require 'Weya.Base',
      app: this
 
    load: (callback) ->
-    IPC.on 'userDataPath', (e, path) =>
-     @_userDataPath = path
+    @_userDataPath = REMOTE.app.getPath 'userData'
+    try
+     options = "#{FS.readFileSync PATH.join @_userDataPath, OPTIONS_FILE}"
+     @options = JSON.parse options
+    catch e
+     @options =
+      file: ''
+      folder: ''
+    @setFolder()
+    @setFile()
+    if @file?
      try
-      options = "#{FS.readFileSync PATH.join @_userDataPath, OPTIONS_FILE}"
-      @options = JSON.parse options
+      @content = "#{FS.readFileSync @file.path}"
      catch e
-      @options =
-       file: ''
-       folder: ''
-     @setFolder()
-     @setFile()
-     if @file?
-      try
-       @content = "#{FS.readFileSync @file.path}"
-      catch e
-       @content = '=====Error reading file====='
-     else
-      @content = null
+      @content = '=====Error reading file====='
+    else
+     @content = null
 
-     try
-      @_tempContent = "#{FS.readFileSync PATH.join @_userDataPath, TEMPORARY_FILE}"
-     catch e
-      if @content?
-       @_tempContent = @content
-      else
-       @_tempContent = @content = Help
-     callback()
-    IPC.send 'getUserDataPath'
+    try
+     @_tempContent = "#{FS.readFileSync PATH.join @_userDataPath, TEMPORARY_FILE}"
+    catch e
+     if @content?
+      @_tempContent = @content
+     else
+      @_tempContent = @content = Help
+    callback()
 
    @listen 'error', (e) ->
     console.error e
@@ -337,9 +334,6 @@ Mod.require 'Weya.Base',
 
 
   APP = new App()
-  IPC.on 'fileOpened', APP.on.fileOpened
-  IPC.on 'folderOpened', APP.on.folderOpened
-  IPC.on 'saveFile', APP.on.saveFile
   APP.load ->
    APP.render ->
 
