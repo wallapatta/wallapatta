@@ -197,7 +197,12 @@ Mod.require 'Weya.Base',
      else
       console.log 'file saved'
 
-   @listen 'saveAs', -> IPC.send 'saveFile'
+   @listen 'saveAs', ->
+    REMOTE.dialog.showSaveDialog
+     filters: FILTERS
+     (filename) =>
+      @on.saveFile null, filename
+
    @listen 'saveFile', (e, file) ->
     return if not file?
     @options.file = file
