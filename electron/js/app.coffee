@@ -12,12 +12,6 @@ IPC.on 'openFile', (e) ->
   (files) ->
    e.sender.send 'fileOpened', files
 
-IPC.on 'openFolder', (e) ->
- ELECTRON.dialog.showOpenDialog
-  properties: ['openDirectory']
-  (files) ->
-   e.sender.send 'folderOpened', files
-
 IPC.on 'saveFile', (e) ->
  ELECTRON.dialog.showSaveDialog
   filters: FILTERS

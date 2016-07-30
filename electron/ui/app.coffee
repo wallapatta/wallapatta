@@ -5,6 +5,7 @@ Mod.require 'Weya.Base',
  (Base, Weya, Editor, Help) ->
   ELECTRON = require 'electron'
   IPC = ELECTRON.ipcRenderer
+  REMOTE = ELECTRON.remote
   FS = require 'fs'
   PATH = require 'path'
 
@@ -145,14 +146,13 @@ Mod.require 'Weya.Base',
    @listen 'help', ->
     ELECTRON.shell.openExternal "http://wallapatta.github.io/"
 
-#    REMOTE.dialog.showOpenDialog
-#     properties: ['openDirectory']
-#     (files) =>
-#      alert 'folder'
-#      @on.folderOpened null, files
+   @listen 'folder', ->
+    REMOTE.dialog.showOpenDialog
+     properties: ['openDirectory']
+     (files) =>
+      @on.folderOpened null, files
 
 
-   @listen 'folder', -> IPC.send 'openFolder'
    @listen 'folderOpened', (e, folders) ->
     console.log folders
     return if not folders?
