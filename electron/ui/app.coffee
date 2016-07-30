@@ -14,6 +14,11 @@ Mod.require 'Weya.Base',
   TEMPORARY_SAVE_INTERVAL = 10 * 1000
   CHANGED_WATCH_INTERVAL = 500
 
+  FILTERS = [
+   name: 'Wallapatta', extensions: ['ds']
+  ]
+
+
   PROTOCOLS = [
    'https://'
    'http://'
@@ -162,7 +167,13 @@ Mod.require 'Weya.Base',
     @saveOptions()
     @editor.setText @removeTrailingSpace @editor.getText()
 
-   @listen 'file', -> IPC.send 'openFile'
+   @listen 'file', ->
+    REMOTE.dialog.showOpenDialog
+     properties: ['openFile']
+     filters: FILTERS
+     (files) =>
+      @on.fileOpened null, files
+
    @listen 'fileOpened', (e, files) ->
     return if not files?
     return if files.length <= 0

@@ -5,13 +5,6 @@ FILTERS = [
  name: 'Wallapatta', extensions: ['ds']
 ]
 
-IPC.on 'openFile', (e) ->
- ELECTRON.dialog.showOpenDialog
-  properties: ['openFile']
-  filters: FILTERS
-  (files) ->
-   e.sender.send 'fileOpened', files
-
 IPC.on 'saveFile', (e) ->
  ELECTRON.dialog.showSaveDialog
   filters: FILTERS
