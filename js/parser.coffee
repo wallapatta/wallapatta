@@ -284,6 +284,11 @@ Mod.require 'Weya.Base',
 
       when TYPES.list
        if @node.type isnt TYPES.list
+        if @node.type is TYPES.block and
+           @node.paragraph is false and
+           @node.parent().type is TYPES.listItem
+         @prevNode = @node
+         @node = @node.parent()
         @addNode new List map: @map, ordered: line.ordered, indentation: line.indentation
 
        @addNode new ListItem map: @map, ordered: line.ordered, indentation: line.indentation + 1
