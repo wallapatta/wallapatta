@@ -2,7 +2,7 @@
   "name": "wallapatta",
   "productName": "Wallapatta",
   "main": "main.js",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Document editor with Markdown lke syntax for Edward Tufte style layouts",
   "homepage": "http://wallapatta.github.io/",
   "author": "Varuna Jayasiri <vpjayasiri@gmail.com>",
