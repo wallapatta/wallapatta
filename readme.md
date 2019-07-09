@@ -1,3 +1,5 @@
+**I am not working on this project any more**
+
 # Wallapatta
 
 Wallapatta is like [Markdown](http://en.wikipedia.org/wiki/Markdown),
