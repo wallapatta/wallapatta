@@ -19,11 +19,14 @@ task 'clean', "Cleans up build directory", (opts) ->
 
 task 'npm', "Build npm", (opts) ->
  global.options = opts
+ global.APP = 'build'
  CLEAN()
- ui.assets (e1) ->
-  ui.js (e2) ->
-   npm.npm (e3) ->
-   LOG.finish e1 + e2 + e3
+ e = 0
+ e += UI.assets()
+ e += UI.js()
+ UI.css (e1) ->
+  console.log 'ui'
+  LOG.finish e1 + e
 
 task "electron", "Build Electron", (opts) ->
  global.options = opts
